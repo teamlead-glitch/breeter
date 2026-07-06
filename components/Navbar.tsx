@@ -64,34 +64,32 @@ export default function Navbar() {
             </Link>
 
             {compact && (
-              <>
-                {/* Desktop nav */}
-                <nav className="hidden md:flex items-center gap-2 ml-2">
-                  {navLinks.map(l => {
-                    const Icon = l.icon
-                    const active = pathname === l.href
-                    return (
-                      <Link key={l.href} href={l.href} className={linkClass(active)}>
-                        <span className={iconBoxClass(active)}><Icon size={15} /></span>
-                        {l.label}
-                      </Link>
-                    )
-                  })}
-                </nav>
-
-                {/* Right side */}
-                <div className="ml-auto flex items-center gap-3">
-                  <button
-                    onClick={() => setBookOpen(true)}
-                    className="hidden md:inline-flex items-center bg-cta hover:bg-cta-dark text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-colors">
-                    Book a Cab
-                  </button>
-                  <button onClick={() => setMobileOpen(!mobileOpen)} className="text-white p-2 rounded-lg">
-                    {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-                  </button>
-                </div>
-              </>
+              /* Desktop nav */
+              <nav className="hidden md:flex items-center gap-2 ml-2">
+                {navLinks.map(l => {
+                  const Icon = l.icon
+                  const active = pathname === l.href
+                  return (
+                    <Link key={l.href} href={l.href} className={linkClass(active)}>
+                      <span className={iconBoxClass(active)}><Icon size={15} /></span>
+                      {l.label}
+                    </Link>
+                  )
+                })}
+              </nav>
             )}
+
+            {/* Right side — always visible, even on the unscrolled home hero */}
+            <div className="ml-auto flex items-center gap-3">
+              <button
+                onClick={() => setBookOpen(true)}
+                className="hidden md:inline-flex items-center bg-cta hover:bg-cta-dark text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-colors">
+                Book a Cab
+              </button>
+              <button onClick={() => setMobileOpen(!mobileOpen)} className="text-white p-2 rounded-lg">
+                {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+              </button>
+            </div>
           </div>
         </div>
 
