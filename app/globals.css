@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  /* Carbon grey — dark backgrounds, navbar, sections */
+  --color-forest: #1E1E1E;
+  --color-forest-mid: #2D2D2D;
+  --color-forest-light: #484848;
+  --color-forest-pale: #E0E0E0;
+
+  /* Brand red — logo mark, accents */
+  --color-gold: #D42929;
+  --color-gold-dark: #AF1E1E;
+  --color-gold-light: #E85252;
+
+  /* Light grey — page & card backgrounds */
+  --color-ivory: #F5F5F5;
+  --color-ivory-dark: #E8E8E8;
+
+  /* Ink — body text */
+  --color-ink: #181818;
+  --color-ink-muted: #555555;
+  --color-ink-faint: #9A9A9A;
+
+  /* CTA green — all primary buttons */
+  --color-cta: #1B7A33;
+  --color-cta-dark: #145225;
+  --color-cta-light: #289845;
+
+  /* Typography */
+  --font-display: var(--font-playfair), Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-dm-mono), Menlo, monospace;
+}
+
+/* ── Base ── */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: #ffffff;
+}
+
+/* ── Scrollbar hide utility ── */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Custom scrollbar ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--color-ivory); }
+::-webkit-scrollbar-thumb { background: var(--color-ink-faint); border-radius: 99px; }
+
+/* ── Swiper overrides ── */
+.swiper-button-next,
+.swiper-button-prev {
+  color: var(--color-forest) !important;
+  background: white;
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 50%;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 15px !important;
+  font-weight: 800;
+}
+.swiper-pagination-bullet {
+  background: rgba(255,255,255,0.3) !important;
+}
+.swiper-pagination-bullet-active {
+  background: var(--color-cta) !important;
+  opacity: 1 !important;
+}
