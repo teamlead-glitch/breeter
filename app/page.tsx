@@ -37,7 +37,7 @@ export default function HomePage() {
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
           <div className="flex flex-col items-center">
-            <div className="relative z-20 -mb-7">
+            <div className="relative z-20 w-full mb-3 sm:w-auto sm:-mb-7">
               <HeroCategoryMenu />
             </div>
             <div className="w-full">

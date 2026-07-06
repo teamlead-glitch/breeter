@@ -4,7 +4,6 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import WhatsAppFab from '@/components/WhatsAppFab'
-import BottomNav from '@/components/BottomNav'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -39,10 +38,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="flex-1 pb-16 md:pb-0">{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
         <WhatsAppFab />
-        <BottomNav />
       </body>
     </html>
   )

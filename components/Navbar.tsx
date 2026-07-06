@@ -2,32 +2,25 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, ChevronDown, Home as HomeIcon, Car, Sparkles, Bus, Palmtree, Info, Phone } from 'lucide-react'
+import { Menu, X, Home as HomeIcon, Car, Sparkles, Bus, Palmtree, Info, Phone } from 'lucide-react'
 import SearchWidget from '@/components/SearchWidget'
 
-const cabLinks = [
-  { href: '/cabs', label: 'All Cabs', icon: Car },
+const navLinks = [
+  { href: '/cabs', label: 'Cabs', icon: Car },
   { href: '/cabs?type=luxury', label: 'Luxury Cabs', icon: Sparkles },
   { href: '/cabs?type=bus-van', label: 'Bus / Van', icon: Bus },
-]
-
-const navLinks = [
   { href: '/holidays', label: 'Holidays', icon: Palmtree },
-  { href: '/about', label: 'About', icon: Info },
-  { href: '/contact', label: 'Contact', icon: Phone },
 ]
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [cabOpen, setCabOpen] = useState(false)
   const [bookOpen, setBookOpen] = useState(false)
   const pathname = usePathname()
   const isHome = pathname === '/'
-  const isCabs = pathname === '/cabs'
 
   // Icon menu switches on once the transparent home hero nav is scrolled past, and stays on everywhere else
-  const compact = !isHome || scrolled
+  const compact = !isHome || scrolled || mobileOpen
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 56)
@@ -44,13 +37,18 @@ export default function Navbar() {
     return () => { document.body.style.overflow = '' }
   }, [bookOpen])
 
-  const navBg = isHome && !scrolled
+  const navBg = isHome && !scrolled && !mobileOpen
     ? 'bg-transparent'
     : 'bg-forest shadow-xl'
 
   const linkClass = (active: boolean) =>
-    `flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-      active ? 'text-white' : 'text-white/70 hover:text-white'
+    `flex items-center gap-2.5 pl-2 pr-3.5 py-2 rounded-xl text-sm font-semibold transition-colors ${
+      active ? 'bg-white/15 text-white' : 'text-white/80 hover:bg-white/10 hover:text-white'
+    }`
+
+  const iconBoxClass = (active: boolean) =>
+    `w-7 h-7 rounded-lg grid place-items-center transition-colors ${
+      active ? 'bg-gold/25 text-gold' : 'bg-white/10 text-white/80'
     }`
 
   return (
@@ -68,40 +66,13 @@ export default function Navbar() {
             {compact && (
               <>
                 {/* Desktop nav */}
-                <nav className="hidden md:flex items-center gap-1 ml-2">
-                  <Link href="/" className={linkClass(isHome)}>
-                    <HomeIcon size={14} className={isHome ? 'text-gold' : ''} />
-                    Home
-                  </Link>
-
-                  {/* Cabs dropdown */}
-                  <div className="relative" onMouseEnter={() => setCabOpen(true)} onMouseLeave={() => setCabOpen(false)}>
-                    <button className={linkClass(isCabs)}>
-                      <Car size={14} className={isCabs ? 'text-gold' : ''} />
-                      Cabs <ChevronDown size={13} className={`transition-transform duration-200 ${cabOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    {cabOpen && (
-                      <div className="absolute top-full left-0 mt-1.5 w-48 bg-white rounded-2xl shadow-2xl border border-black/5 overflow-hidden">
-                        {cabLinks.map(l => {
-                          const Icon = l.icon
-                          return (
-                            <Link key={l.href} href={l.href}
-                              className="flex items-center gap-2.5 px-4 py-3 text-sm text-ink hover:bg-ivory transition-colors font-medium">
-                              <Icon size={15} className="text-ink-faint" />
-                              {l.label}
-                            </Link>
-                          )
-                        })}
-                      </div>
-                    )}
-                  </div>
-
+                <nav className="hidden md:flex items-center gap-2 ml-2">
                   {navLinks.map(l => {
                     const Icon = l.icon
                     const active = pathname === l.href
                     return (
                       <Link key={l.href} href={l.href} className={linkClass(active)}>
-                        <Icon size={14} className={active ? 'text-gold' : ''} />
+                        <span className={iconBoxClass(active)}><Icon size={15} /></span>
                         {l.label}
                       </Link>
                     )
@@ -115,7 +86,7 @@ export default function Navbar() {
                     className="hidden md:inline-flex items-center bg-cta hover:bg-cta-dark text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-colors">
                     Book a Cab
                   </button>
-                  <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-white p-2 rounded-lg">
+                  <button onClick={() => setMobileOpen(!mobileOpen)} className="text-white p-2 rounded-lg">
                     {mobileOpen ? <X size={22} /> : <Menu size={22} />}
                   </button>
                 </div>
@@ -124,10 +95,11 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile menu */}
+        {/* Menu drawer (all breakpoints) */}
         {mobileOpen && (
-          <div className="md:hidden bg-forest border-t border-white/10">
-            <div className="px-4 py-4 space-y-0.5">
+          <div className="bg-forest border-t border-white/10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="py-4 space-y-0.5 md:w-72 md:ml-auto">
               {[
                 { href: '/', label: 'Home', icon: HomeIcon },
                 { href: '/cabs', label: 'Cabs', icon: Car },
@@ -148,6 +120,7 @@ export default function Navbar() {
                 className="block w-full mt-3 px-3 py-3 bg-cta text-white font-bold text-sm rounded-xl text-center">
                 Book a Cab
               </button>
+            </div>
             </div>
           </div>
         )}
