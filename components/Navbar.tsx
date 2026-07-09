@@ -133,7 +133,7 @@ export default function Navbar() {
             onClick={() => setBookOpen(false)}
           />
           {/* Modal */}
-          <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden">
+          <div className="relative w-full max-w-2xl md:max-w-5xl lg:max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden">
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-black/5">
               <div>
