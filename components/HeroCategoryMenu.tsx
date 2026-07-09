@@ -26,16 +26,14 @@ export default function HeroCategoryMenu() {
       </div>
 
       {/* Mobile — 2×2 quick-access grid */}
-      <div className="sm:hidden w-full bg-white/96 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-3 grid grid-cols-2 gap-2">
+      <div className="sm:hidden w-full grid grid-cols-2 gap-2.5">
         {ITEMS.map(item => {
           const Icon = item.icon
           return (
             <Link key={item.href} href={item.href}
-              className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-ivory transition-colors">
-              <span className="flex-none w-9 h-9 rounded-lg bg-forest/8 text-forest grid place-items-center">
-                <Icon size={18} strokeWidth={1.75} />
-              </span>
-              <span className="text-[13px] font-semibold text-ink leading-tight">{item.label}</span>
+              className="flex flex-col items-center justify-center gap-2 py-4 rounded-2xl bg-ivory/95 backdrop-blur-sm hover:bg-white transition-colors">
+              <Icon size={24} strokeWidth={1.6} className="text-ink" />
+              <span className="text-xs font-semibold text-ink">{item.label}</span>
             </Link>
           )
         })}
