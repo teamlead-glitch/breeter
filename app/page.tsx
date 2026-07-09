@@ -59,7 +59,7 @@ export default function HomePage() {
           <div className="flex items-end justify-between mb-12">
             <div>
               <p className="font-mono text-forest/40 text-xs tracking-[0.2em] uppercase mb-2">Curated travel</p>
-              <h2 className="font-display text-ink text-3xl md:text-4xl font-bold">Featured Packages</h2>
+              <h2 className="text-ink text-3xl md:text-4xl font-bold">Featured Packages</h2>
             </div>
             <Link href="/holidays" className="hidden sm:inline-flex items-center gap-1 text-forest font-semibold text-sm hover:underline underline-offset-4">
               View all <ChevronRight size={15} />
@@ -119,7 +119,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <p className="font-mono text-forest/40 text-xs tracking-[0.2em] uppercase mb-2">Our promise</p>
-            <h2 className="font-display text-ink text-3xl md:text-4xl font-bold">Why book with Breeter</h2>
+            <h2 className="text-ink text-3xl md:text-4xl font-bold">Why book with Breeter</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {whyBreeter.map(item => (
@@ -141,7 +141,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div>
-              <h2 className="font-display text-white text-3xl md:text-4xl font-bold mb-3">
+              <h2 className="text-white text-3xl md:text-4xl font-bold mb-3">
                 Planning an outstation trip?
               </h2>
               <p className="text-white/55 text-base max-w-md">
