@@ -69,7 +69,7 @@ export default function SearchWidget() {
           <MapPin size={15} className="text-forest flex-shrink-0" />
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">From</p>
-            <input defaultValue="Kochi" className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint" placeholder="Pickup city" />
+            <input id="search-from-input" defaultValue="Kochi" className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint" placeholder="Pickup city" />
           </div>
         </div>
 

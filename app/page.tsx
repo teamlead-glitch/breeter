@@ -3,6 +3,7 @@ import Link from 'next/link'
 import SearchWidget from '@/components/SearchWidget'
 import HeroCategoryMenu from '@/components/HeroCategoryMenu'
 import VehicleSwiper from '@/components/VehicleSwiper'
+import StartBookingButton from '@/components/StartBookingButton'
 import { packages, whyBreeter } from '@/lib/data'
 import { Shield, Star, Wallet, ChevronRight } from 'lucide-react'
 
@@ -147,10 +148,7 @@ export default function HomePage() {
                 Get an instant fare estimate in under a minute. No credit card required.
               </p>
             </div>
-            <Link href="/book"
-              className="flex-none inline-flex items-center gap-2 bg-cta hover:bg-cta-dark text-white font-bold text-base px-8 py-4 rounded-2xl transition-colors shadow-xl shadow-cta/20">
-              Start booking →
-            </Link>
+            <StartBookingButton />
           </div>
         </div>
       </section>
