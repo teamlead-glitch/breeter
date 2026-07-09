@@ -2,9 +2,9 @@
 
 @theme {
   /* Carbon grey — dark backgrounds, navbar, sections */
-  --color-forest: #1E1E1E;
-  --color-forest-mid: #2D2D2D;
-  --color-forest-light: #484848;
+  --color-forest: #5C5C60;
+  --color-forest-mid: #6C6C70;
+  --color-forest-light: #88888C;
   --color-forest-pale: #E0E0E0;
 
   /* Brand red — logo mark, accents */
