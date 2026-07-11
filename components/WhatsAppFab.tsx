@@ -1,4 +1,10 @@
+'use client'
+import { usePathname } from 'next/navigation'
+
 export default function WhatsAppFab() {
+  const pathname = usePathname()
+  if (pathname !== '/') return null
+
   return (
     <a
       href="https://wa.me/919999999999"
