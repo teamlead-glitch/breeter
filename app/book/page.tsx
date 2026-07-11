@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { ADD_ONS } from '@/components/book/data'
@@ -10,14 +10,22 @@ import AddOnsCard from '@/components/book/AddOnsCard'
 import TravellerDetailsForm from '@/components/book/TravellerDetailsForm'
 import FareBreakdownCard from '@/components/book/FareBreakdownCard'
 import MobilePayBar from '@/components/book/MobilePayBar'
+import TermsAgreement from '@/components/book/TermsAgreement'
 
 export default function BookPage() {
   const [addOns, setAddOns] = useState<string[]>(['age', 'lang'])
   const [agreed, setAgreed] = useState(false)
   const [stops] = useState(['Adimali', 'Mattupetti'])
+  const mobileAgreeRef = useRef<HTMLLabelElement>(null)
 
   const toggleAddon = (id: string) =>
     setAddOns(prev => prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id])
+
+  const handleMobilePayAttempt = () => {
+    window.alert('Please agree to the Terms & cancellation policy to continue.')
+    mobileAgreeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    mobileAgreeRef.current?.focus()
+  }
 
   const basefare = 5800
   const stopsCharge = stops.length * 100
@@ -54,10 +62,15 @@ export default function BookPage() {
             <CabInfoCard />
             <AddOnsCard addOns={addOns} onToggle={toggleAddon} />
             <TravellerDetailsForm />
+
+            {/* Mobile/tablet: terms checkbox — the sidebar with this is desktop-only, but the fixed pay bar's button needs it too */}
+            <div className="lg:hidden bg-white rounded-2xl border border-black/5 p-4">
+              <TermsAgreement ref={mobileAgreeRef} agreed={agreed} onToggle={() => setAgreed(a => !a)} />
+            </div>
           </main>
 
           {/* ── SIDEBAR ─────────────────────────────────── */}
-          <aside className="hidden lg:block w-72 flex-shrink-0">
+          <aside className="hidden lg:block w-72 flex-shrink-0 lg:self-stretch">
             <FareBreakdownCard
               basefare={basefare}
               stopsCount={stops.length}
@@ -74,7 +87,7 @@ export default function BookPage() {
         </div>
       </div>
 
-      <MobilePayBar payNow={payNow} total={total} agreed={agreed} />
+      <MobilePayBar payNow={payNow} total={total} agreed={agreed} onPayAttempt={handleMobilePayAttempt} />
     </div>
   )
 }
