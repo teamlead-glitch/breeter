@@ -1,19 +1,32 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { Menu, X, Home as HomeIcon, Car, Sparkles, Bus, Palmtree, Info, Phone } from 'lucide-react'
 import SearchWidget from '@/components/SearchWidget'
 import { useBookModal } from '@/components/BookModalContext'
 
 const navLinks = [
-  { href: '/cabs', label: 'Cabs', icon: Car },
-  { href: '/cabs?type=luxury', label: 'Luxury Cabs', icon: Sparkles },
-  { href: '/cabs?type=bus-van', label: 'Bus / Van', icon: Bus },
-  { href: '/holidays', label: 'Holidays', icon: Palmtree },
+  { href: '/cabs', label: 'Cabs', icon: Car, type: null as string | null },
+  { href: '/cabs?type=luxury', label: 'Luxury Cabs', icon: Sparkles, type: 'luxury' },
+  { href: '/cabs?type=bus-van', label: 'Bus / Van', icon: Bus, type: 'bus-van' },
+  { href: '/holidays', label: 'Holidays', icon: Palmtree, type: null as string | null },
 ]
 
 export default function Navbar() {
+  return (
+    <Suspense fallback={<NavbarShell currentType={null} />}>
+      <NavbarWithSearchParams />
+    </Suspense>
+  )
+}
+
+function NavbarWithSearchParams() {
+  const currentType = useSearchParams().get('type')
+  return <NavbarShell currentType={currentType} />
+}
+
+function NavbarShell({ currentType }: { currentType: string | null }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const { bookOpen, openBookModal, closeBookModal } = useBookModal()
@@ -69,7 +82,9 @@ export default function Navbar() {
               <nav className="hidden md:flex items-center gap-2 ml-2">
                 {navLinks.map(l => {
                   const Icon = l.icon
-                  const active = pathname === l.href
+                  const active = l.href.startsWith('/cabs')
+                    ? pathname === '/cabs' && currentType === l.type
+                    : pathname === l.href
                   return (
                     <Link key={l.href} href={l.href} className={linkClass(active)}>
                       <span className={iconBoxClass(active)}><Icon size={15} /></span>

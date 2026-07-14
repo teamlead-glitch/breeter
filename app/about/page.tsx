@@ -25,7 +25,6 @@ export default function AboutPage() {
           alt="About Breeter"
           fill priority sizes="100vw" className="object-cover object-bottom"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-forest/15 via-forest/55 to-forest" />
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 pt-28">
           <p className="font-mono text-white/80 text-xs tracking-[0.2em] uppercase mb-2 drop-shadow-sm">About Breeter</p>
           <h1 className="font-display text-white text-4xl md:text-5xl font-bold drop-shadow-md">Travel made simple &amp; transparent</h1>

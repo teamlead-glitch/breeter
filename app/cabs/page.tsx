@@ -17,13 +17,13 @@ const CATEGORIES = {
     eyebrow: 'Premium · Chauffeur driven',
     title: 'Luxury Cabs',
     desc: 'Premium chauffeur-driven cars for business travel, weddings, airport transfers and special occasions.',
-    image: 'https://images.unsplash.com/photo-1704476944918-c1258561ebb9?auto=format&fit=crop&w=1400&q=80',
+    image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1400&q=80',
   },
   'bus-van': {
     eyebrow: 'Group travel · Spacious',
     title: 'Bus / Van',
     desc: 'Spacious vans and buses for group tours, corporate trips and large family travel across South India.',
-    image: 'https://images.unsplash.com/photo-1673290992592-dfe5bbfbd465?auto=format&fit=crop&w=1400&q=80',
+    image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1400&q=80',
   },
 }
 

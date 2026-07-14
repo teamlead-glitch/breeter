@@ -33,8 +33,8 @@ export default function HomePage() {
           className="object-cover object-center"
         />
         {/* Layered gradient for depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-forest/10 via-forest/55 to-forest" />
-        <div className="absolute inset-0 bg-gradient-to-r from-forest/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-forest/5 via-forest/25 to-forest/60" />
+        <div className="absolute inset-0 bg-gradient-to-r from-forest/25 to-transparent" />
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
           <div className="flex flex-col items-center">
