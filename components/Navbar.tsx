@@ -139,7 +139,7 @@ export default function Navbar() {
             <div className="flex items-center justify-between px-6 py-5 border-b border-black/5">
               <div>
                 <p className="font-mono text-forest/60 text-[10px] tracking-[0.2em] uppercase mb-0.5">Quick booking</p>
-                <h2 className="font-display text-ink text-xl font-bold">Book a Cab</h2>
+                <h2 className="font-bold text-ink text-xl">Book a Cab</h2>
               </div>
               <button
                 onClick={closeBookModal}
