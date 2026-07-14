@@ -11,19 +11,19 @@ const CATEGORIES = {
     eyebrow: 'Outstation · Local · Hourly',
     title: 'Cabs',
     desc: 'Comfortable, verified cabs for drop, round trips and hourly rentals at transparent slab-based fares.',
-    image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1400&q=80',
+    image: 'https://images.unsplash.com/photo-1643220297812-8cb15ba7c3d6?auto=format&fit=crop&w=1400&q=80',
   },
   luxury: {
     eyebrow: 'Premium · Chauffeur driven',
     title: 'Luxury Cabs',
     desc: 'Premium chauffeur-driven cars for business travel, weddings, airport transfers and special occasions.',
-    image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1400&q=80',
+    image: 'https://images.unsplash.com/photo-1704476944918-c1258561ebb9?auto=format&fit=crop&w=1400&q=80',
   },
   'bus-van': {
     eyebrow: 'Group travel · Spacious',
     title: 'Bus / Van',
     desc: 'Spacious vans and buses for group tours, corporate trips and large family travel across South India.',
-    image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1400&q=80',
+    image: 'https://images.unsplash.com/photo-1673290992592-dfe5bbfbd465?auto=format&fit=crop&w=1400&q=80',
   },
 }
 
@@ -41,11 +41,11 @@ export default async function CabsPage({ searchParams }: PageProps) {
       {/* Banner */}
       <section className="relative min-h-[48vh] flex items-end overflow-hidden">
         <Image src={cat.image} alt={cat.title} fill priority sizes="100vw" className="object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-forest/20 to-forest/80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-forest/20 via-forest/60 to-forest" />
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 pt-28">
-          <p className="font-mono text-gold/70 text-xs tracking-[0.2em] uppercase mb-2">{cat.eyebrow}</p>
-          <h1 className="font-display text-white text-4xl md:text-5xl font-bold mb-2">{cat.title}</h1>
-          <p className="text-white/60 max-w-lg text-sm">{cat.desc}</p>
+          <p className="font-mono text-white/80 text-xs tracking-[0.2em] uppercase mb-2 drop-shadow-sm">{cat.eyebrow}</p>
+          <h1 className="font-display text-white text-4xl md:text-5xl font-bold mb-2 drop-shadow-md">{cat.title}</h1>
+          <p className="text-white/70 max-w-lg text-sm drop-shadow-sm">{cat.desc}</p>
         </div>
       </section>
 
@@ -85,9 +85,7 @@ export default async function CabsPage({ searchParams }: PageProps) {
               className="group block bg-white rounded-2xl overflow-hidden border border-black/5 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
               <div className="relative h-44 overflow-hidden bg-ivory">
                 <Image src={v.image} alt={v.name} fill sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                <span className="absolute top-3 left-3 bg-forest/80 text-gold text-[10px] font-mono font-semibold px-2.5 py-1 rounded-full backdrop-blur-sm">
-                  {v.category}
-                </span>
+                
               </div>
               <div className="p-5">
                 <h3 className="font-bold text-ink text-base mb-0.5">{v.name}</h3>

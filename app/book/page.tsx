@@ -48,7 +48,7 @@ export default function BookPage() {
             <ChevronRight size={11} />
             <span className="text-white/70">Review booking</span>
           </div>
-          <h1 className="text-white text-2xl md:text-3xl font-bold">Review booking</h1>
+          <h1 className="font-display text-white text-2xl md:text-3xl font-bold">Review booking</h1>
         </div>
       </div>
 

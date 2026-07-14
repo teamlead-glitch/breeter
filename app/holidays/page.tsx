@@ -13,11 +13,11 @@ export default function HolidaysPage() {
           alt="Holiday packages"
           fill priority sizes="100vw" className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-forest/10 to-forest/80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-forest/15 via-forest/55 to-forest" />
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 pt-28 text-center">
-          <p className="font-mono text-gold/70 text-xs tracking-[0.2em] uppercase mb-2">Curated travel</p>
-          <h1 className="font-display text-white text-4xl md:text-5xl font-bold mb-2">Holiday Packages</h1>
-          <p className="text-white/60 text-sm">Kerala, Tamil Nadu, Uttarakhand & beyond</p>
+          <p className="font-mono text-white/80 text-xs tracking-[0.2em] uppercase mb-2 drop-shadow-sm">Curated travel</p>
+          <h1 className="font-display text-white text-4xl md:text-5xl font-bold mb-2 drop-shadow-md">Holiday Packages</h1>
+          <p className="text-white/70 text-sm drop-shadow-sm">Kerala, Tamil Nadu, Uttarakhand & beyond</p>
         </div>
       </section>
 

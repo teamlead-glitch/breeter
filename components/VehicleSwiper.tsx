@@ -15,8 +15,8 @@ export default function VehicleSwiper() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-end justify-between mb-10">
           <div>
-            <p className="font-mono text-gold-light text-xs tracking-[0.2em] uppercase mb-2">Select your vehicle</p>
-            <h2 className="text-white text-3xl md:text-4xl font-bold">Choose your ride</h2>
+            <p className="font-mono text-white/70 text-xs tracking-[0.2em] uppercase mb-2">Select your vehicle</p>
+            <h2 className="font-display text-white text-3xl md:text-4xl font-bold">Choose your ride</h2>
           </div>
           <Link href="/cabs" className="hidden sm:inline-flex text-white/50 hover:text-white text-sm font-medium gap-1 transition-colors items-center">
             View all →
