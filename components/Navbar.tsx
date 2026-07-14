@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, Home as HomeIcon, Car, Sparkles, Bus, Palmtree, Info, Phone } from 'lucide-react'
 import SearchWidget from '@/components/SearchWidget'
+import { useBookModal } from '@/components/BookModalContext'
 
 const navLinks = [
   { href: '/cabs', label: 'Cabs', icon: Car },
@@ -15,7 +16,7 @@ const navLinks = [
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [bookOpen, setBookOpen] = useState(false)
+  const { bookOpen, openBookModal, closeBookModal } = useBookModal()
   const pathname = usePathname()
   const isHome = pathname === '/'
 
@@ -82,7 +83,7 @@ export default function Navbar() {
             {/* Right side — always visible, even on the unscrolled home hero */}
             <div className="ml-auto flex items-center gap-3">
               <button
-                onClick={() => setBookOpen(true)}
+                onClick={openBookModal}
                 className="hidden md:inline-flex items-center bg-cta hover:bg-cta-dark text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-colors">
                 Book a Cab
               </button>
@@ -114,7 +115,7 @@ export default function Navbar() {
                 </Link>
               ))}
               <button
-                onClick={() => { setMobileOpen(false); setBookOpen(true) }}
+                onClick={() => { setMobileOpen(false); openBookModal() }}
                 className="block w-full mt-3 px-3 py-3 bg-cta text-white font-bold text-sm rounded-xl text-center">
                 Book a Cab
               </button>
@@ -130,7 +131,7 @@ export default function Navbar() {
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-ink/60 backdrop-blur-sm"
-            onClick={() => setBookOpen(false)}
+            onClick={closeBookModal}
           />
           {/* Modal */}
           <div className="relative w-full max-w-2xl md:max-w-5xl lg:max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden">
@@ -141,7 +142,7 @@ export default function Navbar() {
                 <h2 className="font-display text-ink text-xl font-bold">Book a Cab</h2>
               </div>
               <button
-                onClick={() => setBookOpen(false)}
+                onClick={closeBookModal}
                 className="w-9 h-9 rounded-xl bg-ivory hover:bg-ivory-dark grid place-items-center transition-colors text-ink-muted hover:text-ink">
                 <X size={18} />
               </button>

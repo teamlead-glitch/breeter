@@ -1,13 +1,15 @@
-import Link from 'next/link'
 import { Edit3 } from 'lucide-react'
+import { useBookModal } from '@/components/BookModalContext'
 
 export default function TripSummary() {
+  const { openBookModal } = useBookModal()
+
   return (
     <div className="bg-white rounded-2xl border border-black/5 p-4 sm:p-5 relative">
-      <Link href="/search"
+      <button onClick={openBookModal}
         className="absolute top-4 right-4 flex items-center gap-1 text-xs font-semibold text-cta hover:bg-cta/8 border border-cta/20 px-3 py-1.5 rounded-lg transition-colors">
         <Edit3 size={12} /> Edit
-      </Link>
+      </button>
       <p className="text-ink-faint text-xs mb-3">Outstation One Way Trip (Drop)</p>
 
       {/* Mobile: From/To stacked vertically */}
