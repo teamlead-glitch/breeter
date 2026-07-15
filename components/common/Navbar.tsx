@@ -3,8 +3,8 @@ import { Suspense, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { Menu, X, Home as HomeIcon, Car, Sparkles, Bus, Palmtree, Info, Phone } from 'lucide-react'
-import SearchWidget from '@/components/SearchWidget'
-import { useBookModal } from '@/components/BookModalContext'
+import SearchWidget from '@/components/common/SearchWidget'
+import { useBookModal } from '@/components/common/BookModalContext'
 
 const navLinks = [
   { href: '/cabs', label: 'Cabs', icon: Car, type: null as string | null },

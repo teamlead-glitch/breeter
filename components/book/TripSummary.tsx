@@ -1,5 +1,5 @@
 import { Edit3 } from 'lucide-react'
-import { useBookModal } from '@/components/BookModalContext'
+import { useBookModal } from '@/components/common/BookModalContext'
 
 export default function TripSummary() {
   const { openBookModal } = useBookModal()

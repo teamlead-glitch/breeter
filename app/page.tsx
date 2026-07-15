@@ -1,9 +1,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import SearchWidget from '@/components/SearchWidget'
-import HeroCategoryMenu from '@/components/HeroCategoryMenu'
-import VehicleSwiper from '@/components/VehicleSwiper'
-import StartBookingButton from '@/components/StartBookingButton'
+import SearchWidget from '@/components/common/SearchWidget'
+import HeroCategoryMenu from '@/components/home/HeroCategoryMenu'
+import VehicleSwiper from '@/components/home/VehicleSwiper'
+import StartBookingButton from '@/components/home/StartBookingButton'
 import { packages, whyBreeter } from '@/lib/data'
 import { Shield, Star, Wallet, ChevronRight } from 'lucide-react'
 

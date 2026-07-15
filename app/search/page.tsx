@@ -1,38 +1,11 @@
 'use client'
 import { useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { vehicles } from '@/lib/data'
-import { Users, Wind, SlidersHorizontal, ArrowLeft, X } from 'lucide-react'
-import SearchWidget from '@/components/SearchWidget'
-
-function FilterFields() {
-  return (
-    <>
-      <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-3">Vehicle tags</p>
-      <div className="space-y-2.5 mb-5">
-        {['Luxury Cabs', 'Bus / Van', 'Neat & Clean', 'Free Cancellation'].map(f => (
-          <label key={f} className="flex items-center gap-2.5 cursor-pointer group">
-            <span className="w-4 h-4 rounded border-2 border-ink-faint/40 group-hover:border-forest transition-colors flex-shrink-0" />
-            <span className="text-sm text-ink-muted group-hover:text-ink transition-colors">{f}</span>
-          </label>
-        ))}
-      </div>
-
-      <div className="h-px bg-black/5 mb-5" />
-
-      <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-3">Add-ons</p>
-      <div className="space-y-2.5">
-        {['Vehicle below 5 years', 'Roof carrier'].map(f => (
-          <label key={f} className="flex items-center gap-2.5 cursor-pointer group">
-            <span className="w-4 h-4 rounded border-2 border-ink-faint/40 group-hover:border-forest transition-colors flex-shrink-0" />
-            <span className="text-sm text-ink-muted group-hover:text-ink transition-colors">{f}</span>
-          </label>
-        ))}
-      </div>
-    </>
-  )
-}
+import { SlidersHorizontal, ArrowLeft, X } from 'lucide-react'
+import SearchWidget from '@/components/common/SearchWidget'
+import FilterFields from '@/components/search/FilterFields'
+import VehicleCard from '@/components/search/VehicleCard'
 
 export default function SearchResultsPage() {
   const [filterOpen, setFilterOpen] = useState(false)
@@ -88,7 +61,7 @@ export default function SearchResultsPage() {
           {/* Results */}
           <main className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="font-display font-bold text-ink text-2xl">Available cabs</h2>
+              <h2 className="font-bold text-ink text-2xl">Available cabs</h2>
               <button
                 onClick={() => setFilterOpen(true)}
                 className="lg:hidden flex items-center gap-1.5 text-xs font-semibold text-ink-muted border border-black/10 px-3 py-2 rounded-lg hover:border-forest/40 transition-colors">
@@ -99,28 +72,7 @@ export default function SearchResultsPage() {
 
             <div className="space-y-4">
               {vehicles.map(v => (
-                <div key={v.id} className="bg-white rounded-2xl border border-black/5 p-4 sm:p-5 flex flex-col sm:flex-row gap-4 sm:gap-5 hover:shadow-lg transition-shadow">
-                  <div className="relative w-full sm:w-32 md:w-40 h-40 sm:h-24 md:h-28 flex-shrink-0 rounded-xl overflow-hidden bg-ivory">
-                    <Image src={v.image} alt={v.name} fill sizes="(max-width: 640px) 100vw, 160px" className="object-cover" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-ink text-base mb-0.5">{v.name} · AC {v.seats} Seat</h3>
-                    <p className="text-ink-faint text-xs mb-3">{v.model}</p>
-                    <div className="flex flex-wrap gap-2">
-                      <span className="text-[10px] font-semibold text-ink-muted bg-ivory px-2.5 py-0.5 rounded-full flex items-center gap-1"><Users size={10}/> {v.seats} seats</span>
-                      <span className="text-[10px] font-semibold text-ink-muted bg-ivory px-2.5 py-0.5 rounded-full flex items-center gap-1"><Wind size={10}/> AC</span>
-                    </div>
-                  </div>
-                  <div className="flex-shrink-0 flex flex-row sm:flex-col justify-between items-center sm:items-end gap-3 sm:gap-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-black/5">
-                    <div>
-                      <p className="font-mono font-bold text-ink text-xl sm:text-2xl">₹{v.startingFare.toLocaleString('en-IN')}</p>
-                      <p className="text-ink-faint text-xs">est. fare</p>
-                    </div>
-                    <Link href="/book" className="bg-cta hover:bg-cta-dark text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-colors sm:mt-3">
-                      Select
-                    </Link>
-                  </div>
-                </div>
+                <VehicleCard key={v.id} v={v} />
               ))}
             </div>
           </main>
