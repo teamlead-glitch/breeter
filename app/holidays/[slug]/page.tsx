@@ -49,9 +49,6 @@ export default async function PackageDetailPage({ params }: PageProps) {
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap gap-2 mb-3">
                 <span className="bg-forest/10 text-forest text-xs font-bold px-3 py-1 rounded-full">{pkg.location}</span>
-                {pkg.tags.map(tag => (
-                  <span key={tag} className="bg-ivory-dark text-ink-muted text-xs font-medium px-3 py-1 rounded-full">{tag}</span>
-                ))}
               </div>
 
               <h1 className="font-display text-ink text-3xl md:text-4xl font-bold mb-1">{pkg.name}</h1>
@@ -121,16 +118,8 @@ export default async function PackageDetailPage({ params }: PageProps) {
                   ))}
                 </div>
 
-                <div>
-                  <p className="text-[10px] text-ink-faint uppercase tracking-wider mb-1">Starting from</p>
-                  <p className="font-mono font-bold text-forest text-2xl mb-4">₹{pkg.price.toLocaleString('en-IN')}<span className="text-xs font-normal text-ink-faint">/person</span></p>
-                </div>
-
-                <button className="w-full bg-cta hover:bg-cta-dark text-white font-bold text-sm py-3.5 rounded-xl transition-colors mb-3">
+                <button className="w-full bg-cta hover:bg-cta-dark text-white font-bold text-sm py-3.5 rounded-xl transition-colors">
                   Request Quote
-                </button>
-                <button className="w-full bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C7E] font-bold text-sm py-3.5 rounded-xl transition-colors">
-                  WhatsApp instead
                 </button>
               </div>
             </div>
