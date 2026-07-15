@@ -59,9 +59,7 @@ export default function SearchWidget() {
 
       {/* Fields grid */}
       <div className={`grid gap-2 mb-4 ${
-        tripType === 'Hourly Rental'
-          ? 'grid-cols-1 sm:grid-cols-3'
-          : tripType === 'Round Trip'
+        tripType === 'Round Trip'
           ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-5'
           : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
       }`}>
@@ -115,15 +113,13 @@ export default function SearchWidget() {
           </div>
         )}
 
-        {tripType !== 'Hourly Rental' && (
-          <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
-            <MapPin size={15} className="text-ink-faint flex-shrink-0" />
-            <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">To</p>
-              <input defaultValue="Kannur" className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint" placeholder="Drop city" />
-            </div>
+        <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+          <MapPin size={15} className="text-ink-faint flex-shrink-0" />
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">To</p>
+            <input defaultValue="Kannur" className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint" placeholder="Drop city" />
           </div>
-        )}
+        </div>
 
         <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
           <Calendar size={15} className="text-forest flex-shrink-0" />
