@@ -24,7 +24,7 @@ export default function VehicleCard({ v }: { v: CardVehicle }) {
         <p className="text-ink-faint text-xs mb-3">{v.model}</p>
         <div className="flex items-center gap-3 mb-4">
           <span className="flex items-center gap-1 text-xs text-ink-muted"><Users size={12} /> {v.seats} seats</span>
-          <span className="flex items-center gap-1 text-xs text-ink-muted"><Wind size={12} /> AC</span>
+          {/* <span className="flex items-center gap-1 text-xs text-ink-muted"><Wind size={12} /> AC</span> */}
         </div>
         <div className="flex items-center justify-between">
           <div>

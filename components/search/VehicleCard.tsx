@@ -14,7 +14,7 @@ export default function VehicleCard({ v }: { v: Vehicle }) {
         <p className="text-ink-faint text-xs mb-3">{v.model}</p>
         <div className="flex flex-wrap gap-2">
           <span className="text-[10px] font-semibold text-ink-muted bg-ivory px-2.5 py-0.5 rounded-full flex items-center gap-1"><Users size={10}/> {v.seats} seats</span>
-          <span className="text-[10px] font-semibold text-ink-muted bg-ivory px-2.5 py-0.5 rounded-full flex items-center gap-1"><Wind size={10}/> AC</span>
+          {/* <span className="text-[10px] font-semibold text-ink-muted bg-ivory px-2.5 py-0.5 rounded-full flex items-center gap-1"><Wind size={10}/> AC</span> */}
         </div>
       </div>
       <div className="flex-shrink-0 flex flex-row sm:flex-col justify-between items-center sm:items-end gap-3 sm:gap-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-black/5">

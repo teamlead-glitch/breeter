@@ -24,7 +24,7 @@ export default function ContactPage() {
                 ))}
               </div>
 
-              {['Email', 'Subject'].map(f => (
+              {['Email'].map(f => (
                 <div key={f} className="mb-4">
                   <label className="block text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-1.5">{f}</label>
                   <input className="w-full bg-ivory rounded-xl px-4 py-3 text-sm text-ink border-2 border-transparent focus:border-forest/25 outline-none" placeholder={`Your ${f.toLowerCase()}`} />
