@@ -7,13 +7,13 @@ export default function CabInfoCard() {
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-1">
             <h3 className="font-bold text-ink text-base">XL Sedan</h3>
-            <span className="bg-cta/10 text-cta text-[10px] font-semibold px-2 py-0.5 rounded-full">4.5 ★ · 12 reviews</span>
+            {/* <span className="bg-cta/10 text-cta text-[10px] font-semibold px-2 py-0.5 rounded-full">4.5 ★ · 12 reviews</span> */}
           </div>
           <p className="text-ink-faint text-xs mb-2">Maruti Ciaz / Skoda Slavia or similar</p>
           <div className="flex flex-wrap items-center gap-3">
             <span className="flex items-center gap-1 text-xs text-ink-muted"><Users size={11}/> 4 Seats</span>
-            <span className="flex items-center gap-1 text-xs text-ink-muted"><Wind size={11}/> AC</span>
-            <span className="text-xs text-ink-muted">SEDAN</span>
+            {/* <span className="flex items-center gap-1 text-xs text-ink-muted"><Wind size={11}/> AC</span> */}
+            {/* <span className="text-xs text-ink-muted">SEDAN</span> */}
           </div>
         </div>
         <div className="w-24 sm:w-32 h-20 bg-ivory rounded-xl flex-shrink-0 flex items-center justify-center">

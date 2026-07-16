@@ -1,9 +1,8 @@
-import Image from 'next/image'
 import Link from 'next/link'
-import SearchWidget from '@/components/common/SearchWidget'
-import HeroCategoryMenu from '@/components/home/HeroCategoryMenu'
+import HeroBanner from '@/components/home/HeroBanner'
 import VehicleSwiper from '@/components/home/VehicleSwiper'
 import StartBookingButton from '@/components/home/StartBookingButton'
+import FeaturedPackageCard from '@/components/holidays/FeaturedPackageCard'
 import { packages, whyBreeter } from '@/lib/data'
 import { Shield, Star, Wallet, ChevronRight } from 'lucide-react'
 
@@ -23,30 +22,7 @@ export default function HomePage() {
   return (
     <>
       {/* ─── HERO ──────────────────────────────────────────── */}
-      <section className="relative min-h-[70vh] flex flex-col justify-start overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1920&q=80"
-          alt="Scenic winding mountain road"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
-        {/* Layered gradient for depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-forest/5 via-forest/25 to-forest/60" />
-        <div className="absolute inset-0 bg-gradient-to-r from-forest/25 to-transparent" />
-
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
-          <div className="flex flex-col items-center">
-            <div className="relative z-20 w-full mb-3 sm:w-auto sm:-mb-7">
-              <HeroCategoryMenu />
-            </div>
-            <div className="w-full">
-              <SearchWidget />
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroBanner />
 
       {/* ─── VEHICLE SWIPER (inverted dark section) ────────── */}
       <VehicleSwiper />
@@ -68,39 +44,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {featuredPackages.map(pkg => (
-              <Link key={pkg.slug} href={`/holidays/${pkg.slug}`}
-                className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl border border-black/4 transition-all duration-300 hover:-translate-y-1">
-                <div className="relative h-52 overflow-hidden">
-                  <Image src={pkg.image} alt={pkg.name} fill sizes="(max-width:768px) 100vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/65 via-transparent to-transparent" />
-                  <span className="absolute top-3 left-3 bg-white/90 text-forest text-[10px] font-bold px-2.5 py-1 rounded-full">
-                    {pkg.location}
-                  </span>
-                  <span className="absolute bottom-3 left-4 text-white/80 font-mono text-sm font-medium">
-                    {pkg.nights}N / {pkg.days}D
-                  </span>
-                </div>
-                <div className="p-5">
-                  <h3 className="font-bold text-ink text-lg mb-2 group-hover:text-forest transition-colors">{pkg.name}</h3>
-                  <div className="flex flex-wrap gap-1.5 mb-4">
-                    {pkg.tags.slice(0, 2).map(tag => (
-                      <span key={tag} className="text-[10px] font-semibold text-ink-faint bg-ivory px-2.5 py-0.5 rounded-full">{tag}</span>
-                    ))}
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-[10px] text-ink-faint uppercase tracking-wider">Starting from</p>
-                      <p className="font-mono font-bold text-forest text-lg">
-                        ₹{pkg.price.toLocaleString('en-IN')}
-                        <span className="text-xs font-normal text-ink-faint">/person</span>
-                      </p>
-                    </div>
-                    <span className="text-xs font-bold text-cta group-hover:bg-cta group-hover:text-white border border-cta px-3 py-1.5 rounded-xl transition-all">
-                      Enquire →
-                    </span>
-                  </div>
-                </div>
-              </Link>
+              <FeaturedPackageCard key={pkg.slug} pkg={pkg} />
             ))}
           </div>
 
