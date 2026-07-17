@@ -1,8 +1,12 @@
 import Link from 'next/link'
-import { Home as HomeIcon, Info, Phone } from 'lucide-react'
+import { Home as HomeIcon, Info, Phone, Car, Sparkles, Bus, Palmtree } from 'lucide-react'
 
 const menuLinks = [
   { href: '/', label: 'Home', icon: HomeIcon },
+  { href: '/cabs', label: 'Cabs', icon: Car },
+  { href: '/cabs?type=luxury', label: 'Luxury Cabs', icon: Sparkles },
+  { href: '/cabs?type=bus-van', label: 'Bus / Van', icon: Bus },
+  { href: '/holidays', label: 'Holidays', icon: Palmtree },
   { href: '/about', label: 'About', icon: Info },
   { href: '/contact', label: 'Contact', icon: Phone },
 ]

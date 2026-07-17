@@ -10,7 +10,7 @@ const navLinks = [
 
 const linkClass = (active: boolean) =>
   `flex items-center gap-2.5 pl-2 pr-3.5 py-2 rounded-xl text-sm font-semibold transition-colors ${
-    active ? 'bg-white/15 text-white' : 'text-white/80 hover:bg-white/10 hover:text-white'
+    active ? 'text-white' : 'text-white/80 hover:bg-white/10 hover:text-white'
   }`
 
 const iconBoxClass = (active: boolean) =>
