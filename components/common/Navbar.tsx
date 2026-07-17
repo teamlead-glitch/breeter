@@ -68,7 +68,7 @@ function NavbarShell({ currentType }: { currentType: string | null }) {
   return (
     <>
       <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${navBg}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:relative">
           <div className="flex items-center h-16 gap-6">
 
             {/* Logo */}
@@ -107,37 +107,35 @@ function NavbarShell({ currentType }: { currentType: string | null }) {
               </button>
             </div>
           </div>
-        </div>
 
-        {/* Menu drawer (all breakpoints) */}
-        {mobileOpen && (
-          <div className="bg-forest border-t border-white/10">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="py-4 space-y-0.5 md:w-72 md:ml-auto">
-              {[
-                { href: '/', label: 'Home', icon: HomeIcon },
-                { href: '/cabs', label: 'Cabs', icon: Car },
-                { href: '/cabs?type=luxury', label: 'Luxury Cabs', icon: Sparkles },
-                { href: '/cabs?type=bus-van', label: 'Bus / Van', icon: Bus },
-                { href: '/holidays', label: 'Holidays', icon: Palmtree },
-                { href: '/about', label: 'About', icon: Info },
-                { href: '/contact', label: 'Contact', icon: Phone },
-              ].map(l => (
-                <Link key={l.href} href={l.href} onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 text-white/80 hover:text-white hover:bg-white/10 rounded-xl text-sm font-medium transition-colors">
-                  <l.icon size={16} className="text-white/50" />
-                  {l.label}
-                </Link>
-              ))}
-              <button
-                onClick={() => { setMobileOpen(false); openBookModal() }}
-                className="block w-full mt-3 px-3 py-3 bg-cta text-white font-bold text-sm rounded-xl text-center">
-                Book a Cab
-              </button>
+          {/* Menu drawer: full-width bar on mobile, floating dropdown anchored to this same container on desktop */}
+          {mobileOpen && (
+            <div className="-mx-4 sm:-mx-6 md:mx-0 bg-forest border-t border-white/10 md:absolute md:right-6 lg:right-8 md:top-16 md:w-64 md:border md:shadow-2xl md:overflow-hidden">
+              <div className="px-4 py-4 space-y-0.5">
+                {[
+                  { href: '/', label: 'Home', icon: HomeIcon },
+                  // { href: '/cabs', label: 'Cabs', icon: Car },
+                  // { href: '/cabs?type=luxury', label: 'Luxury Cabs', icon: Sparkles },
+                  // { href: '/cabs?type=bus-van', label: 'Bus / Van', icon: Bus },
+                  // { href: '/holidays', label: 'Holidays', icon: Palmtree },
+                  { href: '/about', label: 'About', icon: Info },
+                  { href: '/contact', label: 'Contact', icon: Phone },
+                ].map(l => (
+                  <Link key={l.href} href={l.href} onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-3 px-3 py-2.5 text-white/80 hover:text-white hover:bg-white/10 rounded-xl text-sm font-medium transition-colors">
+                    <l.icon size={16} className="text-white/50" />
+                    {l.label}
+                  </Link>
+                ))}
+                <button
+                  onClick={() => { setMobileOpen(false); openBookModal() }}
+                  className="block w-full mt-3 px-3 py-3 bg-cta text-white font-bold text-sm rounded-xl text-center md:hidden">
+                  Book a Cab
+                </button>
+              </div>
             </div>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </header>
 
       {/* Book a Cab popup */}
