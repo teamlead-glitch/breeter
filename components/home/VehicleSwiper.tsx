@@ -6,7 +6,7 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import Link from 'next/link'
 import { vehicles } from '@/lib/data'
-import SwiperCard from '@/components/cabs/SwiperCard'
+import HomeSwiperCard from '@/components/cabs/HomeSwiperCard'
 
 export default function VehicleSwiper() {
   return (
@@ -38,7 +38,7 @@ export default function VehicleSwiper() {
         >
           {vehicles.map(v => (
             <SwiperSlide key={v.id}>
-              <SwiperCard v={v} />
+              <HomeSwiperCard v={v} />
             </SwiperSlide>
           ))}
         </Swiper>

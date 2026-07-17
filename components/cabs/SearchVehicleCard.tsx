@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Users, Wind } from 'lucide-react'
 import { Vehicle } from '@/lib/data'
 
-export default function VehicleCard({ v }: { v: Vehicle }) {
+export default function SearchVehicleCard({ v }: { v: Vehicle }) {
   return (
     <div className="bg-white rounded-2xl border border-black/5 p-4 sm:p-5 flex flex-col sm:flex-row gap-4 sm:gap-5 hover:shadow-lg transition-shadow">
       <div className="relative w-full sm:w-32 md:w-40 h-40 sm:h-24 md:h-28 flex-shrink-0 rounded-xl overflow-hidden bg-ivory">

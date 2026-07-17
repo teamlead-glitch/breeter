@@ -3,9 +3,9 @@ import Link from 'next/link'
 import { Users } from 'lucide-react'
 import { Vehicle } from '@/lib/data'
 
-export default function SwiperCard({ v }: { v: Vehicle }) {
+export default function HomeSwiperCard({ v }: { v: Vehicle }) {
   return (
-    <Link href="/cabs" className="group block bg-white rounded-2xl overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+    <Link href="/book" className="group block bg-white rounded-2xl overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
       <div className="relative h-44 overflow-hidden bg-ivory">
         <Image
           src={v.image}

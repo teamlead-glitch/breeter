@@ -5,7 +5,7 @@ import { vehicles } from '@/lib/data'
 import { SlidersHorizontal, ArrowLeft, X } from 'lucide-react'
 import SearchWidget from '@/components/common/SearchWidget'
 import FilterFields from '@/components/search/FilterFields'
-import VehicleCard from '@/components/search/VehicleCard'
+import SearchVehicleCard from '@/components/cabs/SearchVehicleCard'
 
 export default function SearchResultsPage() {
   const [filterOpen, setFilterOpen] = useState(false)
@@ -72,7 +72,7 @@ export default function SearchResultsPage() {
 
             <div className="space-y-4">
               {vehicles.map(v => (
-                <VehicleCard key={v.id} v={v} />
+                <SearchVehicleCard key={v.id} v={v} />
               ))}
             </div>
           </main>
