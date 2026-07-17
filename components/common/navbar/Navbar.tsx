@@ -1,17 +1,12 @@
 'use client'
 import { Suspense, useState, useEffect } from 'react'
-import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { Menu, X, Home as HomeIcon, Car, Sparkles, Bus, Palmtree, Info, Phone } from 'lucide-react'
-import SearchWidget from '@/components/common/SearchWidget'
+import { Menu, X } from 'lucide-react'
 import { useBookModal } from '@/components/common/BookModalContext'
-
-const navLinks = [
-  { href: '/cabs', label: 'Cabs', icon: Car, type: null as string | null },
-  { href: '/cabs?type=luxury', label: 'Luxury Cabs', icon: Sparkles, type: 'luxury' },
-  { href: '/cabs?type=bus-van', label: 'Bus / Van', icon: Bus, type: 'bus-van' },
-  { href: '/holidays', label: 'Holidays', icon: Palmtree, type: null as string | null },
-]
+import NavbarLogo from './NavbarLogo'
+import DesktopNavLinks from './DesktopNavLinks'
+import MobileMenuDrawer from './MobileMenuDrawer'
+import BookCabModal from './BookCabModal'
 
 export default function Navbar() {
   return (
@@ -55,45 +50,14 @@ function NavbarShell({ currentType }: { currentType: string | null }) {
     ? 'bg-transparent'
     : 'bg-forest shadow-xl'
 
-  const linkClass = (active: boolean) =>
-    `flex items-center gap-2.5 pl-2 pr-3.5 py-2 rounded-xl text-sm font-semibold transition-colors ${
-      active ? 'bg-white/15 text-white' : 'text-white/80 hover:bg-white/10 hover:text-white'
-    }`
-
-  const iconBoxClass = (active: boolean) =>
-    `w-7 h-7 rounded-lg grid place-items-center transition-colors ${
-      active ? 'bg-gold/25 text-gold' : 'bg-white/10 text-white/80'
-    }`
-
   return (
     <>
       <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${navBg}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:relative">
           <div className="flex items-center h-16 gap-6">
+            <NavbarLogo />
 
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
-              <span className="w-8 h-8 bg-gold rounded-lg grid place-items-center font-display font-bold text-white text-lg leading-none">B</span>
-              <span className="font-display font-bold text-white text-xl tracking-tight">Breeter</span>
-            </Link>
-
-            {compact && (
-              /* Desktop nav */
-              <nav className="hidden md:flex items-center gap-2 ml-2">
-                {navLinks.map(l => {
-                  const Icon = l.icon
-                  const active = l.href.startsWith('/cabs')
-                    ? pathname === '/cabs' && currentType === l.type
-                    : pathname === l.href
-                  return (
-                    <Link key={l.href} href={l.href} className={linkClass(active)}>
-                      <span className={iconBoxClass(active)}><Icon size={15} /></span>
-                      {l.label}
-                    </Link>
-                  )
-                })}
-              </nav>
-            )}
+            {compact && <DesktopNavLinks pathname={pathname} currentType={currentType} />}
 
             {/* Right side — always visible, even on the unscrolled home hero */}
             <div className="ml-auto flex items-center gap-3">
@@ -108,65 +72,13 @@ function NavbarShell({ currentType }: { currentType: string | null }) {
             </div>
           </div>
 
-          {/* Menu drawer: full-width bar on mobile, floating dropdown anchored to this same container on desktop */}
           {mobileOpen && (
-            <div className="-mx-4 sm:-mx-6 md:mx-0 bg-forest border-t border-white/10 md:absolute md:right-6 lg:right-8 md:top-16 md:w-64 md:border md:shadow-2xl md:overflow-hidden">
-              <div className="px-4 py-4 space-y-0.5">
-                {[
-                  { href: '/', label: 'Home', icon: HomeIcon },
-                  // { href: '/cabs', label: 'Cabs', icon: Car },
-                  // { href: '/cabs?type=luxury', label: 'Luxury Cabs', icon: Sparkles },
-                  // { href: '/cabs?type=bus-van', label: 'Bus / Van', icon: Bus },
-                  // { href: '/holidays', label: 'Holidays', icon: Palmtree },
-                  { href: '/about', label: 'About', icon: Info },
-                  { href: '/contact', label: 'Contact', icon: Phone },
-                ].map(l => (
-                  <Link key={l.href} href={l.href} onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-3 px-3 py-2.5 text-white/80 hover:text-white hover:bg-white/10 rounded-xl text-sm font-medium transition-colors">
-                    <l.icon size={16} className="text-white/50" />
-                    {l.label}
-                  </Link>
-                ))}
-                <button
-                  onClick={() => { setMobileOpen(false); openBookModal() }}
-                  className="block w-full mt-3 px-3 py-3 bg-cta text-white font-bold text-sm rounded-xl text-center md:hidden">
-                  Book a Cab
-                </button>
-              </div>
-            </div>
+            <MobileMenuDrawer onNavigate={() => setMobileOpen(false)} onBookCab={openBookModal} />
           )}
         </div>
       </header>
 
-      {/* Book a Cab popup */}
-      {bookOpen && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-ink/60 backdrop-blur-sm"
-            onClick={closeBookModal}
-          />
-          {/* Modal */}
-          <div className="relative w-full max-w-2xl md:max-w-5xl lg:max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden">
-            {/* Header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-black/5">
-              <div>
-                <p className="font-mono text-forest/60 text-[10px] tracking-[0.2em] uppercase mb-0.5">Quick booking</p>
-                <h2 className="font-bold text-ink text-xl">Book a Cab</h2>
-              </div>
-              <button
-                onClick={closeBookModal}
-                className="w-9 h-9 rounded-xl bg-ivory hover:bg-ivory-dark grid place-items-center transition-colors text-ink-muted hover:text-ink">
-                <X size={18} />
-              </button>
-            </div>
-            {/* Search widget */}
-            <div className="px-6 py-6 bg-ivory/50">
-              <SearchWidget />
-            </div>
-          </div>
-        </div>
-      )}
+      <BookCabModal open={bookOpen} onClose={closeBookModal} />
     </>
   )
 }

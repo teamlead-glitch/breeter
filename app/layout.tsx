@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Playfair_Display, Inter, DM_Mono } from 'next/font/google'
 import './globals.css'
-import Navbar from '@/components/common/Navbar'
+import Navbar from '@/components/common/navbar/Navbar'
 import Footer from '@/components/common/Footer'
 import WhatsAppFab from '@/components/common/WhatsAppFab'
 import { BookModalProvider } from '@/components/common/BookModalContext'
