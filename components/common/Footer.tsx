@@ -14,7 +14,7 @@ const links = {
   ],
   legal: [
     { href: '/terms', label: 'Terms & Conditions' },
-    { href: '/terms', label: 'Privacy Policy' },
+    { href: '/privacy-policy', label: 'Privacy Policy' },
     { href: '/cancellation-policy', label: 'Cancellation Policy' },
   ],
 }
