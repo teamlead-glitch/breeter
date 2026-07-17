@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import SearchWidget from '@/components/common/SearchWidget'
-import VehicleCard from '@/components/cabs/VehicleCard'
+import HomeSwiperCard from '@/components/cabs/HomeSwiperCard'
 import { vehicles, luxuryVehicles, busVanOptions } from '@/lib/data'
 
 type PageProps = { searchParams: Promise<{ type?: string }> }
@@ -81,7 +81,7 @@ export default async function CabsPage({ searchParams }: PageProps) {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {list.map((v) => (
-            <VehicleCard key={v.id ?? v.name} v={v} />
+            <HomeSwiperCard key={v.id ?? v.name} v={v} />
           ))}
         </div>
       </div>

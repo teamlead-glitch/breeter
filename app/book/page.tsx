@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { ADD_ONS } from '@/components/book/data'
 import TripSummary from '@/components/book/TripSummary'
-import PolicyTabs from '@/components/book/PolicyTabs'
+import BookingPageTabs from '@/components/book/BookingPageTabs'
 import CabInfoCard from '@/components/book/CabInfoCard'
 import AddOnsCard from '@/components/book/AddOnsCard'
 import TravellerDetailsForm from '@/components/book/TravellerDetailsForm'
@@ -58,7 +58,7 @@ export default function BookPage() {
           {/* ── MAIN ─────────────────────────────────────── */}
           <main className="flex-1 min-w-0 space-y-4">
             <TripSummary />
-            <PolicyTabs />
+            <BookingPageTabs />
             <CabInfoCard />
             <AddOnsCard addOns={addOns} onToggle={toggleAddon} />
             <TravellerDetailsForm />
