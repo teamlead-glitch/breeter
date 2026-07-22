@@ -6,10 +6,18 @@ import { SlidersHorizontal, ArrowLeft, X } from 'lucide-react'
 import SearchWidget from '@/components/common/SearchWidget'
 import FilterFields from '@/components/search/FilterFields'
 import SearchVehicleCard from '@/components/cabs/SearchVehicleCard'
+import { useSearchState } from '@/components/common/SearchContext'
+
+function formatDate(value: string) {
+  if (!value) return ''
+  const date = new Date(`${value}T00:00:00`)
+  return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
+}
 
 export default function SearchResultsPage() {
   const [filterOpen, setFilterOpen] = useState(false)
   const [modifyOpen, setModifyOpen] = useState(false)
+  const { state } = useSearchState()
 
   return (
     <>
@@ -22,14 +30,14 @@ export default function SearchResultsPage() {
               <ArrowLeft size={18} />
             </Link>
             <div className="flex items-center gap-3 flex-wrap flex-1">
-              <span className="bg-forest text-white text-xs font-semibold px-3 py-1 rounded-full">Drop</span>
+              <span className="bg-forest text-white text-xs font-semibold px-3 py-1 rounded-full">{state.tripType}</span>
               <div>
                 <p className="text-xs text-ink-faint">Route</p>
-                <p className="font-semibold text-ink text-sm">Kochi → Kannur</p>
+                <p className="font-semibold text-ink text-sm">{state.from} → {state.to}</p>
               </div>
               <div className="hidden sm:block">
                 <p className="text-xs text-ink-faint">Date / Time</p>
-                <p className="font-semibold text-ink text-sm">23 Aug · 10:00 AM</p>
+                <p className="font-semibold text-ink text-sm">{formatDate(state.pickupDate)} · {state.pickupTime} {state.pickupPeriod}</p>
               </div>
               <div className="hidden md:block">
                 <p className="text-xs text-ink-faint">Distance</p>

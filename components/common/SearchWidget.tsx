@@ -2,20 +2,19 @@
 import { useState, useRef, useEffect } from 'react'
 import { MapPin, Calendar, Clock, Plus, Search, X, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
+import { useSearchState, TripType } from '@/components/common/SearchContext'
 
-const TRIP_TYPES = ['Drop', 'Round Trip', 'Hourly Rental'] as const
+const TRIP_TYPES: TripType[] = ['Drop', 'Round Trip', 'Hourly Rental']
 
 const HOURS_12 = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 const MINUTES = ['00', '15', '30', '45']
 const HOUR_OPTIONS = HOURS_12.flatMap(h => MINUTES.map(m => `${h}:${m}`))
 
 export default function SearchWidget() {
-  const [tripType, setTripType] = useState('Drop')
-  const [stops, setStops] = useState<string[]>([])
+  const { state, dispatch } = useSearchState()
+  const { tripType, stops, pickupTime: hour, pickupPeriod: period } = state
   const [addingStop, setAddingStop] = useState(false)
   const [stopInput, setStopInput] = useState('')
-  const [hour, setHour] = useState('10:00')
-  const [period, setPeriod] = useState('AM')
   const [hourOpen, setHourOpen] = useState(false)
   const hourRef = useRef<HTMLDivElement>(null)
 
@@ -32,13 +31,13 @@ export default function SearchWidget() {
 
   const saveStop = () => {
     const value = stopInput.trim()
-    if (value) setStops(prev => [...prev, value])
+    if (value) dispatch({ type: 'ADD_STOP', value })
     setStopInput('')
     setAddingStop(false)
   }
 
   const removeStop = (index: number) => {
-    setStops(prev => prev.filter((_, i) => i !== index))
+    dispatch({ type: 'REMOVE_STOP', index })
   }
 
   return (
@@ -46,7 +45,7 @@ export default function SearchWidget() {
       {/* Trip type tabs */}
       <div className="flex gap-2 mb-5 overflow-x-auto scrollbar-hide">
         {TRIP_TYPES.map(t => (
-          <button key={t} onClick={() => setTripType(t)}
+          <button key={t} onClick={() => dispatch({ type: 'SET_TRIP_TYPE', tripType: t })}
             className={`flex-none px-4 py-1.5 rounded-full text-sm font-semibold transition-all border ${
               tripType === t
                 ? 'bg-cta text-white border-cta'
@@ -67,7 +66,13 @@ export default function SearchWidget() {
           <MapPin size={15} className="text-forest flex-shrink-0" />
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">From</p>
-            <input id="search-from-input" defaultValue="Kochi" className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint" placeholder="Pickup city" />
+            <input
+              id="search-from-input"
+              value={state.from}
+              onChange={e => dispatch({ type: 'SET_FROM', value: e.target.value })}
+              className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint"
+              placeholder="Pickup city"
+            />
           </div>
         </div>
 
@@ -117,7 +122,12 @@ export default function SearchWidget() {
           <MapPin size={15} className="text-ink-faint flex-shrink-0" />
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">To</p>
-            <input defaultValue="Kannur" className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint" placeholder="Drop city" />
+            <input
+              value={state.to}
+              onChange={e => dispatch({ type: 'SET_TO', value: e.target.value })}
+              className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint"
+              placeholder="Drop city"
+            />
           </div>
         </div>
 
@@ -125,7 +135,12 @@ export default function SearchWidget() {
           <Calendar size={15} className="text-forest flex-shrink-0" />
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Pickup Date</p>
-            <input type="date" className="block w-full text-sm font-semibold text-ink bg-transparent outline-none" defaultValue="2026-08-23" />
+            <input
+              type="date"
+              className="block w-full text-sm font-semibold text-ink bg-transparent outline-none"
+              value={state.pickupDate}
+              onChange={e => dispatch({ type: 'SET_PICKUP_DATE', value: e.target.value })}
+            />
           </div>
         </div>
 
@@ -148,7 +163,7 @@ export default function SearchWidget() {
                       <button
                         key={o}
                         type="button"
-                        onClick={() => { setHour(o); setHourOpen(false) }}
+                        onClick={() => { dispatch({ type: 'SET_PICKUP_TIME', value: o }); setHourOpen(false) }}
                         className={`block w-full text-left px-3 py-1.5 text-sm transition-colors ${
                           o === hour ? 'text-forest font-bold bg-forest/5' : 'text-ink hover:bg-ivory'
                         }`}>
@@ -161,7 +176,7 @@ export default function SearchWidget() {
               <div className="relative flex items-center">
                 <select
                   value={period}
-                  onChange={e => setPeriod(e.target.value)}
+                  onChange={e => dispatch({ type: 'SET_PICKUP_PERIOD', value: e.target.value as 'AM' | 'PM' })}
                   className="text-sm font-semibold text-ink bg-transparent outline-none appearance-none cursor-pointer pr-4">
                   <option value="AM">AM</option>
                   <option value="PM">PM</option>
@@ -177,7 +192,12 @@ export default function SearchWidget() {
             <Calendar size={15} className="text-ink-faint flex-shrink-0" />
             <div className="min-w-0 flex-1">
               <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Drop Date</p>
-              <input type="date" className="block w-full text-sm font-semibold text-ink bg-transparent outline-none" defaultValue="2026-08-25" />
+              <input
+                type="date"
+                className="block w-full text-sm font-semibold text-ink bg-transparent outline-none"
+                value={state.dropDate}
+                onChange={e => dispatch({ type: 'SET_DROP_DATE', value: e.target.value })}
+              />
             </div>
           </div>
         )}

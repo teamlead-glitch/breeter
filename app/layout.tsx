@@ -5,6 +5,7 @@ import Navbar from '@/components/common/navbar/Navbar'
 import Footer from '@/components/common/Footer'
 import WhatsAppFab from '@/components/common/WhatsAppFab'
 import { BookModalProvider } from '@/components/common/BookModalContext'
+import { SearchProvider } from '@/components/common/SearchContext'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -38,12 +39,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${playfair.variable} ${inter.variable} ${dmMono.variable}`}
     >
       <body className="min-h-screen flex flex-col">
-        <BookModalProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <WhatsAppFab />
-        </BookModalProvider>
+        <SearchProvider>
+          <BookModalProvider>
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <WhatsAppFab />
+          </BookModalProvider>
+        </SearchProvider>
       </body>
     </html>
   )
