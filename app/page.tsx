@@ -1,10 +1,19 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import HeroBanner from '@/components/home/HeroBanner'
 import VehicleSwiper from '@/components/home/VehicleSwiper'
 import StartBookingButton from '@/components/home/StartBookingButton'
 import FeaturedPackageCard from '@/components/holidays/FeaturedPackageCard'
 import { packages, whyBreeter } from '@/lib/data'
 import { Shield, Star, Wallet, ChevronRight } from 'lucide-react'
+import { getSeoMetadata } from '@/lib/seo'
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('page-home', {
+    title: 'Breeter — Outstation Cabs & Holiday Packages',
+    description: 'Book outstation cabs, hourly rentals and curated holiday packages across South India. Transparent pricing, verified operators.',
+  })
+}
 
 
 

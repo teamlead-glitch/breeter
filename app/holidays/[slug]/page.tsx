@@ -1,10 +1,22 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { packages } from '@/lib/data'
 import { notFound } from 'next/navigation'
 import { ChevronRight, Check, X } from 'lucide-react'
+import { getSeoMetadata } from '@/lib/seo'
 
 type PageProps = { params: Promise<{ slug: string }> }
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
+  const pkg = packages.find(p => p.slug === slug)
+  return getSeoMetadata(`page-holiday-${slug}`, {
+    title: pkg ? `${pkg.name} — Breeter Holidays` : 'Holiday Package — Breeter',
+    description: pkg?.overview ?? 'Explore curated holiday packages across South India with Breeter.',
+    image: pkg?.image,
+  })
+}
 
 export default async function PackageDetailPage({ params }: PageProps) {
   const { slug } = await params

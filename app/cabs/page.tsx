@@ -1,10 +1,28 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import SearchWidget from '@/components/common/SearchWidget'
 import HomeSwiperCard from '@/components/cabs/HomeSwiperCard'
 import { vehicles, luxuryVehicles, busVanOptions } from '@/lib/data'
+import { getSeoMetadata } from '@/lib/seo'
 
 type PageProps = { searchParams: Promise<{ type?: string }> }
+
+const SEO_SLUGS: Record<string, string> = {
+  cabs: 'page-cabs',
+  luxury: 'page-luxury-cabs',
+  'bus-van': 'page-bus-van',
+}
+
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  const { type = 'cabs' } = await searchParams
+  const cat = CATEGORIES[type as keyof typeof CATEGORIES] ?? CATEGORIES.cabs
+  return getSeoMetadata(SEO_SLUGS[type] ?? SEO_SLUGS.cabs, {
+    title: `${cat.title} — Breeter`,
+    description: cat.desc,
+    image: cat.image,
+  })
+}
 
 const CATEGORIES = {
   cabs: {

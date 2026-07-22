@@ -1,3 +1,13 @@
+import type { Metadata } from 'next'
+import { getSeoMetadata } from '@/lib/seo'
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('page-contact-us', {
+    title: 'Contact Us — Breeter',
+    description: "Questions about a booking or a holiday package? Send us a message and we'll get back to you within 2 hours.",
+  })
+}
+
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-ivory pt-20">

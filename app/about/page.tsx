@@ -1,5 +1,14 @@
 import Image from 'next/image'
+import type { Metadata } from 'next'
 import { Shield, Star, MapPin } from 'lucide-react'
+import { getSeoMetadata } from '@/lib/seo'
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('page-about-us', {
+    title: 'About Breeter — Outstation Cabs & Holiday Packages',
+    description: 'Learn how Breeter partners with verified, background-checked local cab operators across South India to offer transparent, all-inclusive pricing.',
+  })
+}
 
 const VALUES = [
   { icon: <Shield size={22} />, title: 'Transparent', desc: 'All-inclusive fares with no hidden charges at checkout.' },
