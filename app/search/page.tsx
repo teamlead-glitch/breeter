@@ -6,7 +6,7 @@ import { SlidersHorizontal, ArrowLeft, X } from 'lucide-react'
 import SearchWidget from '@/components/common/SearchWidget'
 import FilterFields from '@/components/search/FilterFields'
 import SearchVehicleCard from '@/components/cabs/SearchVehicleCard'
-import { useSearchState } from '@/components/common/SearchContext'
+import { useSearchState } from '@/context/SearchContext'
 
 function formatDate(value: string) {
   if (!value) return ''

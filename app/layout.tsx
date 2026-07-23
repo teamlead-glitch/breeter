@@ -5,7 +5,7 @@ import Navbar from '@/components/common/navbar/Navbar'
 import Footer from '@/components/common/Footer'
 import WhatsAppFab from '@/components/common/WhatsAppFab'
 import { BookModalProvider } from '@/components/common/BookModalContext'
-import { SearchProvider } from '@/components/common/SearchContext'
+import { SearchProvider } from '@/context/SearchContext'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],

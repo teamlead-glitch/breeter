@@ -1,5 +1,5 @@
 'use client'
-import { useSearchState } from '@/components/common/SearchContext'
+import { useSearchState } from '@/context/SearchContext'
 
 const VEHICLE_TAGS = ['Luxury Cabs', 'Bus / Van', 'Neat & Clean', 'Free Cancellation']
 const ADD_ONS = ['Vehicle below 5 years', 'Roof carrier']

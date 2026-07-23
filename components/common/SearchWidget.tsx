@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { MapPin, Calendar, Clock, Plus, Search, X, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
-import { useSearchState, TripType } from '@/components/common/SearchContext'
+import { useSearchState, TripType } from '@/context/SearchContext'
 
 const TRIP_TYPES: TripType[] = ['Drop', 'Round Trip', 'Hourly Rental']
 

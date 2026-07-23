@@ -1,6 +1,3 @@
-'use client'
-import { createContext, useContext, useReducer, ReactNode, Dispatch } from 'react'
-
 export type TripType = 'Drop' | 'Round Trip' | 'Hourly Rental'
 
 export type SearchFilters = {
@@ -34,7 +31,7 @@ export type SearchAction =
   | { type: 'TOGGLE_ADDON'; addOn: string }
   | { type: 'RESET' }
 
-const initialState: SearchState = {
+export const initialSearchState: SearchState = {
   tripType: 'Drop',
   from: 'Kochi',
   to: 'Kannur',
@@ -53,7 +50,7 @@ function toggle(list: string[], value: string) {
   return list.includes(value) ? list.filter(v => v !== value) : [...list, value]
 }
 
-function searchReducer(state: SearchState, action: SearchAction): SearchState {
+export function searchReducer(state: SearchState, action: SearchAction): SearchState {
   switch (action.type) {
     case 'SET_TRIP_TYPE':
       return { ...state, tripType: action.tripType }
@@ -78,26 +75,8 @@ function searchReducer(state: SearchState, action: SearchAction): SearchState {
     case 'TOGGLE_ADDON':
       return { ...state, filters: { ...state.filters, addOns: toggle(state.filters.addOns, action.addOn) } }
     case 'RESET':
-      return initialState
+      return initialSearchState
     default:
       return state
   }
-}
-
-type SearchContextValue = {
-  state: SearchState
-  dispatch: Dispatch<SearchAction>
-}
-
-const SearchContext = createContext<SearchContextValue | null>(null)
-
-export function SearchProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(searchReducer, initialState)
-  return <SearchContext.Provider value={{ state, dispatch }}>{children}</SearchContext.Provider>
-}
-
-export function useSearchState() {
-  const ctx = useContext(SearchContext)
-  if (!ctx) throw new Error('useSearchState must be used within a SearchProvider')
-  return ctx
 }
