@@ -58,8 +58,8 @@ export default function BookPage() {
           {/* ── MAIN ─────────────────────────────────────── */}
           <main className="flex-1 min-w-0 space-y-4">
             <TripSummary />
-            <BookingPageTabs />
             <CabInfoCard />
+            <BookingPageTabs />
             <AddOnsCard addOns={addOns} onToggle={toggleAddon} />
             <TravellerDetailsForm />
 
