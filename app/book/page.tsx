@@ -53,14 +53,15 @@ export default function BookPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-40 md:pb-28 lg:pb-10">
-        <div className="flex gap-8 items-start flex-col lg:flex-row">
+        <div className="flex gap-8 items-stretch lg:items-start flex-col lg:flex-row">
 
           {/* ── MAIN ─────────────────────────────────────── */}
           <main className="flex-1 min-w-0 space-y-4">
             <TripSummary />
             <CabInfoCard />
-            <BookingPageTabs />
             <AddOnsCard addOns={addOns} onToggle={toggleAddon} />
+            <BookingPageTabs />
+            
             <TravellerDetailsForm />
 
             {/* Mobile/tablet: terms checkbox — the sidebar with this is desktop-only, but the fixed pay bar's button needs it too */}
