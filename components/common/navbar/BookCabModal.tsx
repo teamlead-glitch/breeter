@@ -5,13 +5,13 @@ export default function BookCabModal({ open, onClose }: { open: boolean; onClose
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center sm:px-4">
       {/* Backdrop */}
       <div className="absolute inset-0 bg-ink/60 backdrop-blur-sm" onClick={onClose} />
       {/* Modal */}
-      <div className="relative w-full max-w-2xl md:max-w-5xl lg:max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden">
+      <div className="relative w-full h-full sm:h-auto max-w-2xl md:max-w-5xl lg:max-w-6xl bg-white rounded-none sm:rounded-3xl shadow-2xl overflow-hidden overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-black/5">
+        <div className="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-5 border-b border-black/5">
           <div>
             <p className="font-mono text-forest/60 text-[10px] tracking-[0.2em] uppercase mb-0.5">Quick booking</p>
             <h2 className="font-bold text-ink text-xl">Book a Cab</h2>
@@ -23,7 +23,7 @@ export default function BookCabModal({ open, onClose }: { open: boolean; onClose
           </button>
         </div>
         {/* Search widget */}
-        <div className="px-6 py-6 bg-ivory/50">
+        <div className="px-2 py-3 sm:px-6 sm:py-6 bg-ivory/50">
           <SearchWidget />
         </div>
       </div>
