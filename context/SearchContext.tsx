@@ -2,7 +2,7 @@
 import { createContext, useContext, useReducer, ReactNode, Dispatch } from 'react'
 import { searchReducer, initialSearchState, SearchState, SearchAction } from '@/context/searchReducer'
 
-export type { TripType, SearchFilters, SearchState, SearchAction } from '@/context/searchReducer'
+export type { TripType, HourlyPackage, SearchFilters, SearchState, SearchAction } from '@/context/searchReducer'
 
 type SearchContextValue = {
   state: SearchState

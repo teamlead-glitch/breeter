@@ -2,9 +2,15 @@
 import { useState } from 'react'
 import { MapPin, CalendarClock, Plus, Search, X } from 'lucide-react'
 import Link from 'next/link'
-import { useSearchState, TripType } from '@/context/SearchContext'
+import { useSearchState, TripType, HourlyPackage } from '@/context/SearchContext'
 
 const TRIP_TYPES: TripType[] = ['Drop', 'Round Trip', 'Hourly Rental']
+
+const HOURLY_PACKAGES: { value: HourlyPackage; label: string }[] = [
+  { value: '4', label: '4 Hrs' },
+  { value: '6', label: '6 Hrs' },
+  { value: '8', label: '8 Hrs' },
+]
 
 function to24Hour(hour12: string, period: 'AM' | 'PM') {
   const [h, m] = hour12.split(':').map(Number)
@@ -76,7 +82,7 @@ export default function SearchWidget() {
 
       {/* Fields grid */}
       <div className={`grid gap-2 mb-4 ${
-        tripType === 'Round Trip'
+        tripType === 'Round Trip' || tripType === 'Hourly Rental'
           ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
           : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
       }`}>
@@ -162,7 +168,7 @@ export default function SearchWidget() {
           </div>
         </div>
 
-        {tripType === 'Round Trip' && (
+        {(tripType === 'Round Trip' || tripType === 'Hourly Rental') && (
           <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
             <CalendarClock size={15} className="text-ink-faint flex-shrink-0" />
             <div className="min-w-0 flex-1">
@@ -177,6 +183,30 @@ export default function SearchWidget() {
           </div>
         )}
       </div>
+
+      {tripType === 'Hourly Rental' && (
+        <div role="radiogroup" aria-label="Hourly package" className="flex items-center gap-2 mb-4">
+          {HOURLY_PACKAGES.map(pkg => (
+            <button
+              key={pkg.value}
+              type="button"
+              role="radio"
+              aria-checked={state.hourlyPackage === pkg.value}
+              onClick={() => dispatch({ type: 'SET_HOURLY_PACKAGE', value: pkg.value })}
+              className={`flex items-center gap-2 rounded-xl px-3.5 py-2.5 border transition-colors ${
+                state.hourlyPackage === pkg.value ? 'bg-cta/5 border-cta/30' : 'border-black/10 hover:border-black/20'
+              }`}>
+              <span
+                className={`w-4 h-4 rounded-full border-2 flex-shrink-0 grid place-items-center transition-colors ${
+                  state.hourlyPackage === pkg.value ? 'border-cta' : 'border-ink-faint/40'
+                }`}>
+                {state.hourlyPackage === pkg.value && <span className="w-2 h-2 rounded-full bg-cta" />}
+              </span>
+              <span className={`text-sm font-semibold ${state.hourlyPackage === pkg.value ? 'text-ink' : 'text-ink-muted'}`}>{pkg.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Footer row */}
       <div className="flex items-center gap-2 flex-wrap">

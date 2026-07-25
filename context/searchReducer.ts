@@ -1,4 +1,5 @@
 export type TripType = 'Drop' | 'Round Trip' | 'Hourly Rental'
+export type HourlyPackage = '4' | '6' | '8'
 
 export type SearchFilters = {
   vehicleTags: string[]
@@ -16,6 +17,7 @@ export type SearchState = {
   dropDate: string
   dropTime: string
   dropPeriod: 'AM' | 'PM'
+  hourlyPackage: HourlyPackage
   filters: SearchFilters
 }
 
@@ -31,6 +33,7 @@ export type SearchAction =
   | { type: 'SET_DROP_DATE'; value: string }
   | { type: 'SET_DROP_TIME'; value: string }
   | { type: 'SET_DROP_PERIOD'; value: 'AM' | 'PM' }
+  | { type: 'SET_HOURLY_PACKAGE'; value: HourlyPackage }
   | { type: 'TOGGLE_VEHICLE_TAG'; tag: string }
   | { type: 'TOGGLE_ADDON'; addOn: string }
   | { type: 'RESET' }
@@ -46,6 +49,7 @@ export const initialSearchState: SearchState = {
   dropDate: '2026-08-25',
   dropTime: '10:00',
   dropPeriod: 'AM',
+  hourlyPackage: '8',
   filters: {
     vehicleTags: [],
     addOns: [],
@@ -80,6 +84,8 @@ export function searchReducer(state: SearchState, action: SearchAction): SearchS
       return { ...state, dropTime: action.value }
     case 'SET_DROP_PERIOD':
       return { ...state, dropPeriod: action.value }
+    case 'SET_HOURLY_PACKAGE':
+      return { ...state, hourlyPackage: action.value }
     case 'TOGGLE_VEHICLE_TAG':
       return { ...state, filters: { ...state.filters, vehicleTags: toggle(state.filters.vehicleTags, action.tag) } }
     case 'TOGGLE_ADDON':
