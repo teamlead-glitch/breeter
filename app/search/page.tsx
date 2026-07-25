@@ -3,9 +3,9 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { vehicles } from '@/lib/data'
 import { SlidersHorizontal, ArrowLeft, X } from 'lucide-react'
-import SearchWidget from '@/components/common/SearchWidget'
 import FilterFields from '@/components/search/FilterFields'
 import SearchVehicleCard from '@/components/cabs/SearchVehicleCard'
+import { useBookModal } from '@/components/common/BookModalContext'
 import { useSearchState } from '@/context/SearchContext'
 
 function formatDate(value: string) {
@@ -16,8 +16,8 @@ function formatDate(value: string) {
 
 export default function SearchResultsPage() {
   const [filterOpen, setFilterOpen] = useState(false)
-  const [modifyOpen, setModifyOpen] = useState(false)
   const { state } = useSearchState()
+  const { openBookModal } = useBookModal()
 
   return (
     <>
@@ -45,7 +45,7 @@ export default function SearchResultsPage() {
               </div>
             </div>
             <button
-              onClick={() => setModifyOpen(true)}
+              onClick={openBookModal}
               className="text-xs font-semibold text-forest border border-forest px-3 py-1.5 rounded-lg hover:bg-forest hover:text-white transition-colors">
               Modify
             </button>
@@ -116,32 +116,6 @@ export default function SearchResultsPage() {
               className="w-full bg-cta hover:bg-cta-dark text-white font-bold text-sm py-3 rounded-xl transition-colors">
               Apply filters
             </button>
-          </div>
-        </div>
-      </div>
-    )}
-
-    {/* Book a Cab popup (Modify) */}
-    {modifyOpen && (
-      <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
-        <div
-          className="absolute inset-0 bg-ink/60 backdrop-blur-sm"
-          onClick={() => setModifyOpen(false)}
-        />
-        <div className="relative w-full max-w-2xl md:max-w-5xl lg:max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-5 border-b border-black/5">
-            <div>
-              <p className="font-mono text-forest/60 text-[10px] tracking-[0.2em] uppercase mb-0.5">Quick booking</p>
-              <h2 className="font-bold text-ink text-xl">Book a Cab</h2>
-            </div>
-            <button
-              onClick={() => setModifyOpen(false)}
-              className="w-9 h-9 rounded-xl bg-ivory hover:bg-ivory-dark grid place-items-center transition-colors text-ink-muted hover:text-ink">
-              <X size={18} />
-            </button>
-          </div>
-          <div className="px-6 py-6 bg-ivory/50">
-            <SearchWidget />
           </div>
         </div>
       </div>
