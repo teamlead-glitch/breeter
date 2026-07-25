@@ -1,33 +1,51 @@
 'use client'
-import { useState, useRef, useEffect } from 'react'
-import { MapPin, Calendar, Clock, Plus, Search, X, ChevronDown } from 'lucide-react'
+import { useState } from 'react'
+import { MapPin, CalendarClock, Plus, Search, X } from 'lucide-react'
 import Link from 'next/link'
 import { useSearchState, TripType } from '@/context/SearchContext'
 
 const TRIP_TYPES: TripType[] = ['Drop', 'Round Trip', 'Hourly Rental']
 
-const HOURS_12 = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-const MINUTES = ['00', '15', '30', '45']
-const HOUR_OPTIONS = HOURS_12.flatMap(h => MINUTES.map(m => `${h}:${m}`))
+function to24Hour(hour12: string, period: 'AM' | 'PM') {
+  const [h, m] = hour12.split(':').map(Number)
+  let h24 = h % 12
+  if (period === 'PM') h24 += 12
+  return `${String(h24).padStart(2, '0')}:${String(m).padStart(2, '0')}`
+}
+
+function from24Hour(time24: string): { hour: string; period: 'AM' | 'PM' } {
+  const [h, m] = time24.split(':').map(Number)
+  const period: 'AM' | 'PM' = h >= 12 ? 'PM' : 'AM'
+  const h12 = h % 12 === 0 ? 12 : h % 12
+  return { hour: `${h12}:${String(m).padStart(2, '0')}`, period }
+}
 
 export default function SearchWidget() {
   const { state, dispatch } = useSearchState()
   const { tripType, stops, pickupTime: hour, pickupPeriod: period } = state
   const [addingStop, setAddingStop] = useState(false)
   const [stopInput, setStopInput] = useState('')
-  const [hourOpen, setHourOpen] = useState(false)
-  const hourRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (!hourOpen) return
-    const onClick = (e: MouseEvent) => {
-      if (hourRef.current && !hourRef.current.contains(e.target as Node)) {
-        setHourOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', onClick)
-    return () => document.removeEventListener('mousedown', onClick)
-  }, [hourOpen])
+  const pickupDateTime = `${state.pickupDate}T${to24Hour(hour, period)}`
+  const dropDateTime = `${state.dropDate}T${to24Hour(state.dropTime, state.dropPeriod)}`
+
+  const onPickupDateTimeChange = (value: string) => {
+    const [datePart, timePart] = value.split('T')
+    if (!datePart || !timePart) return
+    const { hour, period } = from24Hour(timePart)
+    dispatch({ type: 'SET_PICKUP_DATE', value: datePart })
+    dispatch({ type: 'SET_PICKUP_TIME', value: hour })
+    dispatch({ type: 'SET_PICKUP_PERIOD', value: period })
+  }
+
+  const onDropDateTimeChange = (value: string) => {
+    const [datePart, timePart] = value.split('T')
+    if (!datePart || !timePart) return
+    const { hour, period } = from24Hour(timePart)
+    dispatch({ type: 'SET_DROP_DATE', value: datePart })
+    dispatch({ type: 'SET_DROP_TIME', value: hour })
+    dispatch({ type: 'SET_DROP_PERIOD', value: period })
+  }
 
   const saveStop = () => {
     const value = stopInput.trim()
@@ -59,8 +77,8 @@ export default function SearchWidget() {
       {/* Fields grid */}
       <div className={`grid gap-2 mb-4 ${
         tripType === 'Round Trip'
-          ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-5'
-          : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+          ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+          : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
       }`}>
         <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
           <MapPin size={15} className="text-forest flex-shrink-0" />
@@ -132,71 +150,28 @@ export default function SearchWidget() {
         </div>
 
         <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
-          <Calendar size={15} className="text-forest flex-shrink-0" />
+          <CalendarClock size={15} className="text-forest flex-shrink-0" />
           <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Pickup Date</p>
+            <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Pickup Date & Time</p>
             <input
-              type="date"
+              type="datetime-local"
               className="block w-full text-sm font-semibold text-ink bg-transparent outline-none"
-              value={state.pickupDate}
-              onChange={e => dispatch({ type: 'SET_PICKUP_DATE', value: e.target.value })}
+              value={pickupDateTime}
+              onChange={e => onPickupDateTimeChange(e.target.value)}
             />
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
-          <Clock size={15} className="text-forest flex-shrink-0" />
-          <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Pickup Time</p>
-            <div className="flex items-center gap-1.5">
-              <div className="relative flex items-center" ref={hourRef}>
-                <button
-                  type="button"
-                  onClick={() => setHourOpen(o => !o)}
-                  className="flex items-center text-sm font-semibold text-ink bg-transparent outline-none cursor-pointer pr-4">
-                  {hour}
-                  <ChevronDown size={11} className={`text-ink-faint absolute right-0 transition-transform ${hourOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {hourOpen && (
-                  <div className="absolute z-20 top-full left-0 mt-1 w-20 max-h-40 overflow-y-auto bg-white rounded-lg shadow-xl border border-black/8">
-                    {HOUR_OPTIONS.map(o => (
-                      <button
-                        key={o}
-                        type="button"
-                        onClick={() => { dispatch({ type: 'SET_PICKUP_TIME', value: o }); setHourOpen(false) }}
-                        className={`block w-full text-left px-3 py-1.5 text-sm transition-colors ${
-                          o === hour ? 'text-forest font-bold bg-forest/5' : 'text-ink hover:bg-ivory'
-                        }`}>
-                        {o}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <div className="relative flex items-center">
-                <select
-                  value={period}
-                  onChange={e => dispatch({ type: 'SET_PICKUP_PERIOD', value: e.target.value as 'AM' | 'PM' })}
-                  className="text-sm font-semibold text-ink bg-transparent outline-none appearance-none cursor-pointer pr-4">
-                  <option value="AM">AM</option>
-                  <option value="PM">PM</option>
-                </select>
-                <ChevronDown size={11} className="text-ink-faint absolute right-0 pointer-events-none" />
-              </div>
-            </div>
           </div>
         </div>
 
         {tripType === 'Round Trip' && (
           <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
-            <Calendar size={15} className="text-ink-faint flex-shrink-0" />
+            <CalendarClock size={15} className="text-ink-faint flex-shrink-0" />
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Drop Date</p>
+              <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Drop Date & Time</p>
               <input
-                type="date"
+                type="datetime-local"
                 className="block w-full text-sm font-semibold text-ink bg-transparent outline-none"
-                value={state.dropDate}
-                onChange={e => dispatch({ type: 'SET_DROP_DATE', value: e.target.value })}
+                value={dropDateTime}
+                onChange={e => onDropDateTimeChange(e.target.value)}
               />
             </div>
           </div>
