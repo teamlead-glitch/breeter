@@ -81,8 +81,8 @@ export default function SearchWidget() {
       </div>
 
       {/* Fields */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        <div className="flex-1 basis-[220px] flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+      <div className="grid gap-2 mb-4 grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
+        <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
           <MapPin size={15} className="text-forest flex-shrink-0" />
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">From</p>
@@ -97,7 +97,7 @@ export default function SearchWidget() {
         </div>
 
         {tripType !== 'Hourly Rental' && stops.map((stop, i) => (
-          <div key={i} className="flex-1 basis-[220px] flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+          <div key={i} className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
             <MapPin size={15} className="text-forest flex-shrink-0" />
             <div className="min-w-0 flex-1">
               <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Stop {i + 1}</p>
@@ -110,7 +110,7 @@ export default function SearchWidget() {
         ))}
 
         {tripType !== 'Hourly Rental' && (
-          <div className="flex-1 basis-[220px] flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+          <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
             {addingStop ? (
               <>
                 <Plus size={15} className="text-forest flex-shrink-0" />
@@ -143,7 +143,7 @@ export default function SearchWidget() {
           </div>
         )}
 
-        <div className="flex-1 basis-[220px] flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+        <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
           <MapPin size={15} className="text-ink-faint flex-shrink-0" />
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">To</p>
@@ -156,7 +156,7 @@ export default function SearchWidget() {
           </div>
         </div>
 
-        <div className="flex-1 basis-[220px] flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+        <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
           <CalendarClock size={15} className="text-forest flex-shrink-0" />
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Pickup Date & Time</p>
@@ -170,7 +170,7 @@ export default function SearchWidget() {
         </div>
 
         {(tripType === 'Round Trip' || tripType === 'Hourly Rental') && (
-          <div className="flex-1 basis-[220px] flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+          <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
             <CalendarClock size={15} className="text-ink-faint flex-shrink-0" />
             <div className="min-w-0 flex-1">
               <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Drop Date & Time</p>
