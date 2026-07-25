@@ -80,13 +80,9 @@ export default function SearchWidget() {
         ))}
       </div>
 
-      {/* Fields grid */}
-      <div className={`grid gap-2 mb-4 ${
-        tripType === 'Round Trip' || tripType === 'Hourly Rental'
-          ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
-          : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-      }`}>
-        <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+      {/* Fields */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex-1 basis-[220px] flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
           <MapPin size={15} className="text-forest flex-shrink-0" />
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">From</p>
@@ -100,49 +96,54 @@ export default function SearchWidget() {
           </div>
         </div>
 
-        {tripType !== 'Hourly Rental' && (
-          <div className="sm:hidden flex items-center gap-2 flex-wrap">
-            {stops.map((stop, i) => (
-              <span key={i} className="flex items-center gap-1.5 text-xs font-semibold text-forest bg-forest/10 rounded-lg pl-3 pr-2 py-2">
-                <MapPin size={12} /> {stop}
-                <button onClick={() => removeStop(i)} aria-label={`Remove stop ${stop}`} className="text-ink-faint hover:text-ink">
-                  <X size={12} />
-                </button>
-              </span>
-            ))}
+        {tripType !== 'Hourly Rental' && stops.map((stop, i) => (
+          <div key={i} className="flex-1 basis-[220px] flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+            <MapPin size={15} className="text-forest flex-shrink-0" />
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Stop {i + 1}</p>
+              <p className="text-sm font-semibold text-ink truncate">{stop}</p>
+            </div>
+            <button type="button" onClick={() => removeStop(i)} aria-label={`Remove stop ${stop}`} className="text-ink-faint hover:text-ink flex-shrink-0">
+              <X size={14} />
+            </button>
+          </div>
+        ))}
 
+        {tripType !== 'Hourly Rental' && (
+          <div className="flex-1 basis-[220px] flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
             {addingStop ? (
-              <div className="flex items-center gap-1.5">
-                <input
-                  autoFocus
-                  value={stopInput}
-                  onChange={e => setStopInput(e.target.value)}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') { e.preventDefault(); saveStop() }
-                    if (e.key === 'Escape') { setAddingStop(false); setStopInput('') }
-                  }}
-                  placeholder="Enter stop city"
-                  className="text-xs font-semibold text-ink bg-ivory border border-ink-faint/30 rounded-lg px-3 py-2 outline-none focus:border-cta/50 transition-colors w-36"
-                />
-                <button onClick={saveStop}
-                  className="text-xs font-bold text-white bg-cta hover:bg-cta-dark rounded-lg px-3 py-2 transition-colors">
-                  Save
-                </button>
-                <button onClick={() => { setAddingStop(false); setStopInput('') }} aria-label="Cancel add stop"
-                  className="text-ink-faint hover:text-ink p-2">
+              <>
+                <Plus size={15} className="text-forest flex-shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Stop</p>
+                  <input
+                    autoFocus
+                    value={stopInput}
+                    onChange={e => setStopInput(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') { e.preventDefault(); saveStop() }
+                      if (e.key === 'Escape') { setAddingStop(false); setStopInput('') }
+                    }}
+                    onBlur={() => { if (!stopInput) setAddingStop(false) }}
+                    placeholder="Enter stop city"
+                    className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint"
+                  />
+                </div>
+                <button type="button" onClick={() => { setAddingStop(false); setStopInput('') }} aria-label="Cancel add stop"
+                  className="text-ink-faint hover:text-ink flex-shrink-0">
                   <X size={14} />
                 </button>
-              </div>
+              </>
             ) : (
-              <button onClick={() => setAddingStop(true)}
-                className="flex items-center gap-1.5 text-xs font-semibold text-forest/70 hover:text-forest border border-dashed border-forest/30 hover:border-forest/60 rounded-lg px-3 py-2 transition-colors">
-                <Plus size={13} /> Add stop
+              <button type="button" onClick={() => setAddingStop(true)} className="flex items-center gap-3 w-full text-left">
+                <Plus size={15} className="text-forest flex-shrink-0" />
+                <span className="text-sm font-semibold text-ink-muted">Add stop</span>
               </button>
             )}
           </div>
         )}
 
-        <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+        <div className="flex-1 basis-[220px] flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
           <MapPin size={15} className="text-ink-faint flex-shrink-0" />
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">To</p>
@@ -155,7 +156,7 @@ export default function SearchWidget() {
           </div>
         </div>
 
-        <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+        <div className="flex-1 basis-[220px] flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
           <CalendarClock size={15} className="text-forest flex-shrink-0" />
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Pickup Date & Time</p>
@@ -169,7 +170,7 @@ export default function SearchWidget() {
         </div>
 
         {(tripType === 'Round Trip' || tripType === 'Hourly Rental') && (
-          <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+          <div className="flex-1 basis-[220px] flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
             <CalendarClock size={15} className="text-ink-faint flex-shrink-0" />
             <div className="min-w-0 flex-1">
               <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Drop Date & Time</p>
@@ -210,49 +211,6 @@ export default function SearchWidget() {
 
       {/* Footer row */}
       <div className="flex items-center gap-2 flex-wrap">
-        <div className="hidden sm:contents">
-        {tripType !== 'Hourly Rental' && (
-          <>
-            {stops.map((stop, i) => (
-              <span key={i} className="flex items-center gap-1.5 text-xs font-semibold text-forest bg-forest/10 rounded-lg pl-3 pr-2 py-2">
-                <MapPin size={12} /> {stop}
-                <button onClick={() => removeStop(i)} aria-label={`Remove stop ${stop}`} className="text-ink-faint hover:text-ink">
-                  <X size={12} />
-                </button>
-              </span>
-            ))}
-
-            {addingStop ? (
-              <div className="flex items-center gap-1.5">
-                <input
-                  autoFocus
-                  value={stopInput}
-                  onChange={e => setStopInput(e.target.value)}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') { e.preventDefault(); saveStop() }
-                    if (e.key === 'Escape') { setAddingStop(false); setStopInput('') }
-                  }}
-                  placeholder="Enter stop city"
-                  className="text-xs font-semibold text-ink bg-ivory border border-ink-faint/30 rounded-lg px-3 py-2 outline-none focus:border-cta/50 transition-colors w-36"
-                />
-                <button onClick={saveStop}
-                  className="text-xs font-bold text-white bg-cta hover:bg-cta-dark rounded-lg px-3 py-2 transition-colors">
-                  Save
-                </button>
-                <button onClick={() => { setAddingStop(false); setStopInput('') }} aria-label="Cancel add stop"
-                  className="text-ink-faint hover:text-ink p-2">
-                  <X size={14} />
-                </button>
-              </div>
-            ) : (
-              <button onClick={() => setAddingStop(true)}
-                className="flex items-center gap-1.5 text-xs font-semibold text-forest/70 hover:text-forest border border-dashed border-forest/30 hover:border-forest/60 rounded-lg px-3 py-2 transition-colors">
-                <Plus size={13} /> Add stop
-              </button>
-            )}
-          </>
-        )}
-        </div>
         <div className="flex-1" />
         <Link href="/search"
           className="flex items-center gap-2 bg-cta hover:bg-cta-dark text-white font-bold text-sm px-6 py-3 rounded-xl transition-colors shadow-lg shadow-cta/20">
