@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Users } from 'lucide-react'
+import { Users,Wind } from 'lucide-react'
 import { Vehicle } from '@/lib/data'
 
 export default function HomeSwiperCard({ v }: { v: Vehicle }) {
@@ -25,6 +25,7 @@ export default function HomeSwiperCard({ v }: { v: Vehicle }) {
           <span className="flex items-center gap-1 text-xs text-ink-muted">
             <Users size={11} /> {v.seats} seats
           </span>
+          <span className="flex items-center gap-1 text-xs text-ink-muted"><Wind size={11}/> AC</span>
         </div>
       </div>
     </Link>

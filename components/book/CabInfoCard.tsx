@@ -15,7 +15,7 @@ export default function CabInfoCard() {
           <p className="text-ink-faint text-xs mb-2">Maruti Ciaz / Skoda Slavia or similar</p>
           <div className="flex flex-wrap items-center gap-3">
             <span className="flex items-center gap-1 text-xs text-ink-muted"><Users size={11}/> 4 Seats</span>
-            {/* <span className="flex items-center gap-1 text-xs text-ink-muted"><Wind size={11}/> AC</span> */}
+            <span className="flex items-center gap-1 text-xs text-ink-muted"><Wind size={11}/> AC</span>
             {/* <span className="text-xs text-ink-muted">SEDAN</span> */}
           </div>
         </div>
