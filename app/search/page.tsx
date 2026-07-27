@@ -38,12 +38,10 @@ function buildCabCategoryParams(state: SearchState): URLSearchParams {
     params.set('distance_km', String(PLACEHOLDER_DISTANCE_KM))
   }
 
-  if (state.filters.addOns.includes('Vehicle below 5 years')) {
-    params.set('with_vehicle_below_5yr', 'true')
-  }
-  if (state.filters.addOns.includes('Roof carrier')) {
-    params.set('with_carrier', 'true')
-  }
+  // The API's boolean validation accepts 0/1, not the strings "true"/"false".
+  params.set('with_vehicle_below_5yr', state.filters.addOns.includes('Vehicle below 5 years') ? '1' : '0')
+  params.set('with_carrier', state.filters.addOns.includes('Roof carrier') ? '1' : '0')
+  params.set('with_language', state.filters.addOns.includes('Driver language') ? '1' : '0')
 
   return params
 }
@@ -55,7 +53,7 @@ function fetchCabCategories(state: SearchState) {
 
 export default function SearchResultsPage() {
   const [filterOpen, setFilterOpen] = useState(false)
-  const { state } = useSearchState()
+  const { state, dispatch } = useSearchState()
   const { openBookModal } = useBookModal()
   const [cabs, setCabs] = useState<CabCategory[]>([])
   const [loading, setLoading] = useState(true)
@@ -122,7 +120,7 @@ export default function SearchResultsPage() {
               <h3 className="font-bold text-ink text-sm">Filters</h3>
             </div>
 
-            <FilterFields />
+            <FilterFields onChange={() => dispatch({ type: 'TRIGGER_SEARCH' })} />
           </aside>
 
           {/* Results */}
@@ -193,7 +191,7 @@ export default function SearchResultsPage() {
           </div>
           <div className="p-5 pt-0">
             <button
-              onClick={() => setFilterOpen(false)}
+              onClick={() => { dispatch({ type: 'TRIGGER_SEARCH' }); setFilterOpen(false) }}
               className="w-full bg-cta hover:bg-cta-dark text-white font-bold text-sm py-3 rounded-xl transition-colors">
               Apply filters
             </button>
