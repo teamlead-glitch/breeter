@@ -1,12 +1,14 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { vehicles } from '@/lib/data'
 import { SlidersHorizontal, ArrowLeft, X } from 'lucide-react'
 import FilterFields from '@/components/search/FilterFields'
 import SearchVehicleCard from '@/components/cabs/SearchVehicleCard'
 import { useBookModal } from '@/components/common/BookModalContext'
-import { useSearchState } from '@/context/SearchContext'
+import { SearchState, useSearchState } from '@/context/SearchContext'
+import { apiGet } from '@/lib/apiService'
+import { DEFAULT_STATE_ID, PLACEHOLDER_DISTANCE_KM, TRIP_TYPE_IDS } from '@/lib/constants'
+import { CabCategoriesData, CabCategory } from '@/types/cabs'
 
 function formatDate(value: string) {
   if (!value) return ''
@@ -14,10 +16,67 @@ function formatDate(value: string) {
   return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
 }
 
+function buildCabCategoryParams(state: SearchState): URLSearchParams {
+  const params = new URLSearchParams()
+  params.set('per_page', '15')
+  params.set('state_id', String(DEFAULT_STATE_ID))
+  params.set('trip_type_id', String(TRIP_TYPE_IDS[state.tripType]))
+  params.set('start_location', state.from)
+  params.set('end_location', state.to)
+  state.stops.forEach(stop => params.append('stops[]', stop))
+  params.set('from_date', state.pickupDate)
+
+  if (state.tripType === 'Round Trip') {
+    params.set('to_date', state.dropDate)
+  }
+
+  if (state.tripType === 'Hourly Rental') {
+    params.set('actual_hours', state.hourlyPackage)
+  } else {
+    // TODO: replace with a real route-distance calculation; backend will
+    // eventually derive this itself — remove once that lands.
+    params.set('distance_km', String(PLACEHOLDER_DISTANCE_KM))
+  }
+
+  if (state.filters.addOns.includes('Vehicle below 5 years')) {
+    params.set('with_vehicle_below_5yr', 'true')
+  }
+  if (state.filters.addOns.includes('Roof carrier')) {
+    params.set('with_carrier', 'true')
+  }
+
+  return params
+}
+
+function fetchCabCategories(state: SearchState) {
+  const params = buildCabCategoryParams(state)
+  return apiGet<CabCategoriesData>(`v1/cab-categories?${params.toString()}`)
+}
+
 export default function SearchResultsPage() {
   const [filterOpen, setFilterOpen] = useState(false)
   const { state } = useSearchState()
   const { openBookModal } = useBookModal()
+  const [cabs, setCabs] = useState<CabCategory[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+    setError(false)
+    fetchCabCategories(state).then(res => {
+      if (cancelled) return
+      if (res.error || !res.data) {
+        setError(true)
+      } else {
+        setCabs(res.data.data)
+      }
+      setLoading(false)
+    })
+    return () => { cancelled = true }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.searchVersion])
 
   return (
     <>
@@ -78,11 +137,33 @@ export default function SearchResultsPage() {
               </button>
             </div>
 
-            <div className="space-y-4">
-              {vehicles.map(v => (
-                <SearchVehicleCard key={v.id} v={v} />
-              ))}
-            </div>
+            {loading && (
+              <div className="space-y-4">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="h-28 sm:h-32 rounded-2xl bg-white border border-black/5 animate-pulse" />
+                ))}
+              </div>
+            )}
+
+            {!loading && error && (
+              <div className="bg-white rounded-2xl border border-black/5 p-8 text-center text-ink-faint text-sm">
+                Couldn&apos;t load cabs right now. Please try searching again.
+              </div>
+            )}
+
+            {!loading && !error && cabs.length === 0 && (
+              <div className="bg-white rounded-2xl border border-black/5 p-8 text-center text-ink-faint text-sm">
+                No cabs available for this search.
+              </div>
+            )}
+
+            {!loading && !error && cabs.length > 0 && (
+              <div className="space-y-4">
+                {cabs.map(v => (
+                  <SearchVehicleCard key={v.id} v={v} />
+                ))}
+              </div>
+            )}
           </main>
         </div>
       </div>

@@ -19,6 +19,7 @@ export type SearchState = {
   dropPeriod: 'AM' | 'PM'
   hourlyPackage: HourlyPackage
   filters: SearchFilters
+  searchVersion: number
 }
 
 export type SearchAction =
@@ -36,6 +37,7 @@ export type SearchAction =
   | { type: 'SET_HOURLY_PACKAGE'; value: HourlyPackage }
   | { type: 'TOGGLE_VEHICLE_TAG'; tag: string }
   | { type: 'TOGGLE_ADDON'; addOn: string }
+  | { type: 'TRIGGER_SEARCH' }
   | { type: 'RESET' }
 
 export const initialSearchState: SearchState = {
@@ -54,6 +56,7 @@ export const initialSearchState: SearchState = {
     vehicleTags: [],
     addOns: [],
   },
+  searchVersion: 0,
 }
 
 function toggle(list: string[], value: string) {
@@ -90,6 +93,8 @@ export function searchReducer(state: SearchState, action: SearchAction): SearchS
       return { ...state, filters: { ...state.filters, vehicleTags: toggle(state.filters.vehicleTags, action.tag) } }
     case 'TOGGLE_ADDON':
       return { ...state, filters: { ...state.filters, addOns: toggle(state.filters.addOns, action.addOn) } }
+    case 'TRIGGER_SEARCH':
+      return { ...state, searchVersion: state.searchVersion + 1 }
     case 'RESET':
       return initialSearchState
     default:

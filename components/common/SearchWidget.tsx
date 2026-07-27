@@ -212,7 +212,7 @@ export default function SearchWidget() {
       {/* Footer row */}
       <div className="flex items-center gap-2 flex-wrap">
         <div className="flex-1" />
-        <Link href="/search"
+        <Link href="/search" onClick={() => dispatch({ type: 'TRIGGER_SEARCH' })}
           className="flex items-center gap-2 bg-cta hover:bg-cta-dark text-white font-bold text-sm px-6 py-3 rounded-xl transition-colors shadow-lg shadow-cta/20">
           <Search size={15} /> Search Cabs
         </Link>
