@@ -30,11 +30,10 @@ function buildCabCategoryParams(state: SearchState): URLSearchParams {
   params.set('start_location', state.from)
   params.set('end_location', state.to)
   state.stops.forEach(stop => params.append('stops[]', stop))
-  // from_date/to_date are date-only on the API; pickupDate/dropDate carry a time too (datetime-local).
-  params.set('from_date', state.pickupDate.split('T')[0])
+  params.set('from_date', state.pickupDate)
 
   if (state.tripType === 'Round Trip') {
-    params.set('to_date', state.dropDate.split('T')[0])
+    params.set('to_date', state.dropDate)
   }
 
   if (state.tripType === 'Hourly Rental') {
