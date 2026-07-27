@@ -12,8 +12,14 @@ import { CabCategoriesData, CabCategory } from '@/types/cabs'
 
 function formatDate(value: string) {
   if (!value) return ''
-  const date = new Date(`${value}T00:00:00`)
-  return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
+  return new Date(value).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
+}
+
+function formatTime(value: string) {
+  if (!value) return ''
+  return new Date(value)
+    .toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit', hour12: true })
+    .replace(/am|pm/i, m => m.toUpperCase())
 }
 
 function buildCabCategoryParams(state: SearchState): URLSearchParams {
@@ -24,10 +30,11 @@ function buildCabCategoryParams(state: SearchState): URLSearchParams {
   params.set('start_location', state.from)
   params.set('end_location', state.to)
   state.stops.forEach(stop => params.append('stops[]', stop))
-  params.set('from_date', state.pickupDate)
+  // from_date/to_date are date-only on the API; pickupDate/dropDate carry a time too (datetime-local).
+  params.set('from_date', state.pickupDate.split('T')[0])
 
   if (state.tripType === 'Round Trip') {
-    params.set('to_date', state.dropDate)
+    params.set('to_date', state.dropDate.split('T')[0])
   }
 
   if (state.tripType === 'Hourly Rental') {
@@ -94,7 +101,7 @@ export default function SearchResultsPage() {
               </div>
               <div className="hidden sm:block">
                 <p className="text-xs text-ink-faint">Date / Time</p>
-                <p className="font-semibold text-ink text-sm">{formatDate(state.pickupDate)} · {state.pickupTime} {state.pickupPeriod}</p>
+                <p className="font-semibold text-ink text-sm">{formatDate(state.pickupDate)} · {formatTime(state.pickupDate)}</p>
               </div>
               <div className="hidden md:block">
                 <p className="text-xs text-ink-faint">Distance</p>

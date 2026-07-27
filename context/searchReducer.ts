@@ -11,11 +11,7 @@ export type SearchState = {
   to: string
   stops: string[]
   pickupDate: string
-  pickupTime: string
-  pickupPeriod: 'AM' | 'PM'
   dropDate: string
-  dropTime: string
-  dropPeriod: 'AM' | 'PM'
   hourlyPackage: HourlyPackage
   filters: SearchFilters
   searchVersion: number
@@ -28,11 +24,7 @@ export type SearchAction =
   | { type: 'ADD_STOP'; value: string }
   | { type: 'REMOVE_STOP'; index: number }
   | { type: 'SET_PICKUP_DATE'; value: string }
-  | { type: 'SET_PICKUP_TIME'; value: string }
-  | { type: 'SET_PICKUP_PERIOD'; value: 'AM' | 'PM' }
   | { type: 'SET_DROP_DATE'; value: string }
-  | { type: 'SET_DROP_TIME'; value: string }
-  | { type: 'SET_DROP_PERIOD'; value: 'AM' | 'PM' }
   | { type: 'SET_HOURLY_PACKAGE'; value: HourlyPackage }
   | { type: 'TOGGLE_ADDON'; addOn: string }
   | { type: 'TRIGGER_SEARCH' }
@@ -43,12 +35,8 @@ export const initialSearchState: SearchState = {
   from: 'Kochi',
   to: 'Kannur',
   stops: [],
-  pickupDate: '2026-08-23',
-  pickupTime: '10:00',
-  pickupPeriod: 'AM',
-  dropDate: '2026-08-25',
-  dropTime: '10:00',
-  dropPeriod: 'AM',
+  pickupDate: '2026-08-23T10:00',
+  dropDate: '2026-08-25T10:00',
   hourlyPackage: '8',
   filters: {
     addOns: [],
@@ -74,16 +62,8 @@ export function searchReducer(state: SearchState, action: SearchAction): SearchS
       return { ...state, stops: state.stops.filter((_, i) => i !== action.index) }
     case 'SET_PICKUP_DATE':
       return { ...state, pickupDate: action.value }
-    case 'SET_PICKUP_TIME':
-      return { ...state, pickupTime: action.value }
-    case 'SET_PICKUP_PERIOD':
-      return { ...state, pickupPeriod: action.value }
     case 'SET_DROP_DATE':
       return { ...state, dropDate: action.value }
-    case 'SET_DROP_TIME':
-      return { ...state, dropTime: action.value }
-    case 'SET_DROP_PERIOD':
-      return { ...state, dropPeriod: action.value }
     case 'SET_HOURLY_PACKAGE':
       return { ...state, hourlyPackage: action.value }
     case 'TOGGLE_ADDON':

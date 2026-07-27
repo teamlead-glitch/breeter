@@ -12,46 +12,11 @@ const HOURLY_PACKAGES: { value: HourlyPackage; label: string }[] = [
   { value: '8', label: '8 Hrs' },
 ]
 
-function to24Hour(hour12: string, period: 'AM' | 'PM') {
-  const [h, m] = hour12.split(':').map(Number)
-  let h24 = h % 12
-  if (period === 'PM') h24 += 12
-  return `${String(h24).padStart(2, '0')}:${String(m).padStart(2, '0')}`
-}
-
-function from24Hour(time24: string): { hour: string; period: 'AM' | 'PM' } {
-  const [h, m] = time24.split(':').map(Number)
-  const period: 'AM' | 'PM' = h >= 12 ? 'PM' : 'AM'
-  const h12 = h % 12 === 0 ? 12 : h % 12
-  return { hour: `${h12}:${String(m).padStart(2, '0')}`, period }
-}
-
 export default function SearchWidget() {
   const { state, dispatch } = useSearchState()
-  const { tripType, stops, pickupTime: hour, pickupPeriod: period } = state
+  const { tripType, stops } = state
   const [addingStop, setAddingStop] = useState(false)
   const [stopInput, setStopInput] = useState('')
-
-  const pickupDateTime = `${state.pickupDate}T${to24Hour(hour, period)}`
-  const dropDateTime = `${state.dropDate}T${to24Hour(state.dropTime, state.dropPeriod)}`
-
-  const onPickupDateTimeChange = (value: string) => {
-    const [datePart, timePart] = value.split('T')
-    if (!datePart || !timePart) return
-    const { hour, period } = from24Hour(timePart)
-    dispatch({ type: 'SET_PICKUP_DATE', value: datePart })
-    dispatch({ type: 'SET_PICKUP_TIME', value: hour })
-    dispatch({ type: 'SET_PICKUP_PERIOD', value: period })
-  }
-
-  const onDropDateTimeChange = (value: string) => {
-    const [datePart, timePart] = value.split('T')
-    if (!datePart || !timePart) return
-    const { hour, period } = from24Hour(timePart)
-    dispatch({ type: 'SET_DROP_DATE', value: datePart })
-    dispatch({ type: 'SET_DROP_TIME', value: hour })
-    dispatch({ type: 'SET_DROP_PERIOD', value: period })
-  }
 
   const saveStop = () => {
     const value = stopInput.trim()
@@ -163,8 +128,8 @@ export default function SearchWidget() {
             <input
               type="datetime-local"
               className="block w-full text-sm font-semibold text-ink bg-transparent outline-none"
-              value={pickupDateTime}
-              onChange={e => onPickupDateTimeChange(e.target.value)}
+              value={state.pickupDate}
+              onChange={e => dispatch({ type: 'SET_PICKUP_DATE', value: e.target.value })}
             />
           </div>
         </div>
@@ -177,8 +142,8 @@ export default function SearchWidget() {
               <input
                 type="datetime-local"
                 className="block w-full text-sm font-semibold text-ink bg-transparent outline-none"
-                value={dropDateTime}
-                onChange={e => onDropDateTimeChange(e.target.value)}
+                value={state.dropDate}
+                onChange={e => dispatch({ type: 'SET_DROP_DATE', value: e.target.value })}
               />
             </div>
           </div>
