@@ -1,11 +1,10 @@
-import Link from 'next/link'
 import type { Metadata } from 'next'
 import HeroBanner from '@/components/home/HeroBanner'
 import VehicleSwiper from '@/components/home/VehicleSwiper'
 import StartBookingButton from '@/components/home/StartBookingButton'
-import FeaturedPackageCard from '@/components/holidays/FeaturedPackageCard'
-import { packages, whyBreeter } from '@/lib/data'
-import { Shield, Star, Wallet, ChevronRight } from 'lucide-react'
+import FeaturedPackagesSection from '@/components/home/FeaturedPackagesSection'
+import { whyBreeter } from '@/lib/data'
+import { Shield, Star, Wallet } from 'lucide-react'
 import { getSeoMetadata } from '@/lib/seo'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -26,8 +25,6 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 
 
 export default function HomePage() {
-  const featuredPackages = packages.slice(0, 3)
-
   return (
     <>
       {/* ─── HERO ──────────────────────────────────────────── */}
@@ -36,36 +33,8 @@ export default function HomePage() {
       {/* ─── VEHICLE SWIPER (inverted dark section) ────────── */}
       <VehicleSwiper />
 
-     
-
       {/* ─── FEATURED PACKAGES ─────────────────────────────── */}
-      <section className="bg-ivory py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-end justify-between mb-12">
-            <div>
-              <p className="font-mono text-forest/40 text-xs tracking-[0.2em] uppercase mb-2">Curated travel</p>
-              <h2 className="font-display text-ink text-3xl md:text-4xl font-bold">Featured Packages</h2>
-            </div>
-            <Link href="/holidays" className="hidden sm:inline-flex items-center gap-1 text-forest font-semibold text-sm hover:underline underline-offset-4">
-              View all <ChevronRight size={15} />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {featuredPackages.map(pkg => (
-              <FeaturedPackageCard key={pkg.slug} pkg={pkg} />
-            ))}
-          </div>
-
-          <div className="mt-8 text-center sm:hidden">
-            <Link href="/holidays" className="inline-flex items-center gap-1 text-forest font-semibold text-sm">
-              View all packages <ChevronRight size={15} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-     
+      <FeaturedPackagesSection />
 
       {/* ─── WHY BREETER ───────────────────────────────────── */}
       <section className="bg-white py-20 border-t border-ivory-dark">
