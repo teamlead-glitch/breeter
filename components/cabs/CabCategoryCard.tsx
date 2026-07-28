@@ -12,8 +12,8 @@ export default function CabCategoryCard({ v }: { v: CabCategory }) {
   const description = stripHtml(v.description)
 
   return (
-    <Link href="/book" className="group block bg-white rounded-2xl overflow-hidden border border-black/10 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-      <div className="relative h-44 overflow-hidden bg-ivory grid place-items-center">
+    <Link href="/book" className="group flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-black/10 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+      <div className="relative h-44 flex-shrink-0 overflow-hidden bg-ivory grid place-items-center">
         {v.image ? (
           <Image
             src={v.image.url}
@@ -29,9 +29,9 @@ export default function CabCategoryCard({ v }: { v: CabCategory }) {
           Select →
         </span>
       </div>
-      <div className="p-4">
+      <div className="p-4 flex-1 flex flex-col">
         <h3 className="font-bold text-ink text-sm mb-0.5">{v.name}</h3>
-        {description && <p className="text-ink-faint text-xs truncate">{description}</p>}
+        <p className="text-ink-faint text-xs truncate min-h-[1em]">{description}</p>
         {v.fare !== null && (
           <p className="font-mono font-bold text-cta text-sm mt-2">₹{v.fare.amount.toLocaleString('en-IN')}</p>
         )}
