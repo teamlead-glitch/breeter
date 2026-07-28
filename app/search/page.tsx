@@ -48,6 +48,7 @@ function buildCabCategoryParams(state: SearchState): URLSearchParams {
   params.set('with_vehicle_below_5yr', state.filters.addOns.includes('Vehicle below 5 years') ? '1' : '0')
   params.set('with_carrier', state.filters.addOns.includes('Roof carrier') ? '1' : '0')
   params.set('with_language', state.filters.addOns.includes('Driver language') ? '1' : '0')
+  state.filters.vehicleTags.forEach(id => params.append('vehicle_tag_ids[]', String(id)))
 
   return params
 }
