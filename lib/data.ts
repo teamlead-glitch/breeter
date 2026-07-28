@@ -179,16 +179,3 @@ export const whyBreeter = [
     desc: 'Secure your ride with just 20% upfront. Pay the balance directly to the driver after your trip.',
   },
 ]
-
-export const busVanOptions = [
-  { name: 'Van · 7 Seat', model: 'Kia Carens / Force Gurkha / Similar', seats: 7, fare: 4000, image: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=600&q=80' },
-  { name: 'Tempo Traveller', model: 'Force Traveller · AC 12 Seat', seats: 12, fare: 6000, image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=600&q=80' },
-  { name: 'Force Urbania', model: 'Force Urbania · AC 13 Seat', seats: 13, fare: 7500, image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=600&q=80' },
-  { name: 'Mini Bus', model: 'AC · 20 Seat', seats: 20, fare: 9000, image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=600&q=80' },
-]
-
-export const luxuryVehicles = [
-  { id: 'luxury-sedan', name: 'Luxury Sedan', model: 'BMW 5 Series / Mercedes E-Class', category: 'Luxury', seats: 4, startingFare: 6500, image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80' },
-  { id: 'luxury-suv', name: 'Luxury SUV', model: 'BMW X5 / Mercedes GLC / Similar', category: 'Luxury', seats: 6, startingFare: 8500, image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=600&q=80' },
-  { id: 'exec-sedan', name: 'Executive Sedan', model: 'Toyota Camry / Skoda Octavia', category: 'Luxury', seats: 4, startingFare: 9500, image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=600&q=80' },
-]

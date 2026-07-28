@@ -2,8 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import SearchWidget from '@/components/common/SearchWidget'
-import HomeSwiperCard from '@/components/cabs/HomeSwiperCard'
-import { vehicles, luxuryVehicles, busVanOptions } from '@/lib/data'
+import CabsGrid from '@/components/cabs/CabsGrid'
 import { getSeoMetadata } from '@/lib/seo'
 
 type PageProps = { searchParams: Promise<{ type?: string }> }
@@ -49,11 +48,6 @@ export default async function CabsPage({ searchParams }: PageProps) {
   const { type = 'cabs' } = await searchParams
   const cat = CATEGORIES[type as keyof typeof CATEGORIES] ?? CATEGORIES.cabs
 
-  const list =
-    type === 'luxury' ? luxuryVehicles :
-    type === 'bus-van' ? busVanOptions.map(v => ({ ...v, id: v.name, startingFare: v.fare, category: 'Group', image: v.image })) :
-    vehicles
-
   return (
     <>
       {/* Banner */}
@@ -94,14 +88,9 @@ export default async function CabsPage({ searchParams }: PageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex items-center justify-between mb-8">
           <h2 className="font-display text-ink text-2xl font-bold">Available {cat.title.toLowerCase()}</h2>
-          <span className="text-ink-faint text-sm">{list.length} options</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {list.map((v) => (
-            <HomeSwiperCard key={v.id ?? v.name} v={v} />
-          ))}
-        </div>
+        <CabsGrid type={type} />
       </div>
     </>
   )
