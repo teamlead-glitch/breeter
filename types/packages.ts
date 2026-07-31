@@ -26,3 +26,14 @@ export type FeaturedPackagesData = {
   data: FeaturedPackage[]
   count: number
 }
+
+export type PackagesMeta = {
+  total: number
+  limit: number
+  skip: number
+}
+
+export type PackagesData = {
+  data: FeaturedPackage[]
+  meta: PackagesMeta
+}

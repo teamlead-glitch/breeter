@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { apiGet } from '@/lib/apiService'
 import { FeaturedPackage, FeaturedPackagesData } from '@/types/packages'
-import FeaturedPackageCard from '@/components/holidays/FeaturedPackageCard'
+import PackageCard from '@/components/holidays/PackageCard'
 
 export default function FeaturedPackagesSection() {
   const [packages, setPackages] = useState<FeaturedPackage[]>([])
@@ -44,7 +44,7 @@ export default function FeaturedPackagesSection() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {packages.map(pkg => (
-              <FeaturedPackageCard key={pkg.slug} pkg={pkg} />
+              <PackageCard key={pkg.slug} pkg={pkg} />
             ))}
           </div>
         )}

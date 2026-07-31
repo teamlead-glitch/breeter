@@ -2,17 +2,22 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
-import { packages } from '@/lib/data'
-import { ChevronDown, Search } from 'lucide-react'
+import { ChevronDown, Search, SearchX } from 'lucide-react'
 import PackageCard from '@/components/holidays/PackageCard'
 import { apiGet } from '@/lib/apiService'
 import { State, StatesData } from '@/types/states'
+import { FeaturedPackage, PackagesData } from '@/types/packages'
 
 const ALL_STATES = 'All states'
 const VISIBLE_STATE_COUNT = 5
+const PAGE_LIMIT = 15
 
 function fetchStates() {
   return apiGet<StatesData>('v1/states?per_page=15')
+}
+
+function fetchPackages(skip: number) {
+  return apiGet<PackagesData>(`v1/packages?limit=${PAGE_LIMIT}&skip=${skip}`)
 }
 
 export default function HolidaysPage() {
@@ -21,6 +26,13 @@ export default function HolidaysPage() {
   const [query, setQuery] = useState('')
   const [moreOpen, setMoreOpen] = useState(false)
   const moreRef = useRef<HTMLDivElement>(null)
+
+  const [packages, setPackages] = useState<FeaturedPackage[]>([])
+  const [total, setTotal] = useState<number | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [error, setError] = useState(false)
+  const sentinelRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     fetchStates().then(res => {
@@ -36,21 +48,56 @@ export default function HolidaysPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  useEffect(() => {
+    let cancelled = false
+    fetchPackages(0).then(res => {
+      if (cancelled) return
+      if (res.data) {
+        setPackages(res.data.data)
+        setTotal(res.data.meta.total)
+      } else {
+        setError(true)
+      }
+      setLoading(false)
+    })
+    return () => { cancelled = true }
+  }, [])
+
+  const hasMore = total !== null && packages.length < total
+
+  useEffect(() => {
+    if (!hasMore || loadingMore) return
+    const sentinel = sentinelRef.current
+    if (!sentinel) return
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return
+      setLoadingMore(true)
+      fetchPackages(packages.length).then(res => {
+        if (res.data) {
+          setPackages(prev => [...prev, ...res.data!.data])
+          setTotal(res.data!.meta.total)
+        }
+        setLoadingMore(false)
+      })
+    }, { rootMargin: '200px' })
+
+    observer.observe(sentinel)
+    return () => observer.disconnect()
+  }, [hasMore, loadingMore, packages.length])
+
   const stateNames = useMemo(() => states.map(s => s.name), [states])
   const pinnedFilters = useMemo(() => [ALL_STATES, ...stateNames.slice(0, VISIBLE_STATE_COUNT)], [stateNames])
   const moreFilters = useMemo(() => stateNames.slice(VISIBLE_STATE_COUNT), [stateNames])
 
   const filteredPackages = useMemo(() => {
     const keyword = query.trim().toLowerCase()
-    return packages.filter(pkg => {
-      const matchesState = activeState === ALL_STATES || pkg.location === activeState
-      const matchesKeyword =
-        !keyword ||
-        pkg.name.toLowerCase().includes(keyword) ||
-        pkg.location.toLowerCase().includes(keyword)
-      return matchesState && matchesKeyword
-    })
-  }, [activeState, query])
+    if (!keyword) return packages
+    return packages.filter(pkg =>
+      pkg.title.toLowerCase().includes(keyword) ||
+      (pkg.short_description ?? '').toLowerCase().includes(keyword)
+    )
+  }, [packages, query])
 
   return (
     <>
@@ -132,20 +179,63 @@ export default function HolidaysPage() {
       {/* Package grid */}
       <div className="bg-ivory min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex items-center justify-between mb-8">
-            <p className="text-ink-muted text-sm">{filteredPackages.length} packages available</p>
-          </div>
-
-          {filteredPackages.length === 0 ? (
+          {loading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="h-96 rounded-2xl bg-white border border-black/4 animate-pulse" />
+              ))}
+            </div>
+          ) : error ? (
             <div className="text-center py-20">
-              <p className="text-ink-muted text-sm">No packages match your search.</p>
+              <p className="text-ink-muted text-sm">Couldn&apos;t load packages right now. Please try again later.</p>
             </div>
           ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredPackages.map(pkg => (
-              <PackageCard key={pkg.slug} pkg={pkg} />
-            ))}
-          </div>
+            <>
+              {filteredPackages.length === 0 ? (
+                <div className="flex flex-col items-center text-center py-20 px-6">
+                  <div className="w-16 h-16 rounded-2xl bg-forest/10 grid place-items-center mb-5">
+                    <SearchX size={26} className="text-forest" />
+                  </div>
+                  {query.trim() ? (
+                    <>
+                      <h3 className="font-display text-ink text-lg font-bold mb-1.5">No packages match &quot;{query.trim()}&quot;</h3>
+                      <p className="text-ink-faint text-sm max-w-sm mb-6">
+                        Try a different keyword, or clear your search to browse all curated holiday packages.
+                      </p>
+                      <button
+                        onClick={() => setQuery('')}
+                        className="text-xs font-semibold text-white bg-forest hover:bg-forest/90 px-5 py-2.5 rounded-full transition-colors"
+                      >
+                        Clear search
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <h3 className="font-display text-ink text-lg font-bold mb-1.5">No packages available yet</h3>
+                      <p className="text-ink-faint text-sm max-w-sm">Check back soon — we&apos;re adding new curated holiday packages regularly.</p>
+                    </>
+                  )}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredPackages.map(pkg => (
+                    <PackageCard key={pkg.id} pkg={pkg} />
+                  ))}
+                </div>
+              )}
+
+              {hasMore && (
+                <div ref={sentinelRef} className="mt-8">
+                  {loadingMore && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {[1, 2, 3].map(i => (
+                        <div key={i} className="h-96 rounded-2xl bg-white border border-black/4 animate-pulse" />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
