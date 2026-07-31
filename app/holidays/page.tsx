@@ -16,13 +16,15 @@ function fetchStates() {
   return apiGet<StatesData>('v1/states?per_page=15')
 }
 
-function fetchPackages(skip: number) {
-  return apiGet<PackagesData>(`v1/packages?limit=${PAGE_LIMIT}&skip=${skip}`)
+function fetchPackages(skip: number, stateId: number | null) {
+  const params = new URLSearchParams({ limit: String(PAGE_LIMIT), skip: String(skip) })
+  if (stateId !== null) params.set('state_id', String(stateId))
+  return apiGet<PackagesData>(`v1/packages?${params.toString()}`)
 }
 
 export default function HolidaysPage() {
   const [states, setStates] = useState<State[]>([])
-  const [activeState, setActiveState] = useState(ALL_STATES)
+  const [activeStateId, setActiveStateId] = useState<number | null>(null)
   const [query, setQuery] = useState('')
   const [moreOpen, setMoreOpen] = useState(false)
   const moreRef = useRef<HTMLDivElement>(null)
@@ -50,7 +52,11 @@ export default function HolidaysPage() {
 
   useEffect(() => {
     let cancelled = false
-    fetchPackages(0).then(res => {
+    setLoading(true)
+    setError(false)
+    setPackages([])
+    setTotal(null)
+    fetchPackages(0, activeStateId).then(res => {
       if (cancelled) return
       if (res.data) {
         setPackages(res.data.data)
@@ -61,7 +67,7 @@ export default function HolidaysPage() {
       setLoading(false)
     })
     return () => { cancelled = true }
-  }, [])
+  }, [activeStateId])
 
   const hasMore = total !== null && packages.length < total
 
@@ -73,7 +79,7 @@ export default function HolidaysPage() {
     const observer = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting) return
       setLoadingMore(true)
-      fetchPackages(packages.length).then(res => {
+      fetchPackages(packages.length, activeStateId).then(res => {
         if (res.data) {
           setPackages(prev => [...prev, ...res.data!.data])
           setTotal(res.data!.meta.total)
@@ -84,11 +90,19 @@ export default function HolidaysPage() {
 
     observer.observe(sentinel)
     return () => observer.disconnect()
-  }, [hasMore, loadingMore, packages.length])
+  }, [hasMore, loadingMore, packages.length, activeStateId])
 
   const stateNames = useMemo(() => states.map(s => s.name), [states])
   const pinnedFilters = useMemo(() => [ALL_STATES, ...stateNames.slice(0, VISIBLE_STATE_COUNT)], [stateNames])
   const moreFilters = useMemo(() => stateNames.slice(VISIBLE_STATE_COUNT), [stateNames])
+  const activeStateName = useMemo(
+    () => (activeStateId === null ? ALL_STATES : states.find(s => s.id === activeStateId)?.name ?? ALL_STATES),
+    [activeStateId, states]
+  )
+
+  function selectStateFilter(name: string) {
+    setActiveStateId(name === ALL_STATES ? null : states.find(s => s.name === name)?.id ?? null)
+  }
 
   const filteredPackages = useMemo(() => {
     const keyword = query.trim().toLowerCase()
@@ -125,9 +139,9 @@ export default function HolidaysPage() {
               {pinnedFilters.map(f => (
                 <button
                   key={f}
-                  onClick={() => setActiveState(f)}
+                  onClick={() => selectStateFilter(f)}
                   className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors ${
-                    f === activeState ? 'bg-forest text-white border-forest' : 'border-black/10 text-ink-muted hover:border-forest/40'
+                    f === activeStateName ? 'bg-forest text-white border-forest' : 'border-black/10 text-ink-muted hover:border-forest/40'
                   }`}
                 >
                   {f}
@@ -138,10 +152,10 @@ export default function HolidaysPage() {
                   <button
                     onClick={() => setMoreOpen(o => !o)}
                     className={`flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors ${
-                      moreFilters.includes(activeState) ? 'bg-forest text-white border-forest' : 'border-black/10 text-ink-muted hover:border-forest/40'
+                      moreFilters.includes(activeStateName) ? 'bg-forest text-white border-forest' : 'border-black/10 text-ink-muted hover:border-forest/40'
                     }`}
                   >
-                    {moreFilters.includes(activeState) ? activeState : `+${moreFilters.length} more`}
+                    {moreFilters.includes(activeStateName) ? activeStateName : `+${moreFilters.length} more`}
                     <ChevronDown size={12} className={`transition-transform ${moreOpen ? 'rotate-180' : ''}`} />
                   </button>
                   {moreOpen && (
@@ -149,9 +163,9 @@ export default function HolidaysPage() {
                       {moreFilters.map(f => (
                         <button
                           key={f}
-                          onClick={() => { setActiveState(f); setMoreOpen(false) }}
+                          onClick={() => { selectStateFilter(f); setMoreOpen(false) }}
                           className={`w-full text-left text-xs px-3 py-2 transition-colors ${
-                            f === activeState ? 'text-forest font-semibold bg-forest/5' : 'text-ink-muted hover:bg-ivory'
+                            f === activeStateName ? 'text-forest font-semibold bg-forest/5' : 'text-ink-muted hover:bg-ivory'
                           }`}
                         >
                           {f}
