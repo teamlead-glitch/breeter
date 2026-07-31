@@ -6,6 +6,7 @@ import { ChevronRight, Check, X, Palmtree } from 'lucide-react'
 import { apiGet } from '@/lib/apiService'
 import { mapSeoToMetadata } from '@/lib/seo'
 import { PackageDetailData, PackagesData } from '@/types/packages'
+import PackageEnquiryForm from '@/components/holidays/PackageEnquiryForm'
 
 type PageProps = { params: Promise<{ slug: string }> }
 
@@ -161,23 +162,7 @@ export default async function PackageDetailPage({ params }: PageProps) {
 
             {/* Enquiry sidebar */}
             <div className="w-full lg:w-80 flex-shrink-0">
-              <div className="bg-white rounded-2xl border border-black/5 p-6 lg:sticky lg:top-24">
-                <h3 className="font-bold text-ink text-lg mb-1">Interested?</h3>
-                <p className="text-ink-faint text-xs mb-5">Get a custom quote — no payment required.</p>
-
-                <div className="space-y-3 mb-5">
-                  {['Name', 'Phone', 'Email', 'Travel month & pax'].map(field => (
-                    <div key={field}>
-                      <label className="block text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-1">{field}</label>
-                      <input className="w-full bg-ivory rounded-xl px-4 py-3 text-sm text-ink outline-none border-2 border-transparent focus:border-forest/25 transition-colors" placeholder={`Your ${field.toLowerCase()}`} />
-                    </div>
-                  ))}
-                </div>
-
-                <button className="w-full bg-cta hover:bg-cta-dark text-white font-bold text-sm py-3.5 rounded-xl transition-colors">
-                  Request Quote
-                </button>
-              </div>
+              <PackageEnquiryForm packageId={pkg.id} />
             </div>
           </div>
         </div>
