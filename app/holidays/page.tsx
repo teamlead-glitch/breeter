@@ -1,21 +1,49 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
 import { packages } from '@/lib/data'
-import { Search } from 'lucide-react'
+import { ChevronDown, Search } from 'lucide-react'
 import PackageCard from '@/components/holidays/PackageCard'
+import { apiGet } from '@/lib/apiService'
+import { State, StatesData } from '@/types/states'
 
-const stateFilters = ['Kerala', 'Tamil Nadu', 'Uttarakhand', 'Goa', 'All states']
+const ALL_STATES = 'All states'
+const VISIBLE_STATE_COUNT = 5
+
+function fetchStates() {
+  return apiGet<StatesData>('v1/states?per_page=15')
+}
 
 export default function HolidaysPage() {
-  const [activeState, setActiveState] = useState('All states')
+  const [states, setStates] = useState<State[]>([])
+  const [activeState, setActiveState] = useState(ALL_STATES)
   const [query, setQuery] = useState('')
+  const [moreOpen, setMoreOpen] = useState(false)
+  const moreRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    fetchStates().then(res => {
+      if (res.data) setStates(res.data.data)
+    })
+  }, [])
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (moreRef.current && !moreRef.current.contains(e.target as Node)) setMoreOpen(false)
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const stateNames = useMemo(() => states.map(s => s.name), [states])
+  const pinnedFilters = useMemo(() => [ALL_STATES, ...stateNames.slice(0, VISIBLE_STATE_COUNT)], [stateNames])
+  const moreFilters = useMemo(() => stateNames.slice(VISIBLE_STATE_COUNT), [stateNames])
 
   const filteredPackages = useMemo(() => {
     const keyword = query.trim().toLowerCase()
     return packages.filter(pkg => {
-      const matchesState = activeState === 'All states' || pkg.location === activeState
+      const matchesState = activeState === ALL_STATES || pkg.location === activeState
       const matchesKeyword =
         !keyword ||
         pkg.name.toLowerCase().includes(keyword) ||
@@ -47,7 +75,7 @@ export default function HolidaysPage() {
           <div className="flex gap-3 flex-wrap items-center justify-between">
             <div className="flex gap-3 flex-wrap items-center">
               <span className="text-xs text-ink-faint">Filter by:</span>
-              {stateFilters.map(f => (
+              {pinnedFilters.map(f => (
                 <button
                   key={f}
                   onClick={() => setActiveState(f)}
@@ -58,6 +86,34 @@ export default function HolidaysPage() {
                   {f}
                 </button>
               ))}
+              {moreFilters.length > 0 && (
+                <div className="relative" ref={moreRef}>
+                  <button
+                    onClick={() => setMoreOpen(o => !o)}
+                    className={`flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors ${
+                      moreFilters.includes(activeState) ? 'bg-forest text-white border-forest' : 'border-black/10 text-ink-muted hover:border-forest/40'
+                    }`}
+                  >
+                    {moreFilters.includes(activeState) ? activeState : `+${moreFilters.length} more`}
+                    <ChevronDown size={12} className={`transition-transform ${moreOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  {moreOpen && (
+                    <div className="absolute z-20 top-full mt-2 left-0 w-48 max-h-64 overflow-y-auto bg-white rounded-xl border border-black/10 shadow-xl py-1.5">
+                      {moreFilters.map(f => (
+                        <button
+                          key={f}
+                          onClick={() => { setActiveState(f); setMoreOpen(false) }}
+                          className={`w-full text-left text-xs px-3 py-2 transition-colors ${
+                            f === activeState ? 'text-forest font-semibold bg-forest/5' : 'text-ink-muted hover:bg-ivory'
+                          }`}
+                        >
+                          {f}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
             <div className="relative">
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint" />
