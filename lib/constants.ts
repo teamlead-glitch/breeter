@@ -4,8 +4,8 @@ import { TripType } from '@/context/SearchContext'
 export const DEFAULT_STATE_ID = 1
 
 export const TRIP_TYPE_IDS: Record<TripType, number> = {
-  'Drop': 1,
-  'Round Trip': 2,
+  'Drop': 2,
+  'Round Trip': 1,
   'Hourly Rental': 3,
 }
 
