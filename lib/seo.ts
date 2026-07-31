@@ -18,12 +18,10 @@ export async function fetchPageSeo(slug: string): Promise<SeoDetails | null> {
 }
 
 /**
- * Fetches SEO details for `slug` and maps them to Next.js Metadata,
- * falling back to `defaults` for any field missing or unset on the API side.
+ * Maps SEO details to Next.js Metadata, falling back to `defaults` for any
+ * field missing or unset on the API side.
  */
-export async function getSeoMetadata(slug: string, defaults: SeoDefaults): Promise<Metadata> {
-  const seo = await fetchPageSeo(slug)
-
+export function mapSeoToMetadata(seo: SeoDetails | null, defaults: SeoDefaults): Metadata {
   const title = seo?.meta_title || defaults.title
   const description = seo?.meta_description || defaults.description
   const keywords = seo?.meta_keywords || defaults.keywords
@@ -52,4 +50,13 @@ export async function getSeoMetadata(slug: string, defaults: SeoDefaults): Promi
       images: twitterImage ? [twitterImage] : undefined,
     },
   }
+}
+
+/**
+ * Fetches SEO details for `slug` and maps them to Next.js Metadata,
+ * falling back to `defaults` for any field missing or unset on the API side.
+ */
+export async function getSeoMetadata(slug: string, defaults: SeoDefaults): Promise<Metadata> {
+  const seo = await fetchPageSeo(slug)
+  return mapSeoToMetadata(seo, defaults)
 }
