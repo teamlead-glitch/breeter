@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { SlidersHorizontal, ArrowLeft, X } from 'lucide-react'
 import FilterFields from '@/components/search/FilterFields'
-import SearchVehicleCard from '@/components/cabs/SearchVehicleCard'
+import SearchVehicleCard, { PricedCabCategory } from '@/components/cabs/SearchVehicleCard'
 import { useBookModal } from '@/components/common/BookModalContext'
 import { SearchState, useSearchState } from '@/context/SearchContext'
 import { apiGet } from '@/lib/apiService'
 import { DEFAULT_STATE_ID, PLACEHOLDER_DISTANCE_KM, TRIP_TYPE_IDS } from '@/lib/constants'
-import { CabCategoriesData, CabCategory } from '@/types/cabs'
+import { CabCategoriesData } from '@/types/cabs'
 
 function formatDate(value: string) {
   if (!value) return ''
@@ -62,7 +62,7 @@ export default function SearchResultsPage() {
   const [filterOpen, setFilterOpen] = useState(false)
   const { state, dispatch } = useSearchState()
   const { openBookModal } = useBookModal()
-  const [cabs, setCabs] = useState<CabCategory[]>([])
+  const [cabs, setCabs] = useState<PricedCabCategory[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
@@ -75,7 +75,7 @@ export default function SearchResultsPage() {
       if (res.error || !res.data) {
         setError(true)
       } else {
-        setCabs(res.data.data)
+        setCabs(res.data.data.filter((v): v is PricedCabCategory => v.fare !== null))
       }
       setLoading(false)
     })

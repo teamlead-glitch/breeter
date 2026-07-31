@@ -1,15 +1,19 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Car } from 'lucide-react'
+import { Car, Users, Wind } from 'lucide-react'
 import { CabCategory } from '@/types/cabs'
 
-function stripHtml(html: string | null) {
-  if (!html) return ''
-  return html.replace(/<[^>]*>/g, '').trim()
+export type PricedCabCategory = CabCategory & { fare: NonNullable<CabCategory['fare']> }
+
+const MODEL_TEXT: Record<string, string> = {
+  'Hatchback': 'Wagon R / Tata Tiago / Similar',
+  'Sedan': 'Dzire / Honda Amaze / Similar',
+  'SUV': 'Fortuner / Innova Crysta / Similar',
+  'Tempo Traveller': 'Force Traveller · AC 12 Seat',
 }
 
-export default function SearchVehicleCard({ v }: { v: CabCategory }) {
-  const description = stripHtml(v.description)
+export default function SearchVehicleCard({ v }: { v: PricedCabCategory }) {
+  const modelText = MODEL_TEXT[v.name]
 
   return (
     <div className="bg-white rounded-2xl border border-black/5 p-4 sm:p-5 flex flex-row gap-3 sm:gap-5 hover:shadow-lg transition-shadow">
@@ -22,15 +26,15 @@ export default function SearchVehicleCard({ v }: { v: CabCategory }) {
       </div>
       <div className="flex-1 min-w-0">
         <h3 className="font-bold text-ink text-sm sm:text-base mb-0.5">{v.name}</h3>
-        {description && <p className="text-ink-faint text-xs mb-3">{description}</p>}
+        {modelText && <p className="text-ink-faint text-xs mb-3">{modelText}</p>}
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="flex items-center gap-1 bg-ivory text-ink-muted text-[11px] font-medium px-2.5 py-1 rounded-full"><Users size={12} /> 4 seats</span>
+          <span className="flex items-center gap-1 bg-ivory text-ink-muted text-[11px] font-medium px-2.5 py-1 rounded-full"><Wind size={12} /> AC</span>
+        </div>
       </div>
       <div className="flex-shrink-0 flex flex-col items-end">
         <div>
-          {v.fare !== null ? (
-            <p className="font-mono font-bold text-ink text-lg sm:text-2xl">₹{v.fare.amount.toLocaleString('en-IN')}</p>
-          ) : (
-            <p className="font-bold text-ink-faint text-sm">Fare on request</p>
-          )}
+          <p className="font-mono font-bold text-ink text-lg sm:text-2xl">₹{v.fare.amount.toLocaleString('en-IN')}</p>
           <p className="text-ink-faint text-xs">est. fare</p>
         </div>
         <Link href="/book" className="bg-cta hover:bg-cta-dark text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-colors mt-3">
