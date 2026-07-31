@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { getSeoMetadata } from '@/lib/seo'
+import ContactForm from '@/components/contact/ContactForm'
 
 export async function generateMetadata(): Promise<Metadata> {
   return getSeoMetadata('page-contact-us', {
@@ -22,34 +23,7 @@ export default function ContactPage() {
 
           {/* Form */}
           <main className="flex-1 min-w-0">
-            <div className="bg-white rounded-2xl border border-black/5 p-6">
-              <h2 className="font-bold text-ink text-lg mb-5">Send an enquiry</h2>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                {['Name', 'Phone'].map(f => (
-                  <div key={f}>
-                    <label className="block text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-1.5">{f}</label>
-                    <input className="w-full bg-ivory rounded-xl px-4 py-3 text-sm text-ink border-2 border-transparent focus:border-forest/25 outline-none" placeholder={`Your ${f.toLowerCase()}`} />
-                  </div>
-                ))}
-              </div>
-
-              {['Email'].map(f => (
-                <div key={f} className="mb-4">
-                  <label className="block text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-1.5">{f}</label>
-                  <input className="w-full bg-ivory rounded-xl px-4 py-3 text-sm text-ink border-2 border-transparent focus:border-forest/25 outline-none" placeholder={`Your ${f.toLowerCase()}`} />
-                </div>
-              ))}
-
-              <div className="mb-6">
-                <label className="block text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-1.5">Message</label>
-                <textarea rows={5} className="w-full bg-ivory rounded-xl px-4 py-3 text-sm text-ink border-2 border-transparent focus:border-forest/25 outline-none resize-none" placeholder="Tell us how we can help…" />
-              </div>
-
-              <button className="w-full bg-cta hover:bg-cta-dark text-white font-bold py-3.5 rounded-xl transition-colors text-sm">
-                Send message →
-              </button>
-            </div>
+            <ContactForm />
           </main>
 
           {/* Sidebar */}
