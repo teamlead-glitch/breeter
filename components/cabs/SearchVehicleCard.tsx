@@ -5,7 +5,7 @@ import { CabCategory } from '@/types/cabs'
 
 export type PricedCabCategory = CabCategory & { fare: NonNullable<CabCategory['fare']> }
 
-const MODEL_TEXT: Record<string, string> = {
+export const MODEL_TEXT: Record<string, string> = {
   'Hatchback': 'Wagon R / Tata Tiago / Similar',
   'Sedan': 'Dzire / Honda Amaze / Similar',
   'SUV': 'Fortuner / Innova Crysta / Similar',
@@ -13,7 +13,7 @@ const MODEL_TEXT: Record<string, string> = {
 }
 
 export default function SearchVehicleCard({ v }: { v: PricedCabCategory }) {
-  const modelText = MODEL_TEXT[v.name]
+  const modelText = MODEL_TEXT[v.name] ?? 'Bus / van Similar or equivalent'
 
   return (
     <div className="bg-white rounded-2xl border border-black/5 p-4 sm:p-5 flex flex-row gap-3 sm:gap-5 hover:shadow-lg transition-shadow">
@@ -26,7 +26,7 @@ export default function SearchVehicleCard({ v }: { v: PricedCabCategory }) {
       </div>
       <div className="flex-1 min-w-0">
         <h3 className="font-bold text-ink text-sm sm:text-base mb-0.5">{v.name}</h3>
-        {modelText && <p className="text-ink-faint text-xs mb-3">{modelText}</p>}
+        <p className="text-ink-faint text-xs mb-3">{modelText}</p>
         <div className="flex flex-wrap items-center gap-2">
           <span className="flex items-center gap-1 bg-ivory text-ink-muted text-[11px] font-medium px-2.5 py-1 rounded-full"><Users size={12} /> 4 seats</span>
           <span className="flex items-center gap-1 bg-ivory text-ink-muted text-[11px] font-medium px-2.5 py-1 rounded-full"><Wind size={12} /> AC</span>

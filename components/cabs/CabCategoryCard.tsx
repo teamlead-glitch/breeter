@@ -1,15 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Car } from 'lucide-react'
+import { Car, Users, Wind } from 'lucide-react'
 import { CabCategory } from '@/types/cabs'
-
-function stripHtml(html: string | null) {
-  if (!html) return ''
-  return html.replace(/<[^>]*>/g, '').trim()
-}
+import { MODEL_TEXT } from '@/components/cabs/SearchVehicleCard'
 
 export default function CabCategoryCard({ v }: { v: CabCategory }) {
-  const description = stripHtml(v.description)
+  const modelText = MODEL_TEXT[v.name] ?? 'Bus / van Similar or equivalent'
 
   return (
     <Link href="/book" className="group flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-black/10 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
@@ -31,7 +27,11 @@ export default function CabCategoryCard({ v }: { v: CabCategory }) {
       </div>
       <div className="p-4 flex-1 flex flex-col">
         <h3 className="font-bold text-ink text-sm mb-0.5">{v.name}</h3>
-        <p className="text-ink-faint text-xs truncate min-h-[1em]">{description}</p>
+        <p className="text-ink-faint text-xs truncate mb-2">{modelText}</p>
+        <div className="flex items-center gap-3">
+          <span className="flex items-center gap-1 text-xs text-ink-muted"><Users size={11} /> 4 seats</span>
+          <span className="flex items-center gap-1 text-xs text-ink-muted"><Wind size={11} /> AC</span>
+        </div>
         {v.fare !== null && (
           <p className="font-mono font-bold text-cta text-sm mt-2">₹{v.fare.amount.toLocaleString('en-IN')}</p>
         )}
