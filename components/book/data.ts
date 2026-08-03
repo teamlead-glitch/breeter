@@ -16,7 +16,7 @@ export const ADD_ONS: AddOn[] = [
     id: 'lang',
     label: 'Driver language',
     desc: 'Preferred spoken language',
-    extra: ['English', 'Hindi', 'Malayalam', 'Tamil'],
+    extra: ['English', 'Hindi'],
   },
   {
     id: 'roof',

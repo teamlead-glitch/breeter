@@ -21,9 +21,15 @@ export default function AddOnsCard({
         <p className="text-ink-faint text-xs mt-1">Optional — each adds a flat charge to your fare</p>
       </div>
       {ADD_ONS.map((a, i) => (
-        <label
+        <div
           key={a.id}
+          role="checkbox"
+          aria-checked={addOns.includes(a.id)}
+          tabIndex={0}
           onClick={() => onToggle(a.id)}
+          onKeyDown={e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle(a.id) }
+          }}
           className={`flex items-start gap-4 px-4 sm:px-5 py-4 cursor-pointer hover:bg-ivory/60 transition-colors ${
             i < ADD_ONS.length - 1 ? 'border-b border-black/5' : ''
           }`}>
@@ -56,7 +62,7 @@ export default function AddOnsCard({
             )}
           </div>
           <span className="font-mono font-semibold text-ink text-sm flex-shrink-0 mt-0.5">+₹{rates[a.id]}</span>
-        </label>
+        </div>
       ))}
     </div>
   )
