@@ -1,7 +1,9 @@
+'use client'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight, Car } from 'lucide-react'
 import { CabCategory } from '@/types/cabs'
+import { useSearchState } from '@/context/SearchContext'
 
 function stripHtml(html: string | null) {
   if (!html) return ''
@@ -9,11 +11,13 @@ function stripHtml(html: string | null) {
 }
 
 export default function CabSlideCard({ v }: { v: CabCategory }) {
+  const { dispatch } = useSearchState()
   const description = stripHtml(v.description) || 'Similar or equivalent'
 
   return (
     <Link
       href="/book"
+      onClick={() => dispatch({ type: 'SET_CAB_CATEGORY_ID', id: v.id })}
       className="group relative flex h-92 flex-col overflow-hidden rounded-[1.75rem] bg-forest-mid isolate"
     >
       {v.image ? (

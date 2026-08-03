@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { ChevronRight } from 'lucide-react'
+import { ArrowRight, ChevronRight, SearchX } from 'lucide-react'
 import { ADD_ON_FILTER_LABELS, ADD_ONS } from '@/components/book/data'
 import TripSummary from '@/components/book/TripSummary'
 import BookingPageTabs from '@/components/book/BookingPageTabs'
@@ -16,6 +16,28 @@ import { SearchState, useSearchState } from '@/context/SearchContext'
 import { apiPost } from '@/lib/apiService'
 import { DEFAULT_STATE_ID, PLACEHOLDER_LAT_LNG, TRIP_TYPE_IDS } from '@/lib/constants'
 import { BookingDetails, BookingDetailsRequest, BookingDetailsResponse } from '@/types/booking'
+
+function BookingIssueNotice({ heading, message }: { heading: string; message: string }) {
+  return (
+    <div className="min-h-screen bg-ivory grid place-items-center px-4 py-16">
+      <div className="max-w-md w-full text-center">
+        <div className="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-2xl bg-white border border-black/5 shadow-sm">
+          <SearchX size={28} className="text-cta" />
+        </div>
+        <h1 className="font-display text-ink text-xl font-bold mb-2">{heading}</h1>
+        <p className="text-ink-faint text-sm leading-relaxed mb-7">{message}</p>
+        <Link
+          href="/search"
+          className="inline-flex items-center gap-2 bg-cta hover:bg-cta-dark text-white font-bold text-sm px-6 py-3 rounded-xl transition-colors shadow-lg shadow-cta/20">
+          See available cabs <ArrowRight size={15} />
+        </Link>
+        <p className="text-ink-faint text-xs mt-4">
+          You can also tweak your route, dates or trip type there to pull up cabs that match.
+        </p>
+      </div>
+    </div>
+  )
+}
 
 function buildBookingDetailsPayload(state: SearchState, addOns: string[]): BookingDetailsRequest {
   const payload: BookingDetailsRequest = {
@@ -81,12 +103,10 @@ export default function BookPage() {
 
   if (!state.cabCategoryId) {
     return (
-      <div className="min-h-screen bg-ivory grid place-items-center px-4 text-center">
-        <div>
-          <p className="text-ink-faint text-sm mb-3">No cab selected yet.</p>
-          <Link href="/search" className="text-cta font-semibold text-sm hover:text-cta-dark transition-colors">← Back to search results</Link>
-        </div>
-      </div>
+      <BookingIssueNotice
+        heading="No cab selected yet"
+        message="Pick a cab category from the search results to continue with your booking."
+      />
     )
   }
 
@@ -100,14 +120,14 @@ export default function BookPage() {
 
   if (!details) {
     return (
-      <div className="min-h-screen bg-ivory grid place-items-center px-4 text-center">
-        <div>
-          <p className="text-ink-faint text-sm mb-3">
-            {detailsError ? "Couldn't load booking details. Please try again." : 'No booking details available.'}
-          </p>
-          <Link href="/search" className="text-cta font-semibold text-sm hover:text-cta-dark transition-colors">← Back to search results</Link>
-        </div>
-      </div>
+      <BookingIssueNotice
+        heading={detailsError ? "This cab isn't available for your trip" : 'No booking details available'}
+        message={
+          detailsError
+            ? "The selected cab isn't available for your search criteria or trip type — the route, dates or duration you picked may fall outside what it supports."
+            : "We couldn't find pricing for this cab and trip. Head back to search to pick from cabs that are available."
+        }
+      />
     )
   }
 
