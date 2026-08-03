@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation, Autoplay } from 'swiper/modules'
+import { Autoplay } from 'swiper/modules'
 import type { Swiper as SwiperType } from 'swiper/types'
 import 'swiper/css'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
@@ -13,8 +13,9 @@ export default function VehicleSwiper() {
   const [vehicles, setVehicles] = useState<CabCategory[]>([])
   const [loading, setLoading] = useState(true)
   const [activeIndex, setActiveIndex] = useState(0)
-  const prevRef = useRef<HTMLButtonElement>(null)
-  const nextRef = useRef<HTMLButtonElement>(null)
+  const [atStart, setAtStart] = useState(true)
+  const [atEnd, setAtEnd] = useState(false)
+  const swiperRef = useRef<SwiperType | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -27,6 +28,8 @@ export default function VehicleSwiper() {
   }, [])
 
   if (!loading && vehicles.length === 0) return null
+
+  const loop = vehicles.length > 4
 
   return (
     <section className="relative overflow-hidden bg-forest py-20">
@@ -42,21 +45,25 @@ export default function VehicleSwiper() {
           </div>
 
           {!loading && vehicles.length > 1 && (
-            <div className="flex items-center gap-3">
+            <div className="ml-auto flex items-center gap-3">
               <span className="mr-1 font-mono text-xs tabular-nums text-white/40">
                 {String(activeIndex + 1).padStart(2, '0')} / {String(vehicles.length).padStart(2, '0')}
               </span>
               <button
-                ref={prevRef}
+                type="button"
+                onClick={() => swiperRef.current?.slidePrev()}
+                disabled={!loop && atStart}
                 aria-label="Previous vehicle"
-                className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-white transition-colors hover:border-cta hover:bg-cta"
+                className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-white transition-colors hover:border-cta hover:bg-cta disabled:pointer-events-none disabled:opacity-35"
               >
                 <ArrowLeft size={17} />
               </button>
               <button
-                ref={nextRef}
+                type="button"
+                onClick={() => swiperRef.current?.slideNext()}
+                disabled={!loop && atEnd}
                 aria-label="Next vehicle"
-                className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-white transition-colors hover:border-cta hover:bg-cta"
+                className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-white transition-colors hover:border-cta hover:bg-cta disabled:pointer-events-none disabled:opacity-35"
               >
                 <ArrowRight size={17} />
               </button>
@@ -67,12 +74,12 @@ export default function VehicleSwiper() {
         {loading ? (
           <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
             {[1, 2, 3, 4].map(i => (
-              <div key={i} className="h-[23rem] animate-pulse rounded-[1.75rem] bg-white/10" />
+              <div key={i} className="h-92 animate-pulse rounded-[1.75rem] bg-white/10" />
             ))}
           </div>
         ) : (
           <Swiper
-            modules={[Navigation, Autoplay]}
+            modules={[Autoplay]}
             spaceBetween={20}
             slidesPerView={1.15}
             breakpoints={{
@@ -80,16 +87,13 @@ export default function VehicleSwiper() {
               768: { slidesPerView: 3 },
               1024: { slidesPerView: 4.2 },
             }}
-            loop={vehicles.length > 4}
-            onBeforeInit={(swiper: SwiperType) => {
-              const nav = swiper.params.navigation
-              if (nav && typeof nav === 'object') {
-                nav.prevEl = prevRef.current
-                nav.nextEl = nextRef.current
-              }
+            loop={loop}
+            onSwiper={swiper => { swiperRef.current = swiper }}
+            onSlideChange={swiper => {
+              setActiveIndex(swiper.realIndex)
+              setAtStart(swiper.isBeginning)
+              setAtEnd(swiper.isEnd)
             }}
-            navigation={true}
-            onSlideChange={swiper => setActiveIndex(swiper.realIndex)}
             autoplay={{ delay: 4200, disableOnInteraction: false }}
           >
             {vehicles.map(v => (

@@ -14,7 +14,7 @@ export default function CabSlideCard({ v }: { v: CabCategory }) {
   return (
     <Link
       href="/book"
-      className="group relative flex h-[23rem] flex-col overflow-hidden rounded-[1.75rem] bg-forest-mid isolate"
+      className="group relative flex h-92 flex-col overflow-hidden rounded-[1.75rem] bg-forest-mid isolate"
     >
       {v.image ? (
         <Image
