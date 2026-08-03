@@ -9,6 +9,7 @@ import CabInfoCard from '@/components/book/CabInfoCard'
 import AddOnsCard from '@/components/book/AddOnsCard'
 import TravellerDetailsForm from '@/components/book/TravellerDetailsForm'
 import FareBreakdownCard from '@/components/book/FareBreakdownCard'
+import PriceBreakdownList from '@/components/book/PriceBreakdownList'
 import MobilePayBar from '@/components/book/MobilePayBar'
 import TermsAgreement from '@/components/book/TermsAgreement'
 import { SearchState, useSearchState } from '@/context/SearchContext'
@@ -157,6 +158,12 @@ export default function BookPage() {
               </p>
             )}
             <AddOnsCard addOns={addOns} rates={rates} disabled={isRefreshingFare} onToggle={toggleAddon} />
+
+            {/* Mobile/tablet: price breakdown — the sidebar with this is desktop-only */}
+            <div className="lg:hidden bg-white rounded-2xl border border-black/5 p-4 sm:p-5">
+              <PriceBreakdownList breakdown={details.pricing.breakdown} total={total} refreshing={isRefreshingFare} />
+            </div>
+
             <BookingPageTabs />
             
             <TravellerDetailsForm />
