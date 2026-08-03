@@ -19,7 +19,7 @@
   /* Ink — body text */
   --color-ink: #181818;
   --color-ink-muted: #555555;
-  --color-ink-faint: #9A9A9A;
+  --color-ink-faint: #555555;
 
   /* CTA green — all primary buttons */
   --color-cta: #1B7A33;
