@@ -44,7 +44,7 @@ export default function FeaturedPackagesSection() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {packages.map(pkg => (
-              <PackageCard key={pkg.slug} pkg={pkg} />
+              <PackageCard key={pkg.slug} pkg={pkg} featured />
             ))}
           </div>
         )}
