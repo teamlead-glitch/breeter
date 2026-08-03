@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Fraunces } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/common/navbar/Navbar'
 import Footer from '@/components/common/Footer'
@@ -13,6 +13,14 @@ const inter = Inter({
   display: 'swap',
 })
 
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-fraunces',
+  style: ['normal', 'italic'],
+  axes: ['opsz', 'SOFT'],
+  display: 'swap',
+})
+
 export const metadata: Metadata = {
   title: 'Breeter — Outstation Cabs & Holiday Packages',
   description:
@@ -23,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={inter.variable}
+      className={`${inter.variable} ${fraunces.variable}`}
     >
       <body className="min-h-screen flex flex-col">
         <SearchProvider>

@@ -27,8 +27,8 @@ export default function FeaturedPackagesSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-end justify-between mb-12">
           <div>
-            <p className="font-mono text-forest/40 text-xs tracking-[0.2em] uppercase mb-2">Curated travel</p>
-            <h2 className="font-display text-ink text-3xl md:text-4xl font-bold">Featured Packages</h2>
+            <p className="font-mono text-cta text-xs tracking-[0.2em] uppercase mb-2">Curated travel</p>
+            <h2 className="font-serif text-ink text-4xl md:text-5xl">Featured Packages</h2>
           </div>
           <Link href="/holidays" className="hidden sm:inline-flex items-center gap-1 text-forest font-semibold text-sm hover:underline underline-offset-4">
             View all <ChevronRight size={15} />

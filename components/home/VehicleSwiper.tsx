@@ -1,17 +1,20 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation, Pagination, Autoplay } from 'swiper/modules'
+import { Navigation, Autoplay } from 'swiper/modules'
+import type { Swiper as SwiperType } from 'swiper/types'
 import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { apiGet } from '@/lib/apiService'
 import { CabCategoriesData, CabCategory } from '@/types/cabs'
-import CabCategoryCard from '@/components/cabs/CabCategoryCard'
+import CabSlideCard from '@/components/home/CabSlideCard'
 
 export default function VehicleSwiper() {
   const [vehicles, setVehicles] = useState<CabCategory[]>([])
   const [loading, setLoading] = useState(true)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const prevRef = useRef<HTMLButtonElement>(null)
+  const nextRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -26,39 +29,72 @@ export default function VehicleSwiper() {
   if (!loading && vehicles.length === 0) return null
 
   return (
-    <section className="bg-forest py-16 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-end justify-between mb-10">
+    <section className="relative overflow-hidden bg-forest py-20">
+      {/* Ambient glow — purely decorative, clipped by section overflow */}
+      <div className="pointer-events-none absolute -left-24 -top-24 h-96 w-96 rounded-full bg-cta/20 blur-[100px]" />
+      <div className="pointer-events-none absolute -bottom-32 -right-20 h-[28rem] w-[28rem] rounded-full bg-gold/10 blur-[120px]" />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-10 flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p className="font-mono text-white/70 text-xs tracking-[0.2em] uppercase mb-2">Select your vehicle</p>
-            <h2 className="font-display text-white text-3xl md:text-4xl font-bold">Choose your ride</h2>
+            <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-white/50">Select your vehicle</p>
+            <h2 className="font-serif text-4xl italic text-white md:text-5xl">Choose your ride</h2>
           </div>
+
+          {!loading && vehicles.length > 1 && (
+            <div className="flex items-center gap-3">
+              <span className="mr-1 font-mono text-xs tabular-nums text-white/40">
+                {String(activeIndex + 1).padStart(2, '0')} / {String(vehicles.length).padStart(2, '0')}
+              </span>
+              <button
+                ref={prevRef}
+                aria-label="Previous vehicle"
+                className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-white transition-colors hover:border-cta hover:bg-cta"
+              >
+                <ArrowLeft size={17} />
+              </button>
+              <button
+                ref={nextRef}
+                aria-label="Next vehicle"
+                className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-white transition-colors hover:border-cta hover:bg-cta"
+              >
+                <ArrowRight size={17} />
+              </button>
+            </div>
+          )}
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4.5">
+          <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
             {[1, 2, 3, 4].map(i => (
-              <div key={i} className="h-64 rounded-2xl bg-white/10 animate-pulse" />
+              <div key={i} className="h-[23rem] animate-pulse rounded-[1.75rem] bg-white/10" />
             ))}
           </div>
         ) : (
           <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            spaceBetween={18}
-            slidesPerView={1.2}
+            modules={[Navigation, Autoplay]}
+            spaceBetween={20}
+            slidesPerView={1.15}
             breakpoints={{
-              480: { slidesPerView: 2 },
+              480: { slidesPerView: 2.15 },
               768: { slidesPerView: 3 },
-              1024: { slidesPerView: 4 },
+              1024: { slidesPerView: 4.2 },
             }}
-            pagination={{ clickable: true }}
-            navigation
-            autoplay={{ delay: 3800, disableOnInteraction: false }}
-            className="!pb-12"
+            loop={vehicles.length > 4}
+            onBeforeInit={(swiper: SwiperType) => {
+              const nav = swiper.params.navigation
+              if (nav && typeof nav === 'object') {
+                nav.prevEl = prevRef.current
+                nav.nextEl = nextRef.current
+              }
+            }}
+            navigation={true}
+            onSlideChange={swiper => setActiveIndex(swiper.realIndex)}
+            autoplay={{ delay: 4200, disableOnInteraction: false }}
           >
             {vehicles.map(v => (
-              <SwiperSlide key={v.id}>
-                <CabCategoryCard v={v} />
+              <SwiperSlide key={v.id} className="!h-auto">
+                <CabSlideCard v={v} />
               </SwiperSlide>
             ))}
           </Swiper>
