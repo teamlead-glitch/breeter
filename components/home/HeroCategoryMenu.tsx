@@ -10,7 +10,7 @@ const ITEMS = [
 
 export default function HeroCategoryMenu() {
   return (
-    <div className="flex justify-between sm:justify-start bg-white/96 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl px-4 sm:px-7 pt-4 items-stretch gap-5 sm:gap-10 overflow-x-auto scrollbar-hide">
+    <div className="grid grid-cols-2 justify-items-center sm:flex sm:justify-start bg-white/96 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl px-4 sm:px-7 pt-4 sm:items-stretch gap-y-3 gap-x-8 sm:gap-10 sm:overflow-x-auto scrollbar-hide">
       {ITEMS.map(item => {
         const Icon = item.icon
         return (
