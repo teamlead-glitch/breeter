@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { Plus } from 'lucide-react'
 import { useSearchState } from '@/context/SearchContext'
 import { apiGet } from '@/lib/apiService'
 import { VehicleTag, VehicleTagsData } from '@/types/vehicleTags'
@@ -47,7 +48,10 @@ export default function FilterFields({ onChange }: { onChange?: () => void }) {
         </>
       )}
 
-      <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-3">Add-ons</p>
+      <div className="flex items-center gap-2 mb-3">
+        <Plus size={16} className="text-forest" />
+        <h3 className="font-bold text-ink text-sm">Add-ons</h3>
+      </div>
       <div className="space-y-2.5">
         {ADD_ONS.map(f => {
           const checked = state.filters.addOns.includes(f)
