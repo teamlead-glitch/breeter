@@ -17,9 +17,7 @@ function formatDate(value: string) {
 
 function formatTime(value: string) {
   if (!value) return ''
-  return new Date(value)
-    .toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit', hour12: true })
-    .replace(/am|pm/i, m => m.toUpperCase())
+  return new Date(value).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false })
 }
 
 function buildCabCategoryParams(state: SearchState): URLSearchParams {

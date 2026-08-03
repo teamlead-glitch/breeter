@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { MapPin, CalendarClock, Plus, Search, X } from 'lucide-react'
 import Link from 'next/link'
 import { useSearchState, TripType, HourlyPackage } from '@/context/SearchContext'
+import DateTimePicker from '@/components/common/DateTimePicker'
 
 const TRIP_TYPES: TripType[] = ['Drop', 'Round Trip', 'Hourly Rental']
 
@@ -46,7 +47,7 @@ export default function SearchWidget() {
       </div>
 
       {/* Fields */}
-      <div className="grid gap-2 mb-4 grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
+      <div className="grid gap-2 mb-4 grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(280px,1fr))]">
         <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
           <MapPin size={15} className="text-forest flex-shrink-0" />
           <div className="min-w-0 flex-1">
@@ -123,13 +124,11 @@ export default function SearchWidget() {
 
         <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
           <CalendarClock size={15} className="text-forest flex-shrink-0" />
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0">
             <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Pickup Date & Time</p>
-            <input
-              type="datetime-local"
-              className="block w-full text-sm font-semibold text-ink bg-transparent outline-none"
+            <DateTimePicker
               value={state.pickupDate}
-              onChange={e => dispatch({ type: 'SET_PICKUP_DATE', value: e.target.value })}
+              onChange={value => dispatch({ type: 'SET_PICKUP_DATE', value })}
             />
           </div>
         </div>
@@ -137,13 +136,11 @@ export default function SearchWidget() {
         {(tripType === 'Round Trip' || tripType === 'Hourly Rental') && (
           <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
             <CalendarClock size={15} className="text-ink-faint flex-shrink-0" />
-            <div className="min-w-0 flex-1">
+            <div className="min-w-0">
               <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Drop Date & Time</p>
-              <input
-                type="datetime-local"
-                className="block w-full text-sm font-semibold text-ink bg-transparent outline-none"
+              <DateTimePicker
                 value={state.dropDate}
-                onChange={e => dispatch({ type: 'SET_DROP_DATE', value: e.target.value })}
+                onChange={value => dispatch({ type: 'SET_DROP_DATE', value })}
               />
             </div>
           </div>

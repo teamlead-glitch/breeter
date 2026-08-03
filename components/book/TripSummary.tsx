@@ -47,7 +47,7 @@ export default function TripSummary() {
           <p className="text-ink-faint text-xs">Kerala</p>
         </div>
       </div>
-      <p className="text-ink-faint text-xs mt-3">📅 23 Aug 2026, 10:00 AM · ~295 km</p>
+      <p className="text-ink-faint text-xs mt-3">📅 23 Aug 2026, 10:00 · ~295 km</p>
     </div>
   )
 }
