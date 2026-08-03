@@ -5,6 +5,13 @@ export type AddOn = {
   extra: string[] | null
 }
 
+// Maps an add-on id to the filter label used by the search widget's `filters.addOns`.
+export const ADD_ON_FILTER_LABELS: Record<AddOn['id'], string> = {
+  age: 'Vehicle below 5 years',
+  lang: 'Driver language',
+  roof: 'Roof carrier',
+}
+
 export const ADD_ONS: AddOn[] = [
   {
     id: 'age',

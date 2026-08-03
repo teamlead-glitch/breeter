@@ -6,10 +6,12 @@ import { ADD_ONS } from './data'
 export default function AddOnsCard({
   addOns,
   rates,
+  disabled = false,
   onToggle,
 }: {
   addOns: string[]
   rates: Record<string, number>
+  disabled?: boolean
   onToggle: (id: string) => void
 }) {
   const [langChoice, setLangChoice] = useState('English')
@@ -25,14 +27,15 @@ export default function AddOnsCard({
           key={a.id}
           role="checkbox"
           aria-checked={addOns.includes(a.id)}
-          tabIndex={0}
-          onClick={() => onToggle(a.id)}
+          aria-disabled={disabled}
+          tabIndex={disabled ? -1 : 0}
+          onClick={() => !disabled && onToggle(a.id)}
           onKeyDown={e => {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle(a.id) }
+            if (!disabled && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onToggle(a.id) }
           }}
-          className={`flex items-start gap-4 px-4 sm:px-5 py-4 cursor-pointer hover:bg-ivory/60 transition-colors ${
-            i < ADD_ONS.length - 1 ? 'border-b border-black/5' : ''
-          }`}>
+          className={`flex items-start gap-4 px-4 sm:px-5 py-4 transition-colors ${
+            disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-ivory/60'
+          } ${i < ADD_ONS.length - 1 ? 'border-b border-black/5' : ''}`}>
           <span
             aria-hidden
             className={`w-5 h-5 rounded border-2 flex-shrink-0 mt-0.5 grid place-items-center transition-colors ${

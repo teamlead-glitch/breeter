@@ -1,55 +1,39 @@
 'use client'
 import { useState } from 'react'
-import { ADD_ONS } from './data'
 import TermsAgreement from './TermsAgreement'
 
 export default function FareBreakdownCard({
   breakdown,
-  stopsCount,
-  stopsCharge,
-  addOns,
-  rates,
   total,
   payNow,
   balance,
   agreed,
+  refreshing = false,
   onToggleAgree,
 }: {
   breakdown: { label: string; amount: number }[]
-  stopsCount: number
-  stopsCharge: number
-  addOns: string[]
-  rates: Record<string, number>
   total: number
   payNow: number
   balance: number
   agreed: boolean
+  refreshing?: boolean
   onToggleAgree: () => void
 }) {
   const [payOption, setPayOption] = useState<'partial' | 'full'>('partial')
   const payAmount = payOption === 'partial' ? payNow : total
 
   return (
-    <div className="bg-white rounded-2xl border border-black/5 p-5 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
-      <h3 className="font-bold text-ink text-base mb-4">Fare breakdown</h3>
+    <div className={`bg-white rounded-2xl border border-black/5 p-5 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto transition-opacity ${refreshing ? 'opacity-60' : ''}`}>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="font-bold text-ink text-base">Fare breakdown</h3>
+        {refreshing && <span className="text-ink-faint text-xs">Updating…</span>}
+      </div>
 
       <div className="space-y-2.5 mb-4">
         {breakdown.map(line => (
           <div key={line.label} className="flex justify-between text-sm">
             <span className="text-ink-muted">{line.label}</span>
             <span className="font-mono font-semibold text-ink">₹{line.amount.toLocaleString('en-IN')}</span>
-          </div>
-        ))}
-        {stopsCount > 0 && (
-          <div className="flex justify-between text-sm">
-            <span className="text-ink-muted">Stops ({stopsCount})</span>
-            <span className="font-mono font-semibold text-ink">₹{stopsCharge.toLocaleString('en-IN')}</span>
-          </div>
-        )}
-        {ADD_ONS.filter(a => addOns.includes(a.id)).map(a => (
-          <div key={a.id} className="flex justify-between text-sm">
-            <span className="text-ink-muted">{a.label}</span>
-            <span className="font-mono font-semibold text-ink">₹{rates[a.id]}</span>
           </div>
         ))}
       </div>
@@ -113,9 +97,9 @@ export default function FareBreakdownCard({
       <TermsAgreement agreed={agreed} onToggle={onToggleAgree} className="mb-4" />
 
       <button
-        disabled={!agreed}
+        disabled={!agreed || refreshing}
         className={`w-full font-bold py-3.5 rounded-xl text-sm transition-colors ${
-          agreed
+          agreed && !refreshing
             ? 'bg-cta hover:bg-cta-dark text-white'
             : 'bg-ink-faint/15 text-ink-faint cursor-not-allowed'
         }`}>

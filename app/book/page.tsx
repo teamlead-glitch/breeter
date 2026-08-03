@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
-import { ADD_ONS } from '@/components/book/data'
+import { ADD_ON_FILTER_LABELS, ADD_ONS } from '@/components/book/data'
 import TripSummary from '@/components/book/TripSummary'
 import BookingPageTabs from '@/components/book/BookingPageTabs'
 import CabInfoCard from '@/components/book/CabInfoCard'
@@ -16,7 +16,7 @@ import { apiPost } from '@/lib/apiService'
 import { DEFAULT_STATE_ID, PLACEHOLDER_LAT_LNG, TRIP_TYPE_IDS } from '@/lib/constants'
 import { BookingDetails, BookingDetailsRequest, BookingDetailsResponse } from '@/types/booking'
 
-function buildBookingDetailsPayload(state: SearchState): BookingDetailsRequest {
+function buildBookingDetailsPayload(state: SearchState, addOns: string[]): BookingDetailsRequest {
   const payload: BookingDetailsRequest = {
     trip_type_id: TRIP_TYPE_IDS[state.tripType],
     cab_category_id: state.cabCategoryId as number,
@@ -29,9 +29,9 @@ function buildBookingDetailsPayload(state: SearchState): BookingDetailsRequest {
     to_longitude: PLACEHOLDER_LAT_LNG,
     stops: state.stops.map(location => ({ location, latitude: PLACEHOLDER_LAT_LNG, longitude: PLACEHOLDER_LAT_LNG })),
     booking_date: state.pickupDate.split('T')[0],
-    with_language: state.filters.addOns.includes('Driver language'),
-    with_carrier: state.filters.addOns.includes('Roof carrier'),
-    with_vehicle_below_5yr: state.filters.addOns.includes('Vehicle below 5 years'),
+    with_language: addOns.includes('lang'),
+    with_carrier: addOns.includes('roof'),
+    with_vehicle_below_5yr: addOns.includes('age'),
   }
 
   if (state.tripType === 'Round Trip') payload.to_date = state.dropDate.split('T')[0]
@@ -45,7 +45,9 @@ export default function BookPage() {
   const [details, setDetails] = useState<BookingDetails | null>(null)
   const [detailsLoading, setDetailsLoading] = useState(Boolean(state.cabCategoryId))
   const [detailsError, setDetailsError] = useState(false)
-  const [addOns, setAddOns] = useState<string[]>(['age', 'lang'])
+  const [addOns, setAddOns] = useState<string[]>(() =>
+    ADD_ONS.filter(a => state.filters.addOns.includes(ADD_ON_FILTER_LABELS[a.id])).map(a => a.id)
+  )
   const [agreed, setAgreed] = useState(false)
   const mobileAgreeRef = useRef<HTMLLabelElement>(null)
 
@@ -54,7 +56,7 @@ export default function BookPage() {
     let cancelled = false
     setDetailsLoading(true)
     setDetailsError(false)
-    apiPost<BookingDetailsResponse>('v1/booking-details', buildBookingDetailsPayload(state)).then(res => {
+    apiPost<BookingDetailsResponse>('v1/booking-details', buildBookingDetailsPayload(state, addOns)).then(res => {
       if (cancelled) return
       if (res.error || !res.data) {
         setDetailsError(true)
@@ -65,7 +67,7 @@ export default function BookPage() {
     })
     return () => { cancelled = true }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.cabCategoryId])
+  }, [state.cabCategoryId, addOns])
 
   const toggleAddon = (id: string) =>
     setAddOns(prev => prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id])
@@ -87,7 +89,7 @@ export default function BookPage() {
     )
   }
 
-  if (detailsLoading) {
+  if (detailsLoading && !details) {
     return (
       <div className="min-h-screen bg-ivory grid place-items-center">
         <p className="text-ink-faint text-sm">Loading booking details…</p>
@@ -95,30 +97,29 @@ export default function BookPage() {
     )
   }
 
-  if (detailsError || !details) {
+  if (!details) {
     return (
       <div className="min-h-screen bg-ivory grid place-items-center px-4 text-center">
         <div>
-          <p className="text-ink-faint text-sm mb-3">Couldn&apos;t load booking details. Please try again.</p>
+          <p className="text-ink-faint text-sm mb-3">
+            {detailsError ? "Couldn't load booking details. Please try again." : 'No booking details available.'}
+          </p>
           <Link href="/search" className="text-cta font-semibold text-sm hover:text-cta-dark transition-colors">← Back to search results</Link>
         </div>
       </div>
     )
   }
 
-  const stopsCount = state.stops.length
-  const stopsCharge = details.pricing.detail.waiting_charge_per_stop * stopsCount
+  // Refetched whenever add-ons are toggled, so pricing (breakdown + total) always comes straight from the API.
   const rates: Record<string, number> = {
     age: details.pricing.detail.rate_of_vehicle_below_5yrs,
     lang: details.pricing.detail.language_rate,
     roof: details.pricing.detail.carrier_rate,
   }
-  const addonTotal = ADD_ONS
-    .filter(a => addOns.includes(a.id))
-    .reduce((s, a) => s + rates[a.id], 0)
-  const total = details.pricing.total_amount + stopsCharge + addonTotal
+  const total = details.pricing.total_amount
   const payNow = Math.round(total * 0.2)
   const balance = total - payNow
+  const isRefreshingFare = detailsLoading
 
   return (
     <div className="min-h-screen bg-ivory">
@@ -150,7 +151,12 @@ export default function BookPage() {
               pickupDate={state.pickupDate}
             />
             <CabInfoCard cabCategory={details.cab_category} />
-            <AddOnsCard addOns={addOns} rates={rates} onToggle={toggleAddon} />
+            {detailsError && (
+              <p className="text-red-600 text-xs bg-red-50 border border-red-200 rounded-xl px-4 py-2.5">
+                Couldn&apos;t update the fare for your last change — showing the previous total instead.
+              </p>
+            )}
+            <AddOnsCard addOns={addOns} rates={rates} disabled={isRefreshingFare} onToggle={toggleAddon} />
             <BookingPageTabs />
             
             <TravellerDetailsForm />
@@ -165,14 +171,11 @@ export default function BookPage() {
           <aside className="hidden lg:block w-72 flex-shrink-0 lg:self-stretch">
             <FareBreakdownCard
               breakdown={details.pricing.breakdown}
-              stopsCount={stopsCount}
-              stopsCharge={stopsCharge}
-              addOns={addOns}
-              rates={rates}
               total={total}
               payNow={payNow}
               balance={balance}
               agreed={agreed}
+              refreshing={isRefreshingFare}
               onToggleAgree={() => setAgreed(a => !a)}
             />
           </aside>
@@ -180,7 +183,7 @@ export default function BookPage() {
         </div>
       </div>
 
-      <MobilePayBar payNow={payNow} total={total} agreed={agreed} onPayAttempt={handleMobilePayAttempt} />
+      <MobilePayBar payNow={payNow} total={total} agreed={agreed} refreshing={isRefreshingFare} onPayAttempt={handleMobilePayAttempt} />
     </div>
   )
 }
