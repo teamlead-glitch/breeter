@@ -51,10 +51,10 @@ export default async function CabsPage({ searchParams }: PageProps) {
   return (
     <>
       {/* Banner */}
-      <section className="relative min-h-[48vh] flex items-end overflow-hidden">
+      <section className="relative min-h-[28vh] sm:min-h-[48vh] flex items-end overflow-hidden">
         <Image src={cat.image} alt={cat.title} fill priority sizes="100vw" className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-forest/20 via-forest/60 to-forest" />
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 pt-28">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 pt-20 sm:pb-10 sm:pt-28">
           <p className="font-mono text-white/80 text-xs tracking-[0.2em] uppercase mb-2 drop-shadow-sm">{cat.eyebrow}</p>
           <h1 className="font-display text-white text-4xl md:text-5xl font-bold mb-2 drop-shadow-md">{cat.title}</h1>
           <p className="text-white/70 max-w-lg text-sm drop-shadow-sm">{cat.desc}</p>

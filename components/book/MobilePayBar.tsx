@@ -33,8 +33,8 @@ export default function MobilePayBar({
             }`}>
             {payOption === 'partial' && <span className="w-2 h-2 rounded-full bg-cta" />}
           </span>
-          <span className={`text-[11px] font-semibold ${payOption === 'partial' ? 'text-ink' : 'text-ink-faint'}`}>
-            Pay 20% now <span className={payOption === 'partial' ? 'font-mono text-cta' : 'font-mono text-ink-faint'}>· ₹{payNow.toLocaleString('en-IN')}</span>
+          <span className="text-[11px] font-semibold text-ink">
+            Pay 20% now <span className={`font-mono ${payOption === 'partial' ? 'text-cta' : 'text-ink'}`}>· ₹{payNow.toLocaleString('en-IN')}</span>
           </span>
         </button>
         <button
@@ -49,8 +49,8 @@ export default function MobilePayBar({
             }`}>
             {payOption === 'full' && <span className="w-2 h-2 rounded-full bg-cta" />}
           </span>
-          <span className={`text-[11px] font-semibold ${payOption === 'full' ? 'text-ink' : 'text-ink-faint'}`}>
-            Pay full <span className={payOption === 'full' ? 'font-mono text-cta' : 'font-mono text-ink-faint'}>· ₹{total.toLocaleString('en-IN')}</span>
+          <span className="text-[11px] font-semibold text-ink">
+            Pay full <span className={`font-mono ${payOption === 'full' ? 'text-cta' : 'text-ink'}`}>· ₹{total.toLocaleString('en-IN')}</span>
           </span>
         </button>
       </div>
