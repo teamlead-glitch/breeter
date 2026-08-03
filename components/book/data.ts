@@ -1,8 +1,7 @@
 export type AddOn = {
-  id: string
+  id: 'age' | 'lang' | 'roof'
   label: string
   desc: string
-  price: number
   extra: string[] | null
 }
 
@@ -11,21 +10,18 @@ export const ADD_ONS: AddOn[] = [
     id: 'age',
     label: 'Vehicle age below 5 years',
     desc: 'Guaranteed newer car',
-    price: 150,
     extra: null,
   },
   {
     id: 'lang',
     label: 'Driver language',
     desc: 'Preferred spoken language',
-    price: 500,
     extra: ['English', 'Hindi', 'Malayalam', 'Tamil'],
   },
   {
     id: 'roof',
     label: 'Roof carrier',
     desc: 'Extra luggage on roof',
-    price: 250,
     extra: null,
   },
 ]

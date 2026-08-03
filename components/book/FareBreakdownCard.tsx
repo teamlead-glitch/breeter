@@ -4,20 +4,22 @@ import { ADD_ONS } from './data'
 import TermsAgreement from './TermsAgreement'
 
 export default function FareBreakdownCard({
-  basefare,
+  breakdown,
   stopsCount,
   stopsCharge,
   addOns,
+  rates,
   total,
   payNow,
   balance,
   agreed,
   onToggleAgree,
 }: {
-  basefare: number
+  breakdown: { label: string; amount: number }[]
   stopsCount: number
   stopsCharge: number
   addOns: string[]
+  rates: Record<string, number>
   total: number
   payNow: number
   balance: number
@@ -32,20 +34,22 @@ export default function FareBreakdownCard({
       <h3 className="font-bold text-ink text-base mb-4">Fare breakdown</h3>
 
       <div className="space-y-2.5 mb-4">
-        <div className="flex justify-between text-sm">
-          <span className="text-ink-muted">Base + slab KM</span>
-          <span className="font-mono font-semibold text-ink">₹{basefare.toLocaleString('en-IN')}</span>
-        </div>
+        {breakdown.map(line => (
+          <div key={line.label} className="flex justify-between text-sm">
+            <span className="text-ink-muted">{line.label}</span>
+            <span className="font-mono font-semibold text-ink">₹{line.amount.toLocaleString('en-IN')}</span>
+          </div>
+        ))}
         {stopsCount > 0 && (
           <div className="flex justify-between text-sm">
-            <span className="text-ink-muted">Stops ({stopsCount} × ₹100)</span>
-            <span className="font-mono font-semibold text-ink">₹{stopsCharge}</span>
+            <span className="text-ink-muted">Stops ({stopsCount})</span>
+            <span className="font-mono font-semibold text-ink">₹{stopsCharge.toLocaleString('en-IN')}</span>
           </div>
         )}
         {ADD_ONS.filter(a => addOns.includes(a.id)).map(a => (
           <div key={a.id} className="flex justify-between text-sm">
             <span className="text-ink-muted">{a.label}</span>
-            <span className="font-mono font-semibold text-ink">₹{a.price}</span>
+            <span className="font-mono font-semibold text-ink">₹{rates[a.id]}</span>
           </div>
         ))}
       </div>

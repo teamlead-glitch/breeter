@@ -12,3 +12,6 @@ export const TRIP_TYPE_IDS: Record<TripType, number> = {
 // TODO: distance/duration should come from a real routing calculation.
 // Backend will eventually derive this itself — remove once that lands.
 export const PLACEHOLDER_DISTANCE_KM = 250
+
+// TODO: replace with real coordinates once map/autocomplete is integrated into the search form.
+export const PLACEHOLDER_LAT_LNG = 0

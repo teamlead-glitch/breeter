@@ -1,7 +1,9 @@
+'use client'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Car, Users, Wind } from 'lucide-react'
 import { CabCategory } from '@/types/cabs'
+import { useSearchState } from '@/context/SearchContext'
 
 export type PricedCabCategory = CabCategory & { fare: NonNullable<CabCategory['fare']> }
 
@@ -13,6 +15,7 @@ export const MODEL_TEXT: Record<string, string> = {
 }
 
 export default function SearchVehicleCard({ v }: { v: PricedCabCategory }) {
+  const { dispatch } = useSearchState()
   const modelText = MODEL_TEXT[v.name] ?? 'Bus / van Similar or equivalent'
 
   return (
@@ -37,7 +40,10 @@ export default function SearchVehicleCard({ v }: { v: PricedCabCategory }) {
           <p className="font-mono font-bold text-ink text-lg sm:text-2xl">₹{v.fare.amount.toLocaleString('en-IN')}</p>
           <p className="text-ink-faint text-xs">est. fare</p>
         </div>
-        <Link href="/book" className="bg-cta hover:bg-cta-dark text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-colors mt-3">
+        <Link
+          href="/book"
+          onClick={() => dispatch({ type: 'SET_CAB_CATEGORY_ID', id: v.id })}
+          className="bg-cta hover:bg-cta-dark text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-colors mt-3">
           Select
         </Link>
       </div>

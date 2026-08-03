@@ -9,16 +9,7 @@ import { SearchState, useSearchState } from '@/context/SearchContext'
 import { apiGet } from '@/lib/apiService'
 import { DEFAULT_STATE_ID, PLACEHOLDER_DISTANCE_KM, TRIP_TYPE_IDS } from '@/lib/constants'
 import { CabCategoriesData } from '@/types/cabs'
-
-function formatDate(value: string) {
-  if (!value) return ''
-  return new Date(value).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
-}
-
-function formatTime(value: string) {
-  if (!value) return ''
-  return new Date(value).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false })
-}
+import { formatDate, formatTime } from '@/lib/date'
 
 function buildCabCategoryParams(state: SearchState): URLSearchParams {
   const params = new URLSearchParams()

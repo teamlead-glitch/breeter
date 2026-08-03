@@ -3,7 +3,15 @@ import { useState } from 'react'
 import { Check } from 'lucide-react'
 import { ADD_ONS } from './data'
 
-export default function AddOnsCard({ addOns, onToggle }: { addOns: string[]; onToggle: (id: string) => void }) {
+export default function AddOnsCard({
+  addOns,
+  rates,
+  onToggle,
+}: {
+  addOns: string[]
+  rates: Record<string, number>
+  onToggle: (id: string) => void
+}) {
   const [langChoice, setLangChoice] = useState('English')
 
   return (
@@ -47,7 +55,7 @@ export default function AddOnsCard({ addOns, onToggle }: { addOns: string[]; onT
               </div>
             )}
           </div>
-          <span className="font-mono font-semibold text-ink text-sm flex-shrink-0 mt-0.5">+₹{a.price}</span>
+          <span className="font-mono font-semibold text-ink text-sm flex-shrink-0 mt-0.5">+₹{rates[a.id]}</span>
         </label>
       ))}
     </div>
