@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import { Car, Users, Wind } from 'lucide-react'
-import { MODEL_TEXT } from '@/components/cabs/SearchVehicleCard'
 import { BookingDetails } from '@/types/booking'
 
 function stripHtml(html: string | null) {
@@ -9,7 +8,7 @@ function stripHtml(html: string | null) {
 }
 
 export default function CabInfoCard({ cabCategory }: { cabCategory: BookingDetails['cab_category'] }) {
-  const description = stripHtml(cabCategory.description) || MODEL_TEXT[cabCategory.name] || 'Similar or equivalent'
+  const description = stripHtml(cabCategory.description) || 'Similar or equivalent'
 
   return (
     <div className="bg-white rounded-2xl border border-black/5 overflow-hidden">
