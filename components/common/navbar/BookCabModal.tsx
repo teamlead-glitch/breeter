@@ -24,7 +24,7 @@ export default function BookCabModal({ open, onClose }: { open: boolean; onClose
         </div>
         {/* Search widget */}
         <div className="px-2 py-3 sm:px-6 sm:py-6 bg-ivory/50">
-          <SearchWidget />
+          <SearchWidget onSearch={onClose} />
         </div>
       </div>
     </div>
