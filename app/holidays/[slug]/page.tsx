@@ -7,6 +7,7 @@ import { apiGet } from '@/lib/apiService'
 import { mapSeoToMetadata } from '@/lib/seo'
 import { PackageDetailData, PackagesData } from '@/types/packages'
 import PackageEnquiryForm from '@/components/holidays/PackageEnquiryForm'
+import PackageCard from '@/components/holidays/PackageCard'
 
 type PageProps = { params: Promise<{ slug: string }> }
 
@@ -175,20 +176,7 @@ export default async function PackageDetailPage({ params }: PageProps) {
             <h2 className="font-display text-ink text-2xl font-bold mb-8">You may also like</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {related.map(p => (
-                <Link key={p.slug} href={`/holidays/${p.slug}`}
-                  className="group block bg-white rounded-2xl overflow-hidden border border-black/5 hover:shadow-xl transition-all duration-300">
-                  <div className="relative h-36 overflow-hidden bg-white grid place-items-center">
-                    {p.image ? (
-                      <Image src={p.image.url} alt={p.image.alt_text || p.title} fill sizes="(max-width:640px) 100vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                    ) : (
-                      <Palmtree size={28} className="text-ink-faint" />
-                    )}
-                  </div>
-                  <div className="p-4">
-                    <p className="font-semibold text-ink text-sm group-hover:text-forest transition-colors">{p.title}</p>
-                    <p className="text-ink-faint text-xs font-mono mt-0.5">{p.nights}N / {p.days}D</p>
-                  </div>
-                </Link>
+                <PackageCard key={p.slug} pkg={p} />
               ))}
             </div>
           </div>
