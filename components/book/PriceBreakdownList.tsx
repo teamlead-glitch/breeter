@@ -16,9 +16,9 @@ export default function PriceBreakdownList({
 
       <div className="space-y-2.5 mb-4">
         {breakdown.map(line => (
-          <div key={line.label} className="flex justify-between text-sm">
-            <span className="text-ink-muted">{line.label}</span>
-            <span className="font-mono font-semibold text-ink">₹{line.amount.toLocaleString('en-IN')}</span>
+          <div key={line.label} className="flex items-start justify-between gap-1.5 text-xs">
+            <span className="min-w-0 flex-1 text-ink-faint">{line.label}</span>
+            <span className="flex-shrink-0 font-mono font-bold whitespace-nowrap text-ink-faint">₹{line.amount.toLocaleString('en-IN')}</span>
           </div>
         ))}
       </div>
