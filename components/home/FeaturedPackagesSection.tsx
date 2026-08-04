@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { apiGet } from '@/lib/apiService'
 import { FeaturedPackage, FeaturedPackagesData } from '@/types/packages'
-import PackageCard from '@/components/holidays/PackageCard'
+import FeaturedPackageSpotlight from '@/components/home/FeaturedPackageSpotlight'
 
 export default function FeaturedPackagesSection() {
   const [packages, setPackages] = useState<FeaturedPackage[]>([])
@@ -23,8 +23,9 @@ export default function FeaturedPackagesSection() {
   if (!loading && packages.length === 0) return null
 
   return (
-    <section className="bg-ivory py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden bg-ivory py-20">
+      <div className="pointer-events-none absolute top-0 left-0 h-96 w-96 -translate-x-1/3 -translate-y-1/3 rounded-full bg-cta/5 blur-[120px]" />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-end justify-between mb-12">
           <div>
             <p className="font-mono text-cta text-xs tracking-[0.2em] uppercase mb-2">Curated travel</p>
@@ -38,13 +39,13 @@ export default function FeaturedPackagesSection() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[1, 2, 3].map(i => (
-              <div key={i} className="h-96 rounded-2xl bg-white border border-black/4 animate-pulse" />
+              <div key={i} className="h-96 rounded-[1.75rem] bg-white border border-black/4 animate-pulse" />
             ))}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {packages.map(pkg => (
-              <PackageCard key={pkg.slug} pkg={pkg} />
+              <FeaturedPackageSpotlight key={pkg.slug} pkg={pkg} />
             ))}
           </div>
         )}
