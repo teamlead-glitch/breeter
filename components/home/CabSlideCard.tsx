@@ -41,7 +41,7 @@ export default function CabSlideCard({ v }: { v: CabCategory }) {
       <div className="absolute inset-0 rounded-[1.75rem] ring-1 ring-inset ring-white/15 transition-colors duration-300 group-hover:ring-cta/60" />
 
       <div className="relative z-10 mt-auto p-5">
-        <h3 className="font-serif text-2xl leading-tight text-white">{v.name}</h3>
+        <h3 className="font-display text-xl font-bold leading-tight text-white">{v.name}</h3>
         <p className="mt-1 mb-4 truncate text-xs text-white/55">{description}</p>
 
         <div className="flex items-end justify-between">

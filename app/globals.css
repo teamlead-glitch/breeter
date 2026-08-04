@@ -30,7 +30,6 @@
   --font-display: var(--font-sans);
   --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-sans);
-  --font-serif: var(--font-fraunces), Georgia, serif;
 }
 
 /* ── Base ── */

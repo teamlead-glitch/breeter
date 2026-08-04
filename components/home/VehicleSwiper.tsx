@@ -41,7 +41,7 @@ export default function VehicleSwiper() {
         <div className="mb-10 flex flex-wrap items-end justify-between gap-6">
           <div>
             <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-white/50">Select your vehicle</p>
-            <h2 className="font-serif text-4xl italic text-white md:text-5xl">Choose your ride</h2>
+            <h2 className="font-display text-4xl font-bold text-white md:text-5xl">Choose your ride</h2>
           </div>
 
           {!loading && vehicles.length > 1 && (

@@ -42,7 +42,7 @@ export default function HomePage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-xl mb-16">
             <p className="font-mono text-cta text-xs tracking-[0.2em] uppercase mb-3">Our promise</p>
-            <h2 className="font-serif text-ink text-4xl md:text-5xl">Why book with Breeter</h2>
+            <h2 className="font-display text-ink text-4xl md:text-5xl font-bold">Why book with Breeter</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {whyBreeter.map(item => (
@@ -67,7 +67,7 @@ export default function HomePage() {
           <div className="pointer-events-none absolute -bottom-20 left-10 w-64 h-64 bg-gold/15 rounded-full blur-[100px]" />
           <div className="relative flex flex-col md:flex-row items-center justify-between gap-8 px-8 py-14 md:px-16 md:py-16">
             <div>
-              <h2 className="font-serif italic text-white text-3xl md:text-5xl mb-3">
+              <h2 className="font-display text-white text-3xl md:text-5xl font-bold mb-3">
                 Planning an outstation trip?
               </h2>
               <p className="text-white/55 text-base max-w-md">
