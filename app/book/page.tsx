@@ -17,6 +17,7 @@ import { SearchState, useSearchState } from '@/context/SearchContext'
 import { apiPost } from '@/lib/apiService'
 import { DEFAULT_STATE_ID, PLACEHOLDER_LAT_LNG, TRIP_TYPE_IDS } from '@/lib/constants'
 import { BookingDetails, BookingDetailsRequest, BookingDetailsResponse } from '@/types/booking'
+import { TravellerInfo } from '@/types/payments'
 
 function BookingIssueNotice({ heading, message }: { heading: string; message: string }) {
   return (
@@ -74,6 +75,8 @@ export default function BookPage() {
   )
   const [agreed, setAgreed] = useState(false)
   const [otpModalOpen, setOtpModalOpen] = useState(false)
+  const [payAmount, setPayAmount] = useState(0)
+  const [travellerInfo, setTravellerInfo] = useState<TravellerInfo | null>(null)
   const mobileAgreeRef = useRef<HTMLLabelElement>(null)
   const travellerFormRef = useRef<TravellerDetailsFormHandle>(null)
 
@@ -104,8 +107,10 @@ export default function BookPage() {
     mobileAgreeRef.current?.focus()
   }
 
-  const handlePayNow = () => {
+  const handlePayNow = (amount: number) => {
     if (!travellerFormRef.current?.validate()) return
+    setTravellerInfo(travellerFormRef.current.getValues())
+    setPayAmount(amount)
     setOtpModalOpen(true)
   }
 
@@ -230,7 +235,15 @@ export default function BookPage() {
         onPayNow={handlePayNow}
       />
 
-      {otpModalOpen && <OtpVerificationModal onClose={() => setOtpModalOpen(false)} />}
+      {otpModalOpen && travellerInfo && (
+        <OtpVerificationModal
+          onClose={() => setOtpModalOpen(false)}
+          amount={payAmount}
+          booking={buildBookingDetailsPayload(state, addOns)}
+          traveller={travellerInfo}
+          cabCategoryName={details.cab_category.name}
+        />
+      )}
     </div>
   )
 }

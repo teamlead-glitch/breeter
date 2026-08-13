@@ -1,8 +1,10 @@
 'use client'
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
+import { TravellerInfo } from '@/types/payments'
 
 export type TravellerDetailsFormHandle = {
   validate: () => boolean
+  getValues: () => TravellerInfo
 }
 
 type FieldErrors = { name?: string; phone?: string; email?: string }
@@ -42,6 +44,7 @@ const TravellerDetailsForm = forwardRef<TravellerDetailsFormHandle>((_props, ref
 
       return firstInvalidInput === null
     },
+    getValues: () => ({ name: name.trim(), phone: phone.trim(), email: email.trim(), notes: notes.trim() }),
   }))
 
   const handlePhoneChange = (value: string) => {

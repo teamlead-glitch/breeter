@@ -20,7 +20,7 @@ export default function FareBreakdownCard({
   agreed: boolean
   refreshing?: boolean
   onToggleAgree: () => void
-  onPayNow: () => void
+  onPayNow: (amount: number) => void
 }) {
   const [payOption, setPayOption] = useState<'partial' | 'full'>('partial')
   const payAmount = payOption === 'partial' ? payNow : total
@@ -82,7 +82,7 @@ export default function FareBreakdownCard({
 
       <button
         disabled={!agreed || refreshing}
-        onClick={onPayNow}
+        onClick={() => onPayNow(payAmount)}
         className={`w-full font-bold py-3.5 rounded-xl text-sm transition-colors ${
           agreed && !refreshing
             ? 'bg-cta hover:bg-cta-dark text-white'
