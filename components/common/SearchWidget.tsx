@@ -36,7 +36,7 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
       <div className="flex gap-2 mb-5 overflow-x-auto scrollbar-hide">
         {TRIP_TYPES.map(t => (
           <button key={t} onClick={() => dispatch({ type: 'SET_TRIP_TYPE', tripType: t })}
-            className={`flex-none px-6 py-2.5 rounded-full text-base font-semibold transition-all border ${
+            className={`flex-none px-5 py-2 sm:px-6 sm:py-2.5 rounded-full text-sm sm:text-base font-semibold transition-all border ${
               tripType === t
                 ? 'bg-cta text-white border-cta'
                 : 'bg-transparent text-ink-muted border-ink-faint/40 hover:border-cta/50 hover:text-ink'
