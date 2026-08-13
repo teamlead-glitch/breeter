@@ -13,7 +13,7 @@ const HOURLY_PACKAGES: { value: HourlyPackage; label: string }[] = [
   { value: '8', label: '8 Hrs' },
 ]
 
-export default function SearchWidget({ onSearch }: { onSearch?: () => void } = {}) {
+export default function SearchWidget({ onSearch, bare = false }: { onSearch?: () => void; bare?: boolean } = {}) {
   const { state, dispatch } = useSearchState()
   const { tripType, stops } = state
   const [addingStop, setAddingStop] = useState(false)
@@ -31,12 +31,12 @@ export default function SearchWidget({ onSearch }: { onSearch?: () => void } = {
   }
 
   return (
-    <div className="bg-white/96 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-5 md:p-10">
+    <div className={bare ? '' : 'bg-white/96 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-5 md:p-10'}>
       {/* Trip type tabs */}
       <div className="flex gap-2 mb-5 overflow-x-auto scrollbar-hide">
         {TRIP_TYPES.map(t => (
           <button key={t} onClick={() => dispatch({ type: 'SET_TRIP_TYPE', tripType: t })}
-            className={`flex-none px-4 py-1.5 rounded-full text-sm font-semibold transition-all border ${
+            className={`flex-none px-6 py-2.5 rounded-full text-base font-semibold transition-all border ${
               tripType === t
                 ? 'bg-cta text-white border-cta'
                 : 'bg-transparent text-ink-muted border-ink-faint/40 hover:border-cta/50 hover:text-ink'
@@ -48,7 +48,7 @@ export default function SearchWidget({ onSearch }: { onSearch?: () => void } = {
 
       {/* Fields */}
       <div className="grid gap-2 mb-4 grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(280px,1fr))]">
-        <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+        <div className="flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
           <MapPin size={15} className="text-forest flex-shrink-0" />
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">From</p>
@@ -63,7 +63,7 @@ export default function SearchWidget({ onSearch }: { onSearch?: () => void } = {
         </div>
 
         {tripType !== 'Hourly Rental' && stops.map((stop, i) => (
-          <div key={i} className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+          <div key={i} className="flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
             <MapPin size={15} className="text-forest flex-shrink-0" />
             <div className="min-w-0 flex-1">
               <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Stop {i + 1}</p>
@@ -76,7 +76,7 @@ export default function SearchWidget({ onSearch }: { onSearch?: () => void } = {
         ))}
 
         {tripType !== 'Hourly Rental' && (
-          <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+          <div className="flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
             {addingStop ? (
               <>
                 <Plus size={15} className="text-forest flex-shrink-0" />
@@ -109,7 +109,7 @@ export default function SearchWidget({ onSearch }: { onSearch?: () => void } = {
           </div>
         )}
 
-        <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+        <div className="flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
           <MapPin size={15} className="text-ink-faint flex-shrink-0" />
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">To</p>
@@ -122,7 +122,7 @@ export default function SearchWidget({ onSearch }: { onSearch?: () => void } = {
           </div>
         </div>
 
-        <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+        <div className="flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
           <CalendarClock size={15} className="text-forest flex-shrink-0" />
           <div className="min-w-0">
             <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Pickup Date & Time</p>
@@ -134,7 +134,7 @@ export default function SearchWidget({ onSearch }: { onSearch?: () => void } = {
         </div>
 
         {(tripType === 'Round Trip' || tripType === 'Hourly Rental') && (
-          <div className="flex items-center gap-3 bg-ivory rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+          <div className="flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
             <CalendarClock size={15} className="text-ink-faint flex-shrink-0" />
             <div className="min-w-0">
               <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Drop Date & Time</p>
