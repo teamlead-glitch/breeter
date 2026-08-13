@@ -1,26 +1,120 @@
-export default function TravellerDetailsForm() {
+'use client'
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
+
+export type TravellerDetailsFormHandle = {
+  validate: () => boolean
+}
+
+type FieldErrors = { name?: string; phone?: string; email?: string }
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+const TravellerDetailsForm = forwardRef<TravellerDetailsFormHandle>((_props, ref) => {
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
+  const [notes, setNotes] = useState('')
+  const [errors, setErrors] = useState<FieldErrors>({})
+
+  const nameInputRef = useRef<HTMLInputElement>(null)
+  const phoneInputRef = useRef<HTMLInputElement>(null)
+  const emailInputRef = useRef<HTMLInputElement>(null)
+
+  useImperativeHandle(ref, () => ({
+    validate: () => {
+      const nextErrors: FieldErrors = {}
+      if (!name.trim()) nextErrors.name = 'Enter your name'
+      if (phone.replace(/\D/g, '').length < 7) nextErrors.phone = 'Enter a valid contact number'
+      if (!EMAIL_PATTERN.test(email.trim())) nextErrors.email = 'Enter a valid email address'
+
+      setErrors(nextErrors)
+
+      const firstInvalidInput = nextErrors.name
+        ? nameInputRef.current
+        : nextErrors.phone
+          ? phoneInputRef.current
+          : nextErrors.email
+            ? emailInputRef.current
+            : null
+
+      firstInvalidInput?.focus()
+      firstInvalidInput?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+
+      return firstInvalidInput === null
+    },
+  }))
+
+  const handlePhoneChange = (value: string) => {
+    setPhone(value.replace(/[^\d\s+]/g, '').slice(0, 15))
+  }
+
+  const fieldClass = (hasError?: string) =>
+    `w-full bg-ivory rounded-xl px-4 py-3 text-base sm:text-sm text-ink border-2 outline-none transition-colors ${
+      hasError ? 'border-red-300 focus:border-red-400' : 'border-transparent focus:border-forest/25'
+    }`
+
   return (
     <div className="bg-white rounded-2xl border border-black/5 p-4 sm:p-5">
       <h3 className="font-bold text-ink text-base mb-5">Traveller details</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div>
           <label className="block text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-1.5">Name</label>
-          <input name="name" autoComplete="name" className="w-full bg-ivory rounded-xl px-4 py-3 text-base sm:text-sm text-ink border-2 border-transparent focus:border-forest/25 outline-none" placeholder="Your full name" />
+          <input
+            ref={nameInputRef}
+            name="name"
+            autoComplete="name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            className={fieldClass(errors.name)}
+            placeholder="Your full name"
+          />
+          {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
         </div>
-       
+
         <div>
           <label className="block text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-1.5">Contact No.</label>
-          <input type="tel" inputMode="tel" autoComplete="tel" className="w-full bg-ivory rounded-xl px-4 py-3 text-base sm:text-sm text-ink border-2 border-transparent focus:border-forest/25 outline-none" placeholder="+91 98765 43213" />
+          <input
+            ref={phoneInputRef}
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
+            maxLength={15}
+            value={phone}
+            onChange={e => handlePhoneChange(e.target.value)}
+            className={fieldClass(errors.phone)}
+            placeholder="+91 98765 43213"
+          />
+          {errors.phone && <p className="mt-1 text-xs text-red-600">{errors.phone}</p>}
         </div>
+
         <div>
           <label className="block text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-1.5">Email ID</label>
-          <input type="email" autoComplete="email" className="w-full bg-ivory rounded-xl px-4 py-3 text-base sm:text-sm text-ink border-2 border-transparent focus:border-forest/25 outline-none" placeholder="you@email.com" />
+          <input
+            ref={emailInputRef}
+            type="email"
+            autoComplete="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            className={fieldClass(errors.email)}
+            placeholder="you@email.com"
+          />
+          {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
         </div>
       </div>
       <div>
         <label className="block text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-1.5">Notes for driver (optional)</label>
-        <textarea rows={3} className="w-full bg-ivory rounded-xl px-4 py-3 text-base sm:text-sm text-ink border-2 border-transparent focus:border-forest/25 outline-none resize-none" placeholder="Pickup from main gate…" />
+        <textarea
+          rows={3}
+          value={notes}
+          onChange={e => setNotes(e.target.value)}
+          className="w-full bg-ivory rounded-xl px-4 py-3 text-base sm:text-sm text-ink border-2 border-transparent focus:border-forest/25 outline-none resize-none"
+          placeholder="Pickup from main gate…"
+        />
       </div>
     </div>
   )
-}
+})
+
+TravellerDetailsForm.displayName = 'TravellerDetailsForm'
+
+export default TravellerDetailsForm

@@ -7,12 +7,14 @@ export default function MobilePayBar({
   agreed,
   refreshing = false,
   onPayAttempt,
+  onPayNow,
 }: {
   payNow: number
   total: number
   agreed: boolean
   refreshing?: boolean
   onPayAttempt: () => void
+  onPayNow: () => void
 }) {
   const [payOption, setPayOption] = useState<'partial' | 'full'>('partial')
   const balance = total - payNow
@@ -63,7 +65,7 @@ export default function MobilePayBar({
         </div>
         <button
           disabled={refreshing}
-          onClick={() => { if (!agreed) onPayAttempt() }}
+          onClick={() => { if (!agreed) onPayAttempt(); else onPayNow() }}
           className={`flex-none font-bold px-6 py-3.5 rounded-xl text-sm transition-colors ${
             agreed && !refreshing
               ? 'bg-cta hover:bg-cta-dark text-white'

@@ -7,11 +7,12 @@ import TripSummary from '@/components/book/TripSummary'
 import BookingPageTabs from '@/components/book/BookingPageTabs'
 import CabInfoCard from '@/components/book/CabInfoCard'
 import AddOnsCard from '@/components/book/AddOnsCard'
-import TravellerDetailsForm from '@/components/book/TravellerDetailsForm'
+import TravellerDetailsForm, { TravellerDetailsFormHandle } from '@/components/book/TravellerDetailsForm'
 import FareBreakdownCard from '@/components/book/FareBreakdownCard'
 import PriceBreakdownList from '@/components/book/PriceBreakdownList'
 import MobilePayBar from '@/components/book/MobilePayBar'
 import TermsAgreement from '@/components/book/TermsAgreement'
+import OtpVerificationModal from '@/components/book/OtpVerificationModal'
 import { SearchState, useSearchState } from '@/context/SearchContext'
 import { apiPost } from '@/lib/apiService'
 import { DEFAULT_STATE_ID, PLACEHOLDER_LAT_LNG, TRIP_TYPE_IDS } from '@/lib/constants'
@@ -72,7 +73,9 @@ export default function BookPage() {
     ADD_ONS.filter(a => state.filters.addOns.includes(ADD_ON_FILTER_LABELS[a.id])).map(a => a.id)
   )
   const [agreed, setAgreed] = useState(false)
+  const [otpModalOpen, setOtpModalOpen] = useState(false)
   const mobileAgreeRef = useRef<HTMLLabelElement>(null)
+  const travellerFormRef = useRef<TravellerDetailsFormHandle>(null)
 
   useEffect(() => {
     if (!state.cabCategoryId) return
@@ -99,6 +102,11 @@ export default function BookPage() {
     window.alert('Please agree to the Terms & cancellation policy to continue.')
     mobileAgreeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
     mobileAgreeRef.current?.focus()
+  }
+
+  const handlePayNow = () => {
+    if (!travellerFormRef.current?.validate()) return
+    setOtpModalOpen(true)
   }
 
   if (!state.cabCategoryId) {
@@ -188,7 +196,7 @@ export default function BookPage() {
               <PriceBreakdownList breakdown={details.pricing.breakdown} total={total} refreshing={isRefreshingFare} />
             </div>
             
-            <TravellerDetailsForm />
+            <TravellerDetailsForm ref={travellerFormRef} />
 
             {/* Mobile/tablet: terms checkbox — the sidebar with this is desktop-only, but the fixed pay bar's button needs it too */}
             <div className="lg:hidden bg-white rounded-2xl border border-black/5 p-4">
@@ -206,13 +214,23 @@ export default function BookPage() {
               agreed={agreed}
               refreshing={isRefreshingFare}
               onToggleAgree={() => setAgreed(a => !a)}
+              onPayNow={handlePayNow}
             />
           </aside>
 
         </div>
       </div>
 
-      <MobilePayBar payNow={payNow} total={total} agreed={agreed} refreshing={isRefreshingFare} onPayAttempt={handleMobilePayAttempt} />
+      <MobilePayBar
+        payNow={payNow}
+        total={total}
+        agreed={agreed}
+        refreshing={isRefreshingFare}
+        onPayAttempt={handleMobilePayAttempt}
+        onPayNow={handlePayNow}
+      />
+
+      {otpModalOpen && <OtpVerificationModal onClose={() => setOtpModalOpen(false)} />}
     </div>
   )
 }
