@@ -72,20 +72,24 @@ export default function VehicleSwiper() {
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="h-92 animate-pulse rounded-[1.75rem] bg-white/10" />
+          <div className="grid grid-cols-3 gap-6 sm:grid-cols-4 lg:grid-cols-6">
+            {[1, 2, 3, 4, 5, 6].map(i => (
+              <div key={i} className="flex flex-col items-center gap-3">
+                <div className="aspect-square w-full animate-pulse rounded-full bg-white/10" />
+                <div className="h-3 w-3/4 animate-pulse rounded-full bg-white/10" />
+              </div>
             ))}
           </div>
         ) : (
           <Swiper
             modules={[Autoplay]}
-            spaceBetween={20}
-            slidesPerView={1.15}
+            spaceBetween={16}
+            slidesPerView={2.4}
             breakpoints={{
-              480: { slidesPerView: 2.15 },
-              768: { slidesPerView: 3 },
-              1024: { slidesPerView: 4.2 },
+              480: { slidesPerView: 3.2 },
+              768: { slidesPerView: 4 },
+              1024: { slidesPerView: 5 },
+              1280: { slidesPerView: 6 },
             }}
             loop={loop}
             onSwiper={swiper => { swiperRef.current = swiper }}

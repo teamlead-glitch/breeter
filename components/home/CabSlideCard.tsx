@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowUpRight, Car } from 'lucide-react'
+import { Car } from 'lucide-react'
 import { CabCategory } from '@/types/cabs'
 import { useSearchState } from '@/context/SearchContext'
 
@@ -18,45 +18,33 @@ export default function CabSlideCard({ v }: { v: CabCategory }) {
     <Link
       href="/book"
       onClick={() => dispatch({ type: 'SET_CAB_CATEGORY_ID', id: v.id })}
-      className="group relative flex h-92 flex-col overflow-hidden rounded-[1.75rem] bg-forest-mid isolate"
+      className="group flex flex-col items-center text-center"
     >
-      {v.image ? (
-        <Image
-          src={v.image.url}
-          alt={v.image.alt_text || v.name}
-          fill
-          sizes="(max-width:480px) 85vw, (max-width:768px) 45vw, (max-width:1024px) 32vw, 24vw"
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-        />
-      ) : (
-        <div className="absolute inset-0 grid place-items-center">
-          <Car size={44} className="text-white/25" />
-        </div>
-      )}
-
-      {/* Scrim for text legibility */}
-      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-transparent" />
-
-      {/* Ring that lights up on hover */}
-      <div className="absolute inset-0 rounded-[1.75rem] ring-1 ring-inset ring-white/15 transition-colors duration-300 group-hover:ring-cta/60" />
-
-      <div className="relative z-10 mt-auto p-5">
-        <h3 className="font-display text-xl font-bold leading-tight text-white">{v.name}</h3>
-        <p className="mt-1 mb-4 truncate text-xs text-white/55">{description}</p>
-
-        <div className="flex items-end justify-between">
-          {v.fare !== null ? (
-            <p className="font-mono text-sm font-bold text-white">
-              ₹{v.fare.amount.toLocaleString('en-IN')}
-              <span className="ml-1 font-sans text-[10px] font-normal text-white/50">onwards</span>
-            </p>
-          ) : <span />}
-
-          <span className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-full bg-white/15 text-white backdrop-blur-sm transition-colors duration-300 group-hover:bg-cta">
-            <ArrowUpRight size={17} />
-          </span>
-        </div>
+      <div className="relative isolate aspect-square w-full overflow-hidden rounded-full bg-forest-mid ring-1 ring-white/15 transition-all duration-300 group-hover:ring-2 group-hover:ring-cta">
+        {v.image ? (
+          <Image
+            src={v.image.url}
+            alt={v.image.alt_text || v.name}
+            fill
+            sizes="(max-width:480px) 42vw, (max-width:768px) 30vw, (max-width:1024px) 22vw, 16vw"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+          />
+        ) : (
+          <div className="absolute inset-0 grid place-items-center">
+            <Car size={36} className="text-white/25" />
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
       </div>
+
+      <h3 className="mt-4 font-display text-base font-bold leading-tight text-white sm:text-lg">{v.name}</h3>
+      <p className="mt-1 line-clamp-2 max-w-[90%] text-xs text-white/55">{description}</p>
+      {v.fare !== null && (
+        <p className="mt-1.5 font-mono text-sm font-bold text-cta-light">
+          ₹{v.fare.amount.toLocaleString('en-IN')}
+          <span className="ml-1 font-sans text-[10px] font-normal text-white/40">onwards</span>
+        </p>
+      )}
     </Link>
   )
 }

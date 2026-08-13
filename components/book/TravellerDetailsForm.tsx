@@ -7,12 +7,7 @@ export default function TravellerDetailsForm() {
           <label className="block text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-1.5">Name</label>
           <input name="name" autoComplete="name" className="w-full bg-ivory rounded-xl px-4 py-3 text-base sm:text-sm text-ink border-2 border-transparent focus:border-forest/25 outline-none" placeholder="Your full name" />
         </div>
-        <div>
-          <label className="block text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-1.5">No. of Pax</label>
-          <select className="w-full bg-ivory rounded-xl px-4 py-3 text-base sm:text-sm font-semibold text-ink border-2 border-transparent focus:border-forest/25 outline-none appearance-none">
-            {[1,2,3,4,5,6].map(n => <option key={n}>{n}</option>)}
-          </select>
-        </div>
+       
         <div>
           <label className="block text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-1.5">Contact No.</label>
           <input type="tel" inputMode="tel" autoComplete="tel" className="w-full bg-ivory rounded-xl px-4 py-3 text-base sm:text-sm text-ink border-2 border-transparent focus:border-forest/25 outline-none" placeholder="+91 98765 43213" />

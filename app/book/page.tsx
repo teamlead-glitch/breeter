@@ -179,12 +179,14 @@ export default function BookPage() {
             )}
             <AddOnsCard addOns={addOns} rates={rates} disabled={isRefreshingFare} onToggle={toggleAddon} />
 
-            {/* Mobile/tablet: price breakdown — the sidebar with this is desktop-only */}
+          
+
+            <BookingPageTabs />
+
+              {/* Mobile/tablet: price breakdown — the sidebar with this is desktop-only */}
             <div className="lg:hidden bg-white rounded-2xl border border-black/5 p-4 sm:p-5">
               <PriceBreakdownList breakdown={details.pricing.breakdown} total={total} refreshing={isRefreshingFare} />
             </div>
-
-            <BookingPageTabs />
             
             <TravellerDetailsForm />
 
