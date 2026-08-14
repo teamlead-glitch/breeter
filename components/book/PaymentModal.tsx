@@ -1,26 +1,17 @@
 'use client'
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { X, ShieldCheck, AlertCircle, Loader2 } from 'lucide-react'
 import { createRazorpayOrder, fetchOrderStatus } from '@/lib/payments'
 import { loadRazorpayScript } from '@/lib/razorpay'
 import { BookingDetailsRequest } from '@/types/booking'
 import { TravellerInfo } from '@/types/payments'
 
-const OTP_LENGTH = 4
 const POLL_INTERVAL_MS = 3000
 const MAX_POLL_ATTEMPTS = 20 // ~60s of polling before we tell the user it's still processing
 
-type Status =
-  | 'otp'
-  | 'otp-verifying'
-  | 'creating-order'
-  | 'confirming'
-  | 'success'
-  | 'error'
-  | 'cancelled'
-  | 'timeout'
+type Status = 'creating-order' | 'confirming' | 'success' | 'error' | 'cancelled' | 'timeout'
 
-export default function OtpVerificationModal({
+export default function PaymentModal({
   onClose,
   amount,
   booking,
@@ -33,41 +24,11 @@ export default function OtpVerificationModal({
   traveller: TravellerInfo
   cabCategoryName?: string
 }) {
-  const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(''))
-  const [status, setStatus] = useState<Status>('otp')
+  const [status, setStatus] = useState<Status>('creating-order')
   const [errorMessage, setErrorMessage] = useState('')
-  const inputsRef = useRef<(HTMLInputElement | null)[]>([])
   const paymentHandledRef = useRef(false)
   const pollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const mountedRef = useRef(true)
-
-  useEffect(() => {
-    document.body.style.overflow = 'hidden'
-    const raf = requestAnimationFrame(() => inputsRef.current[0]?.focus())
-    return () => {
-      mountedRef.current = false
-      document.body.style.overflow = ''
-      cancelAnimationFrame(raf)
-      if (pollTimerRef.current) clearTimeout(pollTimerRef.current)
-    }
-  }, [])
-
-  const code = digits.join('')
-  const complete = code.length === OTP_LENGTH
-
-  const setDigit = (i: number, value: string) => {
-    const v = value.replace(/\D/g, '').slice(-1)
-    setDigits(prev => {
-      const next = [...prev]
-      next[i] = v
-      return next
-    })
-    if (v && i < OTP_LENGTH - 1) inputsRef.current[i + 1]?.focus()
-  }
-
-  const handleKeyDown = (i: number, e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace' && !digits[i] && i > 0) inputsRef.current[i - 1]?.focus()
-  }
 
   const pollOrderStatus = (id: string | number) => {
     let attempts = 0
@@ -94,9 +55,9 @@ export default function OtpVerificationModal({
     tick()
   }
 
+  // Assumes status is already 'creating-order' and errorMessage cleared — true on mount by
+  // initial state, and callers that retry (an event handler, not this effect) reset both first.
   const startPayment = async () => {
-    setStatus('creating-order')
-    setErrorMessage('')
     paymentHandledRef.current = false
 
     try {
@@ -164,11 +125,16 @@ export default function OtpVerificationModal({
     rzp.open()
   }
 
-  const handleVerify = () => {
-    if (!complete) return
-    setStatus('otp-verifying')
-    setTimeout(startPayment, 900)
-  }
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    startPayment()
+    return () => {
+      mountedRef.current = false
+      document.body.style.overflow = ''
+      if (pollTimerRef.current) clearTimeout(pollTimerRef.current)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className="fixed inset-0 z-70 flex items-center justify-center px-4">
@@ -181,43 +147,6 @@ export default function OtpVerificationModal({
             className="absolute top-4 right-4 w-9 h-9 rounded-xl bg-ivory hover:bg-ivory-dark grid place-items-center transition-colors text-ink-muted hover:text-ink">
             <X size={18} />
           </button>
-        )}
-
-        {(status === 'otp' || status === 'otp-verifying') && (
-          <>
-            <h2 className="font-display text-ink text-lg font-bold mb-1.5">Verify your number</h2>
-            <p className="text-ink-faint text-sm mb-6">
-              An OTP has been sent to your number. Please verify it to proceed with your booking.
-            </p>
-
-            <div className="flex items-center justify-center gap-3 mb-6">
-              {digits.map((d, i) => (
-                <input
-                  key={i}
-                  ref={el => { inputsRef.current[i] = el }}
-                  value={d}
-                  onChange={e => setDigit(i, e.target.value)}
-                  onKeyDown={e => handleKeyDown(i, e)}
-                  disabled={status === 'otp-verifying'}
-                  inputMode="numeric"
-                  maxLength={1}
-                  aria-label={`OTP digit ${i + 1}`}
-                  className="w-12 h-14 text-center text-xl font-bold text-ink bg-ivory rounded-xl border-2 border-transparent focus:border-cta/50 outline-none transition-colors disabled:opacity-60"
-                />
-              ))}
-            </div>
-
-            <button
-              disabled={!complete || status === 'otp-verifying'}
-              onClick={handleVerify}
-              className={`w-full font-bold py-3.5 rounded-xl text-sm transition-colors ${
-                complete && status !== 'otp-verifying'
-                  ? 'bg-cta hover:bg-cta-dark text-white'
-                  : 'bg-ink-faint/15 text-ink-faint cursor-not-allowed'
-              }`}>
-              {status === 'otp-verifying' ? 'Verifying…' : 'Verify & Pay'}
-            </button>
-          </>
         )}
 
         {(status === 'creating-order' || status === 'confirming') && (
@@ -240,7 +169,7 @@ export default function OtpVerificationModal({
               <ShieldCheck size={26} />
             </div>
             <h2 className="font-display text-ink text-lg font-bold mb-1.5">Payment received</h2>
-            <p className="text-ink-faint text-sm mb-6">Your number is verified and your booking is confirmed.</p>
+            <p className="text-ink-faint text-sm mb-6">Your booking is confirmed.</p>
             <button
               onClick={onClose}
               className="w-full bg-cta hover:bg-cta-dark text-white font-bold py-3.5 rounded-xl text-sm transition-colors">
@@ -267,7 +196,7 @@ export default function OtpVerificationModal({
                 Cancel
               </button>
               <button
-                onClick={startPayment}
+                onClick={() => { setStatus('creating-order'); setErrorMessage(''); startPayment() }}
                 className="flex-1 bg-cta hover:bg-cta-dark text-white font-bold py-3.5 rounded-xl text-sm transition-colors">
                 Try again
               </button>

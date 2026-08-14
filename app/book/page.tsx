@@ -12,7 +12,7 @@ import FareBreakdownCard from '@/components/book/FareBreakdownCard'
 import PriceBreakdownList from '@/components/book/PriceBreakdownList'
 import MobilePayBar from '@/components/book/MobilePayBar'
 import TermsAgreement from '@/components/book/TermsAgreement'
-import OtpVerificationModal from '@/components/book/OtpVerificationModal'
+import PaymentModal from '@/components/book/PaymentModal'
 import { SearchState, useSearchState } from '@/context/SearchContext'
 import { apiPost } from '@/lib/apiService'
 import { DEFAULT_STATE_ID, PLACEHOLDER_LAT_LNG, TRIP_TYPE_IDS } from '@/lib/constants'
@@ -74,7 +74,7 @@ export default function BookPage() {
     ADD_ONS.filter(a => state.filters.addOns.includes(ADD_ON_FILTER_LABELS[a.id])).map(a => a.id)
   )
   const [agreed, setAgreed] = useState(false)
-  const [otpModalOpen, setOtpModalOpen] = useState(false)
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false)
   const [payAmount, setPayAmount] = useState(0)
   const [travellerInfo, setTravellerInfo] = useState<TravellerInfo | null>(null)
   const mobileAgreeRef = useRef<HTMLLabelElement>(null)
@@ -109,9 +109,13 @@ export default function BookPage() {
 
   const handlePayNow = (amount: number) => {
     if (!travellerFormRef.current?.validate()) return
+    if (!travellerFormRef.current.isPhoneVerified()) {
+      travellerFormRef.current.requirePhoneVerification()
+      return
+    }
     setTravellerInfo(travellerFormRef.current.getValues())
     setPayAmount(amount)
-    setOtpModalOpen(true)
+    setPaymentModalOpen(true)
   }
 
   if (!state.cabCategoryId) {
@@ -235,9 +239,9 @@ export default function BookPage() {
         onPayNow={handlePayNow}
       />
 
-      {otpModalOpen && travellerInfo && (
-        <OtpVerificationModal
-          onClose={() => setOtpModalOpen(false)}
+      {paymentModalOpen && travellerInfo && (
+        <PaymentModal
+          onClose={() => setPaymentModalOpen(false)}
           amount={payAmount}
           booking={buildBookingDetailsPayload(state, addOns)}
           traveller={travellerInfo}
