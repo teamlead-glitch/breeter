@@ -12,7 +12,6 @@ import CabSlideCard from '@/components/home/CabSlideCard'
 export default function VehicleSwiper() {
   const [vehicles, setVehicles] = useState<CabCategory[]>([])
   const [loading, setLoading] = useState(true)
-  const [activeIndex, setActiveIndex] = useState(0)
   const [atStart, setAtStart] = useState(true)
   const [atEnd, setAtEnd] = useState(false)
   const swiperRef = useRef<SwiperType | null>(null)
@@ -29,41 +28,46 @@ export default function VehicleSwiper() {
 
   if (!loading && vehicles.length === 0) return null
 
-  const loop = vehicles.length > 4
+  // Swiper's loop mode needs comfortably more real slides than the widest slidesPerView (6)
+  // to duplicate safely — too few and next/prev get stuck or misbehave asymmetrically.
+  const loop = vehicles.length > 12
+
+  const restartAutoplay = () => {
+    const autoplay = swiperRef.current?.autoplay
+    autoplay?.stop()
+    autoplay?.start()
+  }
 
   return (
-    <section className="relative overflow-hidden bg-forest py-20">
+    <section className="relative overflow-hidden bg-white py-20 border-t border-ivory-dark">
       {/* Ambient glow — purely decorative, clipped by section overflow */}
-      <div className="pointer-events-none absolute -left-24 -top-24 h-96 w-96 rounded-full bg-cta/20 blur-[100px]" />
-      <div className="pointer-events-none absolute -bottom-32 -right-20 h-[28rem] w-[28rem] rounded-full bg-gold/10 blur-[120px]" />
+      <div className="pointer-events-none absolute -left-24 -top-24 h-96 w-96 rounded-full bg-cta/5 blur-[100px]" />
+      <div className="pointer-events-none absolute -bottom-32 -right-20 h-[28rem] w-[28rem] rounded-full bg-gold/5 blur-[120px]" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10 flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-white/50">Select your vehicle</p>
-            <h2 className="font-display text-4xl font-bold text-white md:text-5xl">Choose your ride</h2>
+            <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-cta">Select your vehicle</p>
+            <h2 className="font-display text-4xl font-bold text-ink md:text-5xl">Choose your ride</h2>
           </div>
 
           {!loading && vehicles.length > 1 && (
             <div className="ml-auto flex items-center gap-3">
-              <span className="mr-1 font-mono text-xs tabular-nums text-white/40">
-                {String(activeIndex + 1).padStart(2, '0')} / {String(vehicles.length).padStart(2, '0')}
-              </span>
               <button
                 type="button"
-                onClick={() => swiperRef.current?.slidePrev()}
+                onClick={() => { swiperRef.current?.slidePrev(); restartAutoplay() }}
                 disabled={!loop && atStart}
                 aria-label="Previous vehicle"
-                className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-white transition-colors hover:border-cta hover:bg-cta disabled:pointer-events-none disabled:opacity-35"
+                className="grid h-11 w-11 place-items-center rounded-full border border-black/10 text-ink transition-colors hover:border-cta hover:bg-cta hover:text-white disabled:pointer-events-none disabled:opacity-35"
               >
                 <ArrowLeft size={17} />
               </button>
               <button
                 type="button"
-                onClick={() => swiperRef.current?.slideNext()}
+                onClick={() => { swiperRef.current?.slideNext(); restartAutoplay() }}
                 disabled={!loop && atEnd}
                 aria-label="Next vehicle"
-                className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-white transition-colors hover:border-cta hover:bg-cta disabled:pointer-events-none disabled:opacity-35"
+                className="grid h-11 w-11 place-items-center rounded-full border border-black/10 text-ink transition-colors hover:border-cta hover:bg-cta hover:text-white disabled:pointer-events-none disabled:opacity-35"
               >
                 <ArrowRight size={17} />
               </button>
@@ -75,8 +79,8 @@ export default function VehicleSwiper() {
           <div className="grid grid-cols-3 gap-6 sm:grid-cols-4 lg:grid-cols-6">
             {[1, 2, 3, 4, 5, 6].map(i => (
               <div key={i} className="flex flex-col items-center gap-3">
-                <div className="aspect-square w-full animate-pulse rounded-full bg-white/10" />
-                <div className="h-3 w-3/4 animate-pulse rounded-full bg-white/10" />
+                <div className="aspect-square w-full animate-pulse rounded-full bg-ivory" />
+                <div className="h-3 w-3/4 animate-pulse rounded-full bg-ivory" />
               </div>
             ))}
           </div>
@@ -94,7 +98,6 @@ export default function VehicleSwiper() {
             loop={loop}
             onSwiper={swiper => { swiperRef.current = swiper }}
             onSlideChange={swiper => {
-              setActiveIndex(swiper.realIndex)
               setAtStart(swiper.isBeginning)
               setAtEnd(swiper.isEnd)
             }}
