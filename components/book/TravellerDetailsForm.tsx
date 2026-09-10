@@ -2,6 +2,7 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { CheckCircle2 } from 'lucide-react'
 import { TravellerInfo } from '@/types/payments'
+import { BookingDetailsRequest } from '@/types/booking'
 import PhoneOtpModal from './PhoneOtpModal'
 
 export type TravellerDetailsFormHandle = {
@@ -11,11 +12,17 @@ export type TravellerDetailsFormHandle = {
   requirePhoneVerification: () => void
 }
 
+type TravellerDetailsFormProps = {
+  // Trip context the send-otp API needs alongside the traveller's own details.
+  booking: BookingDetailsRequest
+  pickupTime: string
+}
+
 type FieldErrors = { name?: string; phone?: string; email?: string }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-const TravellerDetailsForm = forwardRef<TravellerDetailsFormHandle>((_props, ref) => {
+const TravellerDetailsForm = forwardRef<TravellerDetailsFormHandle, TravellerDetailsFormProps>(({ booking, pickupTime }, ref) => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
@@ -155,7 +162,14 @@ const TravellerDetailsForm = forwardRef<TravellerDetailsFormHandle>((_props, ref
 
       {phoneOtpOpen && (
         <PhoneOtpModal
-          phone={phone.trim()}
+          payload={{
+            ...booking,
+            mobile_number: phone.trim(),
+            customer_name: name.trim(),
+            customer_email: email.trim(),
+            notes: notes.trim(),
+            pickup_time: pickupTime,
+          }}
           onClose={() => setPhoneOtpOpen(false)}
           onVerified={() => {
             setOtpVerified(true)

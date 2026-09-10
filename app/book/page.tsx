@@ -158,6 +158,8 @@ export default function BookPage() {
   const payNow = Math.round(total * 0.2)
   const balance = total - payNow
   const isRefreshingFare = detailsLoading
+  const bookingPayload = buildBookingDetailsPayload(state, addOns)
+  const pickupTime = state.pickupDate.split('T')[1] ?? ''
 
   return (
     <div className="min-h-screen bg-ivory">
@@ -205,7 +207,7 @@ export default function BookPage() {
               <PriceBreakdownList breakdown={details.pricing.breakdown} total={total} refreshing={isRefreshingFare} />
             </div>
             
-            <TravellerDetailsForm ref={travellerFormRef} />
+            <TravellerDetailsForm ref={travellerFormRef} booking={bookingPayload} pickupTime={pickupTime} />
 
             {/* Mobile/tablet: terms checkbox — the sidebar with this is desktop-only, but the fixed pay bar's button needs it too */}
             <div className="lg:hidden bg-white rounded-2xl border border-black/5 p-4">
@@ -243,7 +245,7 @@ export default function BookPage() {
         <PaymentModal
           onClose={() => setPaymentModalOpen(false)}
           amount={payAmount}
-          booking={buildBookingDetailsPayload(state, addOns)}
+          booking={bookingPayload}
           traveller={travellerInfo}
           cabCategoryName={details.cab_category.name}
         />

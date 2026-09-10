@@ -2,20 +2,22 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { X, AlertCircle, Loader2 } from 'lucide-react'
 import { sendOtp, verifyOtp } from '@/lib/otp'
+import { SendOtpRequest } from '@/types/otp'
 
 const OTP_LENGTH = 4
 
 type Status = 'sending' | 'send-error' | 'entering' | 'verifying'
 
 export default function PhoneOtpModal({
-  phone,
+  payload,
   onClose,
   onVerified,
 }: {
-  phone: string
+  payload: SendOtpRequest
   onClose: () => void
   onVerified: () => void
 }) {
+  const phone = payload.mobile_number
   const [status, setStatus] = useState<Status>('sending')
   const [otpId, setOtpId] = useState<string | null>(null)
   const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(''))
@@ -26,7 +28,7 @@ export default function PhoneOtpModal({
   // Assumes status is already 'sending' and errorMessage cleared — true on mount by initial
   // state, and the "Try again" button (an event handler, not this effect) resets both first.
   const send = async () => {
-    const res = await sendOtp(phone)
+    const res = await sendOtp(payload)
     if (!mountedRef.current) return
     if (res.error || !res.data) {
       setErrorMessage(res.error || 'Could not send the OTP. Please try again.')
