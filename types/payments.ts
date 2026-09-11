@@ -28,8 +28,11 @@ export type CreateRazorpayOrderResponse = {
 export type OrderStatus = 'pending' | 'paid' | 'failed'
 
 export type OrderStatusResponse = {
+  message: string
   data: {
     payment_id: string | number
     status: OrderStatus
+    booking_id: string | number
+    booking_status: string
   }
 }

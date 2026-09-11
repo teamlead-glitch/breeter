@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { X, ShieldCheck, AlertCircle, Loader2 } from 'lucide-react'
 import { createRazorpayOrder, fetchOrderStatus } from '@/lib/payments'
 import { loadRazorpayScript } from '@/lib/razorpay'
@@ -8,7 +9,7 @@ import { RazorpayPaymentType, TravellerInfo } from '@/types/payments'
 const POLL_INTERVAL_MS = 3000
 const MAX_POLL_ATTEMPTS = 20 // ~60s of polling before we tell the user it's still processing
 
-type Status = 'creating-order' | 'confirming' | 'success' | 'error' | 'cancelled' | 'timeout'
+type Status = 'creating-order' | 'confirming' | 'error' | 'cancelled' | 'timeout'
 
 export default function PaymentModal({
   onClose,
@@ -23,6 +24,7 @@ export default function PaymentModal({
   traveller: TravellerInfo
   cabCategoryName?: string
 }) {
+  const router = useRouter()
   const [status, setStatus] = useState<Status>('creating-order')
   const [errorMessage, setErrorMessage] = useState('')
   const paymentHandledRef = useRef(false)
@@ -37,7 +39,9 @@ export default function PaymentModal({
       if (!mountedRef.current) return
 
       if (res.data?.data.status === 'paid') {
-        setStatus('success')
+        const params = new URLSearchParams({ booking_id: String(res.data.data.booking_id) })
+        if (traveller.email) params.set('email', traveller.email)
+        router.push(`/book/success?${params.toString()}`)
         return
       }
       if (res.data?.data.status === 'failed') {
@@ -156,21 +160,6 @@ export default function PaymentModal({
                 ? "Hang tight, we're opening the payment window."
                 : "This can take a few seconds — please don't close this window."}
             </p>
-          </div>
-        )}
-
-        {status === 'success' && (
-          <div className="text-center py-4">
-            <div className="mx-auto mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-cta/10 text-cta">
-              <ShieldCheck size={26} />
-            </div>
-            <h2 className="font-display text-ink text-lg font-bold mb-1.5">Payment received</h2>
-            <p className="text-ink-faint text-sm mb-6">Your booking is confirmed.</p>
-            <button
-              onClick={onClose}
-              className="w-full bg-cta hover:bg-cta-dark text-white font-bold py-3.5 rounded-xl text-sm transition-colors">
-              Done
-            </button>
           </div>
         )}
 
