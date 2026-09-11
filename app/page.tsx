@@ -34,10 +34,10 @@ export default function HomePage() {
       <VehicleSwiper />
 
       {/* ─── FEATURED PACKAGES ─────────────────────────────── */}
-      <FeaturedPackagesSection />
+      {/* <FeaturedPackagesSection /> */}
 
       {/* ─── WHY BREETER ───────────────────────────────────── */}
-      <section className="relative bg-white py-24 border-t border-ivory-dark overflow-hidden">
+      {/* <section className="relative bg-white py-24 border-t border-ivory-dark overflow-hidden">
         <div className="pointer-events-none absolute top-0 right-0 w-lg h-128 bg-cta/5 rounded-full blur-[120px] -translate-y-1/3 translate-x-1/3" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-xl mb-16">
@@ -58,7 +58,7 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ─── CTA STRIP ─────────────────────────────────────── */}
       <section className="bg-ivory py-20 px-4 sm:px-6 lg:px-8">
