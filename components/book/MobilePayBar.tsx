@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { RazorpayPaymentType } from '@/types/payments'
 
 export default function MobilePayBar({
   payNow,
@@ -14,7 +15,7 @@ export default function MobilePayBar({
   agreed: boolean
   refreshing?: boolean
   onPayAttempt: () => void
-  onPayNow: (amount: number) => void
+  onPayNow: (type: RazorpayPaymentType) => void
 }) {
   const [payOption, setPayOption] = useState<'partial' | 'full'>('partial')
   const balance = total - payNow
@@ -65,7 +66,7 @@ export default function MobilePayBar({
         </div>
         <button
           disabled={refreshing}
-          onClick={() => { if (!agreed) onPayAttempt(); else onPayNow(payAmount) }}
+          onClick={() => { if (!agreed) onPayAttempt(); else onPayNow(payOption === 'partial' ? 'advance' : 'full') }}
           className={`flex-none font-bold px-6 py-3.5 rounded-xl text-sm transition-colors ${
             agreed && !refreshing
               ? 'bg-cta hover:bg-cta-dark text-white'

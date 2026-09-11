@@ -10,6 +10,9 @@ export type TravellerDetailsFormHandle = {
   getValues: () => TravellerInfo
   isPhoneVerified: () => boolean
   requirePhoneVerification: () => void
+  // The booking_id the backend created while sending/verifying the OTP — needed to create the
+  // Razorpay order. Only non-null once isPhoneVerified() is true.
+  getBookingId: () => number | null
 }
 
 type TravellerDetailsFormProps = {
@@ -32,6 +35,7 @@ const TravellerDetailsForm = forwardRef<TravellerDetailsFormHandle, TravellerDet
   const [phoneOtpOpen, setPhoneOtpOpen] = useState(false)
   const [otpVerified, setOtpVerified] = useState(false)
   const [verifiedPhone, setVerifiedPhone] = useState<string | null>(null)
+  const [verifiedBookingId, setVerifiedBookingId] = useState<number | null>(null)
   const [verifyNotice, setVerifyNotice] = useState<string | null>(null)
 
   const nameInputRef = useRef<HTMLInputElement>(null)
@@ -63,6 +67,7 @@ const TravellerDetailsForm = forwardRef<TravellerDetailsFormHandle, TravellerDet
     },
     getValues: () => ({ name: name.trim(), phone: phone.trim(), email: email.trim(), notes: notes.trim() }),
     isPhoneVerified: () => otpVerified,
+    getBookingId: () => verifiedBookingId,
     requirePhoneVerification: () => {
       setVerifyNotice('Please verify your mobile number to continue.')
       verifyButtonRef.current?.focus()
@@ -73,7 +78,10 @@ const TravellerDetailsForm = forwardRef<TravellerDetailsFormHandle, TravellerDet
   const handlePhoneChange = (value: string) => {
     const next = value.replace(/[^\d\s+]/g, '').slice(0, 15)
     setPhone(next)
-    if (next !== verifiedPhone) setOtpVerified(false)
+    if (next !== verifiedPhone) {
+      setOtpVerified(false)
+      setVerifiedBookingId(null)
+    }
   }
 
   const fieldClass = (hasError?: string) =>
@@ -171,9 +179,10 @@ const TravellerDetailsForm = forwardRef<TravellerDetailsFormHandle, TravellerDet
             pickup_time: pickupTime,
           }}
           onClose={() => setPhoneOtpOpen(false)}
-          onVerified={() => {
+          onVerified={bookingId => {
             setOtpVerified(true)
             setVerifiedPhone(phone)
+            setVerifiedBookingId(bookingId)
             setPhoneOtpOpen(false)
           }}
         />

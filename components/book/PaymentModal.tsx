@@ -3,8 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { X, ShieldCheck, AlertCircle, Loader2 } from 'lucide-react'
 import { createRazorpayOrder, fetchOrderStatus } from '@/lib/payments'
 import { loadRazorpayScript } from '@/lib/razorpay'
-import { BookingDetailsRequest } from '@/types/booking'
-import { TravellerInfo } from '@/types/payments'
+import { RazorpayPaymentType, TravellerInfo } from '@/types/payments'
 
 const POLL_INTERVAL_MS = 3000
 const MAX_POLL_ATTEMPTS = 20 // ~60s of polling before we tell the user it's still processing
@@ -13,14 +12,14 @@ type Status = 'creating-order' | 'confirming' | 'success' | 'error' | 'cancelled
 
 export default function PaymentModal({
   onClose,
-  amount,
-  booking,
+  bookingId,
+  type,
   traveller,
   cabCategoryName,
 }: {
   onClose: () => void
-  amount: number
-  booking: BookingDetailsRequest
+  bookingId: number
+  type: RazorpayPaymentType
   traveller: TravellerInfo
   cabCategoryName?: string
 }) {
@@ -68,14 +67,7 @@ export default function PaymentModal({
       return
     }
 
-    const key = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID
-    if (!key) {
-      setErrorMessage('Payments are not configured yet.')
-      setStatus('error')
-      return
-    }
-
-    const res = await createRazorpayOrder({ booking, traveller, amount })
+    const res = await createRazorpayOrder({ booking_id: bookingId, type })
     if (!mountedRef.current) return
     if (res.error || !res.data) {
       setErrorMessage(res.error || 'Could not start the payment. Please try again.')
@@ -83,7 +75,7 @@ export default function PaymentModal({
       return
     }
 
-    const { order_id, amount: paiseAmount, currency, booking_id } = res.data.data
+    const { order_id, amount: paiseAmount, currency, key, payment_id } = res.data.data
 
     const Razorpay = window.Razorpay
     if (!Razorpay) {
@@ -112,7 +104,7 @@ export default function PaymentModal({
         paymentHandledRef.current = true
         if (!mountedRef.current) return
         setStatus('confirming')
-        pollOrderStatus(booking_id)
+        pollOrderStatus(payment_id)
       },
     })
 
@@ -126,6 +118,10 @@ export default function PaymentModal({
   }
 
   useEffect(() => {
+    // React Strict Mode runs this effect, its cleanup, then this effect again on mount —
+    // without resetting the ref here, the cleanup's `false` from the first pass sticks
+    // around and silently drops the real request's response when it lands.
+    mountedRef.current = true
     document.body.style.overflow = 'hidden'
     startPayment()
     return () => {

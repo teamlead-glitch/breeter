@@ -4,7 +4,7 @@ import { X, AlertCircle, Loader2 } from 'lucide-react'
 import { sendOtp, verifyOtp } from '@/lib/otp'
 import { SendOtpRequest } from '@/types/otp'
 
-const OTP_LENGTH = 4
+const OTP_LENGTH = 6
 
 type Status = 'sending' | 'send-error' | 'entering' | 'verifying'
 
@@ -15,13 +15,15 @@ export default function PhoneOtpModal({
 }: {
   payload: SendOtpRequest
   onClose: () => void
-  onVerified: () => void
+  onVerified: (bookingId: number) => void
 }) {
   const phone = payload.mobile_number
   const [status, setStatus] = useState<Status>('sending')
-  const [otpId, setOtpId] = useState<string | null>(null)
   const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(''))
   const [errorMessage, setErrorMessage] = useState('')
+  // Backend returns the OTP directly while its SMS gateway isn't hooked up — surfaced here
+  // so testing doesn't require digging through network requests. Remove once SMS is live.
+  const [devOtp, setDevOtp] = useState<string | null>(null)
   const inputsRef = useRef<(HTMLInputElement | null)[]>([])
   const mountedRef = useRef(true)
 
@@ -35,12 +37,18 @@ export default function PhoneOtpModal({
       setStatus('send-error')
       return
     }
-    setOtpId(res.data.data.otp_id)
+    const otp = res.data.data.otp
+    setDevOtp(otp ?? null)
+    if (otp && otp.length === OTP_LENGTH) setDigits(otp.split(''))
     setStatus('entering')
     requestAnimationFrame(() => inputsRef.current[0]?.focus())
   }
 
   useEffect(() => {
+    // React Strict Mode runs this effect, its cleanup, then this effect again on mount —
+    // without resetting the ref here, the cleanup's `false` from the first pass sticks
+    // around and silently drops the real request's response when it lands.
+    mountedRef.current = true
     document.body.style.overflow = 'hidden'
     send()
     return () => {
@@ -68,19 +76,19 @@ export default function PhoneOtpModal({
   }
 
   const handleVerify = async () => {
-    if (!complete || !otpId) return
+    if (!complete) return
     setStatus('verifying')
     setErrorMessage('')
-    const res = await verifyOtp(otpId, code)
+    const res = await verifyOtp(phone, code)
     if (!mountedRef.current) return
-    if (res.error || !res.data?.data.verified) {
+    if (res.error || !res.data) {
       setErrorMessage(res.error || 'Incorrect OTP. Please try again.')
       setStatus('entering')
       setDigits(Array(OTP_LENGTH).fill(''))
       requestAnimationFrame(() => inputsRef.current[0]?.focus())
       return
     }
-    onVerified()
+    onVerified(res.data.data.booking_id)
   }
 
   return (
@@ -122,7 +130,7 @@ export default function PhoneOtpModal({
             <h2 className="font-display text-ink text-lg font-bold mb-1.5">Verify your number</h2>
             <p className="text-ink-faint text-sm mb-6">An OTP has been sent to {phone}. Please verify it to continue.</p>
 
-            <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="flex items-center justify-center gap-1.5 mb-4 sm:gap-2.5">
               {digits.map((d, i) => (
                 <input
                   key={i}
@@ -134,10 +142,16 @@ export default function PhoneOtpModal({
                   inputMode="numeric"
                   maxLength={1}
                   aria-label={`OTP digit ${i + 1}`}
-                  className="w-12 h-14 text-center text-xl font-bold text-ink bg-ivory rounded-xl border-2 border-transparent focus:border-cta/50 outline-none transition-colors disabled:opacity-60"
+                  className="w-9 h-12 text-center text-lg font-bold text-ink bg-ivory rounded-xl border-2 border-transparent focus:border-cta/50 outline-none transition-colors disabled:opacity-60 sm:w-11 sm:h-13 sm:text-xl"
                 />
               ))}
             </div>
+
+            {devOtp && (
+              <p className="mb-4 text-center text-xs text-ink-faint">
+                SMS gateway not configured — testing code: <span className="font-mono font-bold text-ink">{devOtp}</span>
+              </p>
+            )}
 
             {errorMessage && <p className="mb-4 text-center text-xs text-red-600">{errorMessage}</p>}
 

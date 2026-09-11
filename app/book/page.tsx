@@ -17,7 +17,7 @@ import { SearchState, useSearchState } from '@/context/SearchContext'
 import { apiPost } from '@/lib/apiService'
 import { DEFAULT_STATE_ID, PLACEHOLDER_LAT_LNG, TRIP_TYPE_IDS } from '@/lib/constants'
 import { BookingDetails, BookingDetailsRequest, BookingDetailsResponse } from '@/types/booking'
-import { TravellerInfo } from '@/types/payments'
+import { RazorpayPaymentType, TravellerInfo } from '@/types/payments'
 
 function BookingIssueNotice({ heading, message }: { heading: string; message: string }) {
   return (
@@ -75,7 +75,8 @@ export default function BookPage() {
   )
   const [agreed, setAgreed] = useState(false)
   const [paymentModalOpen, setPaymentModalOpen] = useState(false)
-  const [payAmount, setPayAmount] = useState(0)
+  const [paymentType, setPaymentType] = useState<RazorpayPaymentType>('advance')
+  const [paymentBookingId, setPaymentBookingId] = useState<number | null>(null)
   const [travellerInfo, setTravellerInfo] = useState<TravellerInfo | null>(null)
   const mobileAgreeRef = useRef<HTMLLabelElement>(null)
   const travellerFormRef = useRef<TravellerDetailsFormHandle>(null)
@@ -107,14 +108,21 @@ export default function BookPage() {
     mobileAgreeRef.current?.focus()
   }
 
-  const handlePayNow = (amount: number) => {
+  const handlePayNow = (type: RazorpayPaymentType) => {
     if (!travellerFormRef.current?.validate()) return
     if (!travellerFormRef.current.isPhoneVerified()) {
       travellerFormRef.current.requirePhoneVerification()
       return
     }
+    const bookingId = travellerFormRef.current.getBookingId()
+    if (bookingId === null) {
+      // Shouldn't happen once isPhoneVerified() is true, but guard against it regardless.
+      travellerFormRef.current.requirePhoneVerification()
+      return
+    }
     setTravellerInfo(travellerFormRef.current.getValues())
-    setPayAmount(amount)
+    setPaymentBookingId(bookingId)
+    setPaymentType(type)
     setPaymentModalOpen(true)
   }
 
@@ -241,11 +249,11 @@ export default function BookPage() {
         onPayNow={handlePayNow}
       />
 
-      {paymentModalOpen && travellerInfo && (
+      {paymentModalOpen && travellerInfo && paymentBookingId !== null && (
         <PaymentModal
           onClose={() => setPaymentModalOpen(false)}
-          amount={payAmount}
-          booking={bookingPayload}
+          bookingId={paymentBookingId}
+          type={paymentType}
           traveller={travellerInfo}
           cabCategoryName={details.cab_category.name}
         />

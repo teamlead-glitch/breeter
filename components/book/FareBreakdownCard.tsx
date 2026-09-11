@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import PriceBreakdownList from './PriceBreakdownList'
 import TermsAgreement from './TermsAgreement'
+import { RazorpayPaymentType } from '@/types/payments'
 
 export default function FareBreakdownCard({
   breakdown,
@@ -20,7 +21,7 @@ export default function FareBreakdownCard({
   agreed: boolean
   refreshing?: boolean
   onToggleAgree: () => void
-  onPayNow: (amount: number) => void
+  onPayNow: (type: RazorpayPaymentType) => void
 }) {
   const [payOption, setPayOption] = useState<'partial' | 'full'>('partial')
   const payAmount = payOption === 'partial' ? payNow : total
@@ -82,7 +83,7 @@ export default function FareBreakdownCard({
 
       <button
         disabled={!agreed || refreshing}
-        onClick={() => onPayNow(payAmount)}
+        onClick={() => onPayNow(payOption === 'partial' ? 'advance' : 'full')}
         className={`w-full font-bold py-3.5 rounded-xl text-sm transition-colors ${
           agreed && !refreshing
             ? 'bg-cta hover:bg-cta-dark text-white'

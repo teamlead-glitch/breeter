@@ -5,9 +5,8 @@ export function sendOtp(payload: SendOtpRequest) {
   return apiPost<SendOtpResponse>('v1/otp/send', payload)
 }
 
-// NOTE: v1/otp/verify's request/response shape is still assumed — confirm against the real
-// backend and update here if it differs.
-
-export function verifyOtp(otpId: string, otp: string) {
-  return apiPost<VerifyOtpResponse>('v1/otp/verify', { otp_id: otpId, otp })
+// NOTE: v1/otp/verify's response shape is still assumed — confirm against the real backend
+// and update here if it differs.
+export function verifyOtp(mobileNumber: string, code: string) {
+  return apiPost<VerifyOtpResponse>('v1/otp/verify', { mobile_number: mobileNumber, code })
 }

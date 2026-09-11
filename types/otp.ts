@@ -33,14 +33,20 @@ export type SendOtpRequest = {
 }
 
 export type SendOtpResponse = {
+  message: string
   data: {
-    otp_id: string
-    expires_in: number
+    booking_id: number
+    status: string
+    // Present while the SMS gateway isn't configured — backend returns the code directly
+    // for testing instead of texting it.
+    otp?: string
   }
 }
 
 export type VerifyOtpResponse = {
+  message: string
   data: {
-    verified: boolean
+    booking_id: number
+    status: string
   }
 }
