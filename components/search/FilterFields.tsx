@@ -48,7 +48,7 @@ export default function FilterFields({ onChange }: { onChange?: () => void }) {
         </>
       )}
 
-      <div className="flex items-center gap-2 mb-3">
+      {/* <div className="flex items-center gap-2 mb-3">
         <Plus size={16} className="text-forest" />
         <h3 className="font-bold text-ink text-sm">Add-ons</h3>
       </div>
@@ -70,7 +70,7 @@ export default function FilterFields({ onChange }: { onChange?: () => void }) {
             </label>
           )
         })}
-      </div>
+      </div> */}
     </>
   )
 }
