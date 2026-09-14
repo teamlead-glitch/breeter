@@ -23,6 +23,7 @@ export default function BookPage() {
     ADD_ONS.filter(a => state.filters.addOns.includes(ADD_ON_FILTER_LABELS[a.id])).map(a => a.id)
   )
   const [agreed, setAgreed] = useState(false)
+  const [mobileTermsError, setMobileTermsError] = useState<string | undefined>()
   const [paymentModalOpen, setPaymentModalOpen] = useState(false)
   const [paymentType, setPaymentType] = useState<RazorpayPaymentType>('advance')
   const [paymentBookingId, setPaymentBookingId] = useState<number | null>(null)
@@ -52,7 +53,7 @@ export default function BookPage() {
     setAddOns(prev => prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id])
 
   const handleMobilePayAttempt = () => {
-    window.alert('Please agree to the Terms & cancellation policy to continue.')
+    setMobileTermsError('Please agree to the terms to continue.')
     mobileAgreeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
     mobileAgreeRef.current?.focus()
   }
@@ -135,8 +136,9 @@ export default function BookPage() {
             bookingPayload={bookingPayload}
             pickupTime={pickupTime}
             agreed={agreed}
+            mobileTermsError={mobileTermsError}
             onToggleAddon={toggleAddon}
-            onToggleAgreed={() => setAgreed(a => !a)}
+            onToggleAgreed={() => { setAgreed(a => !a); setMobileTermsError(undefined) }}
             travellerFormRef={travellerFormRef}
             mobileAgreeRef={mobileAgreeRef}
           />

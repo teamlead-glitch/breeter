@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import PriceBreakdownList from './PriceBreakdownList'
 import TermsAgreement from './TermsAgreement'
 import { RazorpayPaymentType } from '@/types/payments'
@@ -24,6 +24,8 @@ export default function FareBreakdownCard({
   onPayNow: (type: RazorpayPaymentType) => void
 }) {
   const [payOption, setPayOption] = useState<'partial' | 'full'>('partial')
+  const [termsError, setTermsError] = useState<string | undefined>()
+  const termsRef = useRef<HTMLLabelElement>(null)
   const payAmount = payOption === 'partial' ? payNow : total
 
   return (
@@ -79,15 +81,28 @@ export default function FareBreakdownCard({
         </label>
       </div>
 
-      <TermsAgreement agreed={agreed} onToggle={onToggleAgree} className="mb-4" />
+      <TermsAgreement
+        ref={termsRef}
+        agreed={agreed}
+        onToggle={() => { onToggleAgree(); setTermsError(undefined) }}
+        error={termsError}
+        className="mb-4"
+      />
 
       <button
-        disabled={!agreed || refreshing}
-        onClick={() => onPayNow(payOption === 'partial' ? 'advance' : 'full')}
+        disabled={refreshing}
+        onClick={() => {
+          if (refreshing) return
+          if (!agreed) {
+            setTermsError('Please agree to the terms to continue.')
+            termsRef.current?.focus()
+            termsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            return
+          }
+          onPayNow(payOption === 'partial' ? 'advance' : 'full')
+        }}
         className={`w-full font-bold py-3.5 rounded-xl text-sm transition-colors ${
-          agreed && !refreshing
-            ? 'bg-cta hover:bg-cta-dark text-white'
-            : 'bg-ink-faint/15 text-ink-faint cursor-not-allowed'
+          refreshing ? 'bg-ink-faint/15 text-ink-faint cursor-not-allowed' : 'bg-cta hover:bg-cta-dark text-white'
         }`}>
         Pay ₹{payAmount.toLocaleString('en-IN')} now →
       </button>

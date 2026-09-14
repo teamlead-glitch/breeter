@@ -19,6 +19,7 @@ export default function BookingMainColumn({
   bookingPayload,
   pickupTime,
   agreed,
+  mobileTermsError,
   onToggleAddon,
   onToggleAgreed,
   travellerFormRef,
@@ -34,6 +35,7 @@ export default function BookingMainColumn({
   bookingPayload: BookingDetailsRequest
   pickupTime: string
   agreed: boolean
+  mobileTermsError?: string
   onToggleAddon: (id: string) => void
   onToggleAgreed: () => void
   travellerFormRef: RefObject<TravellerDetailsFormHandle | null>
@@ -68,7 +70,7 @@ export default function BookingMainColumn({
 
       {/* Mobile/tablet: terms checkbox — the sidebar with this is desktop-only, but the fixed pay bar's button needs it too */}
       <div className="lg:hidden bg-white rounded-2xl border border-black/5 p-4">
-        <TermsAgreement ref={mobileAgreeRef} agreed={agreed} onToggle={onToggleAgreed} />
+        <TermsAgreement ref={mobileAgreeRef} agreed={agreed} onToggle={onToggleAgreed} error={mobileTermsError} />
       </div>
     </main>
   )
