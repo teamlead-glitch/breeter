@@ -33,6 +33,7 @@ export type SearchAction =
   | { type: 'SET_CAB_CATEGORY_ID'; id: number }
   | { type: 'TRIGGER_SEARCH' }
   | { type: 'RESET' }
+  | { type: 'HYDRATE'; state: Partial<SearchState> }
 
 export const initialSearchState: SearchState = {
   tripType: 'Drop',
@@ -82,6 +83,8 @@ export function searchReducer(state: SearchState, action: SearchAction): SearchS
       return { ...state, searchVersion: state.searchVersion + 1 }
     case 'RESET':
       return initialSearchState
+    case 'HYDRATE':
+      return { ...state, ...action.state }
     default:
       return state
   }
