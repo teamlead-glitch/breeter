@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { MapPin, CalendarClock, Plus, Search, X } from 'lucide-react'
 import Link from 'next/link'
 import { useSearchState, TripType, HourlyPackage } from '@/context/SearchContext'
@@ -18,6 +18,9 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
   const { tripType, stops } = state
   const [addingStop, setAddingStop] = useState(false)
   const [stopInput, setStopInput] = useState('')
+  const [errors, setErrors] = useState<{ from?: boolean; to?: boolean }>({})
+  const fromInputRef = useRef<HTMLInputElement>(null)
+  const toInputRef = useRef<HTMLInputElement>(null)
 
   const saveStop = () => {
     const value = stopInput.trim()
@@ -48,17 +51,25 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
 
       {/* Fields */}
       <div className="grid gap-2 mb-4 grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(280px,1fr))]">
-        <div className="flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
-          <MapPin size={15} className="text-forest flex-shrink-0" />
-          <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">From</p>
-            <input
-              id="search-from-input"
-              value={state.from}
-              onChange={e => dispatch({ type: 'SET_FROM', value: e.target.value })}
-              className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint"
-              placeholder="Pickup city"
-            />
+        <div>
+          <div className={`flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 transition-colors ${
+            errors.from ? 'border-red-300' : 'border-transparent focus-within:border-forest/25'
+          }`}>
+            <MapPin size={15} className="text-forest flex-shrink-0" />
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">From</p>
+              <input
+                ref={fromInputRef}
+                id="search-from-input"
+                value={state.from}
+                onChange={e => {
+                  dispatch({ type: 'SET_FROM', value: e.target.value })
+                  if (errors.from) setErrors(prev => ({ ...prev, from: false }))
+                }}
+                className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint"
+                placeholder="Pickup city"
+              />
+            </div>
           </div>
         </div>
 
@@ -109,16 +120,24 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
           </div>
         )}
 
-        <div className="flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
-          <MapPin size={15} className="text-ink-faint flex-shrink-0" />
-          <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">To</p>
-            <input
-              value={state.to}
-              onChange={e => dispatch({ type: 'SET_TO', value: e.target.value })}
-              className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint"
-              placeholder="Drop city"
-            />
+        <div>
+          <div className={`flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 transition-colors ${
+            errors.to ? 'border-red-300' : 'border-transparent focus-within:border-forest/25'
+          }`}>
+            <MapPin size={15} className="text-ink-faint flex-shrink-0" />
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">To</p>
+              <input
+                ref={toInputRef}
+                value={state.to}
+                onChange={e => {
+                  dispatch({ type: 'SET_TO', value: e.target.value })
+                  if (errors.to) setErrors(prev => ({ ...prev, to: false }))
+                }}
+                className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint"
+                placeholder="Drop city"
+              />
+            </div>
           </div>
         </div>
 
@@ -174,7 +193,23 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
       {/* Footer row */}
       <div className="flex items-center gap-2 flex-wrap">
         <div className="flex-1" />
-        <Link href="/search" onClick={() => { dispatch({ type: 'TRIGGER_SEARCH' }); onSearch?.() }}
+        <Link href="/search" onClick={e => {
+            const nextErrors: { from?: boolean; to?: boolean } = {}
+            if (!state.from.trim()) nextErrors.from = true
+            if (!state.to.trim()) nextErrors.to = true
+
+            if (nextErrors.from || nextErrors.to) {
+              e.preventDefault()
+              setErrors(nextErrors)
+              const target = nextErrors.from ? fromInputRef.current : toInputRef.current
+              target?.focus()
+              target?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+              return
+            }
+
+            dispatch({ type: 'TRIGGER_SEARCH' })
+            onSearch?.()
+          }}
           className="flex items-center gap-2 bg-cta hover:bg-cta-dark text-white font-bold text-sm px-6 py-3 rounded-xl transition-colors shadow-lg shadow-cta/20">
           <Search size={15} /> Search Cabs
         </Link>
