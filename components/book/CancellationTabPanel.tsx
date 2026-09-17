@@ -9,7 +9,11 @@ export default function CancellationTabPanel() {
       
       </p>
       
-      <Link href="/cancellation-policy" className="text-cta text-sm font-semibold hover:underline underline-offset-4">
+      <Link
+        href="/cancellation-policy"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-cta text-sm font-semibold hover:underline underline-offset-4">
         View full Cancellation Policy →
       </Link>
     </div>

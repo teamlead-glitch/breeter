@@ -16,7 +16,11 @@ export default function TermsTabPanel() {
           </li>
         ))}
       </ul>
-      <Link href="/terms" className="text-cta text-sm font-semibold hover:underline underline-offset-4">
+      <Link
+        href="/terms"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-cta text-sm font-semibold hover:underline underline-offset-4">
         View Policies →
       </Link>
     </div>
