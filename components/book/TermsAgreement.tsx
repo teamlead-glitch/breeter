@@ -31,7 +31,12 @@ const TermsAgreement = forwardRef<
         </span>
         <span className="text-xs text-ink-muted leading-relaxed">
           I agree to the{' '}
-          <Link href="/terms" onClick={e => e.stopPropagation()} className="text-cta font-semibold hover:underline">
+          <Link
+            href="/terms"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={e => e.stopPropagation()}
+            className="text-cta font-semibold hover:underline">
             Terms &amp; cancellation policy
           </Link>
         </span>
