@@ -13,6 +13,24 @@ const SearchContext = createContext<SearchContextValue | null>(null)
 
 const STORAGE_KEY = 'breeter-search-state'
 
+// A few minutes' buffer (rounded to a clean 5-min mark) so the default doesn't read as
+// "in the past" the instant it's set, and reads as a realistic earliest pickup time.
+function roundedNow() {
+  const d = new Date(Date.now() + 30 * 60 * 1000)
+  d.setMinutes(Math.ceil(d.getMinutes() / 5) * 5, 0, 0)
+  return d
+}
+
+function formatDateTime(d: Date) {
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
+function defaultTripDates() {
+  const now = formatDateTime(roundedNow())
+  return { pickupDate: now, dropDate: now }
+}
+
 export function SearchProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(searchReducer, initialSearchState)
   const hydratedRef = useRef(false)
@@ -30,12 +48,16 @@ export function SearchProvider({ children }: { children: ReactNode }) {
   }, [state])
 
   useEffect(() => {
+    let saved: Partial<SearchState> = {}
     try {
-      const saved = localStorage.getItem(STORAGE_KEY)
-      if (saved) dispatch({ type: 'HYDRATE', state: JSON.parse(saved) })
+      const raw = localStorage.getItem(STORAGE_KEY)
+      if (raw) saved = JSON.parse(raw)
     } catch {
-      // Ignore corrupt/unavailable storage — falls back to initialSearchState.
+      // Ignore corrupt/unavailable storage — falls back to defaults below.
     }
+    // pickupDate/dropDate default relative to "now" on a fresh visit; a persisted search's own
+    // dates still win.
+    dispatch({ type: 'HYDRATE', state: { ...defaultTripDates(), ...saved } })
     hydratedRef.current = true
   }, [])
 

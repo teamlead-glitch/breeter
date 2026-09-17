@@ -18,9 +18,12 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
   const { tripType, stops } = state
   const [addingStop, setAddingStop] = useState(false)
   const [stopInput, setStopInput] = useState('')
-  const [errors, setErrors] = useState<{ from?: boolean; to?: boolean }>({})
+  const [errors, setErrors] = useState<{ from?: boolean; to?: boolean; pastDate?: boolean; dropBeforePickup?: boolean }>({})
+  const [alertMessages, setAlertMessages] = useState<{ id: 'from' | 'to' | 'same' | 'pastDate' | 'dropBeforePickup'; text: string }[]>([])
   const fromInputRef = useRef<HTMLInputElement>(null)
   const toInputRef = useRef<HTMLInputElement>(null)
+  const pickupDateRef = useRef<HTMLDivElement>(null)
+  const dropDateRef = useRef<HTMLDivElement>(null)
 
   const saveStop = () => {
     const value = stopInput.trim()
@@ -65,6 +68,7 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
                 onChange={e => {
                   dispatch({ type: 'SET_FROM', value: e.target.value })
                   if (errors.from) setErrors(prev => ({ ...prev, from: false }))
+                  setAlertMessages(prev => prev.filter(m => m.id !== 'from' && m.id !== 'same'))
                 }}
                 className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint"
                 placeholder="Pickup city"
@@ -133,6 +137,7 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
                 onChange={e => {
                   dispatch({ type: 'SET_TO', value: e.target.value })
                   if (errors.to) setErrors(prev => ({ ...prev, to: false }))
+                  setAlertMessages(prev => prev.filter(m => m.id !== 'to' && m.id !== 'same'))
                 }}
                 className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint"
                 placeholder="Drop city"
@@ -141,30 +146,54 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
           </div>
         </div>
 
-        <div className="flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+        <div ref={pickupDateRef} className={`flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 transition-colors ${
+          errors.pastDate ? 'border-red-300' : 'border-transparent focus-within:border-forest/25'
+        }`}>
           <CalendarClock size={15} className="text-forest flex-shrink-0" />
           <div className="min-w-0">
             <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Pickup Date & Time</p>
             <DateTimePicker
               value={state.pickupDate}
-              onChange={value => dispatch({ type: 'SET_PICKUP_DATE', value })}
+              onChange={value => {
+                dispatch({ type: 'SET_PICKUP_DATE', value })
+                if (errors.pastDate || errors.dropBeforePickup) {
+                  setErrors(prev => ({ ...prev, pastDate: false, dropBeforePickup: false }))
+                }
+                setAlertMessages(prev => prev.filter(m => m.id !== 'pastDate' && m.id !== 'dropBeforePickup'))
+              }}
             />
           </div>
         </div>
 
         {(tripType === 'Round Trip' || tripType === 'Hourly Rental') && (
-          <div className="flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+          <div ref={dropDateRef} className={`flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 transition-colors ${
+            errors.dropBeforePickup ? 'border-red-300' : 'border-transparent focus-within:border-forest/25'
+          }`}>
             <CalendarClock size={15} className="text-ink-faint flex-shrink-0" />
             <div className="min-w-0">
               <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Drop Date & Time</p>
               <DateTimePicker
                 value={state.dropDate}
-                onChange={value => dispatch({ type: 'SET_DROP_DATE', value })}
+                onChange={value => {
+                  dispatch({ type: 'SET_DROP_DATE', value })
+                  if (errors.dropBeforePickup) setErrors(prev => ({ ...prev, dropBeforePickup: false }))
+                  setAlertMessages(prev => prev.filter(m => m.id !== 'dropBeforePickup'))
+                }}
               />
             </div>
           </div>
         )}
       </div>
+
+      {alertMessages.length > 0 && (
+        <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+          <ul className="space-y-1">
+            {alertMessages.map(m => (
+              <li key={m.id} className="text-xs font-medium text-red-700">{m.text}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {tripType === 'Hourly Rental' && (
         <div role="radiogroup" aria-label="Hourly package" className="flex items-center gap-2 mb-4">
@@ -194,19 +223,50 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
       <div className="flex items-center gap-2 flex-wrap">
         <div className="flex-1" />
         <Link href="/search" onClick={e => {
-            const nextErrors: { from?: boolean; to?: boolean } = {}
-            if (!state.from.trim()) nextErrors.from = true
-            if (!state.to.trim()) nextErrors.to = true
+            const nextErrors: { from?: boolean; to?: boolean; pastDate?: boolean; dropBeforePickup?: boolean } = {}
+            const messages: { id: 'from' | 'to' | 'same' | 'pastDate' | 'dropBeforePickup'; text: string }[] = []
+            const from = state.from.trim()
+            const to = state.to.trim()
 
-            if (nextErrors.from || nextErrors.to) {
+            if (!from) { nextErrors.from = true; messages.push({ id: 'from', text: 'Enter a pickup city.' }) }
+            if (!to) { nextErrors.to = true; messages.push({ id: 'to', text: 'Enter a drop city.' }) }
+            if (from && to && from.toLowerCase() === to.toLowerCase()) {
+              nextErrors.from = true
+              nextErrors.to = true
+              messages.push({ id: 'same', text: "Pickup and drop locations can't be the same." })
+            }
+
+            const pickup = new Date(state.pickupDate)
+            if (!Number.isNaN(pickup.getTime()) && pickup.getTime() < Date.now()) {
+              nextErrors.pastDate = true
+              messages.push({ id: 'pastDate', text: "Pickup date & time can't be in the past." })
+            }
+
+            if (tripType === 'Round Trip' || tripType === 'Hourly Rental') {
+              const drop = new Date(state.dropDate)
+              if (!Number.isNaN(pickup.getTime()) && !Number.isNaN(drop.getTime()) && drop.getTime() < pickup.getTime()) {
+                nextErrors.dropBeforePickup = true
+                messages.push({ id: 'dropBeforePickup', text: "Drop date & time can't be before pickup." })
+              }
+            }
+
+            if (messages.length > 0) {
               e.preventDefault()
               setErrors(nextErrors)
-              const target = nextErrors.from ? fromInputRef.current : toInputRef.current
+              setAlertMessages(messages)
+              const target = nextErrors.from
+                ? fromInputRef.current
+                : nextErrors.to
+                  ? toInputRef.current
+                  : nextErrors.pastDate
+                    ? pickupDateRef.current?.querySelector<HTMLInputElement>('input[type="date"]')
+                    : dropDateRef.current?.querySelector<HTMLInputElement>('input[type="date"]')
               target?.focus()
               target?.scrollIntoView({ behavior: 'smooth', block: 'center' })
               return
             }
 
+            setAlertMessages([])
             dispatch({ type: 'TRIGGER_SEARCH' })
             onSearch?.()
           }}
