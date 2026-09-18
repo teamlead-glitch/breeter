@@ -69,7 +69,7 @@ export default function HomePage() {
       </section> */}
 
       {/* ─── CTA STRIP ─────────────────────────────────────── */}
-      <section className="bg-ivory py-20 px-4 sm:px-6 lg:px-8">
+      {/* <section className="bg-ivory py-20 px-4 sm:px-6 lg:px-8">
         <div className="relative max-w-7xl mx-auto rounded-4xl bg-forest overflow-hidden">
           <div className="pointer-events-none absolute -top-16 -right-16 w-72 h-72 bg-cta/25 rounded-full blur-[100px]" />
           <div className="pointer-events-none absolute -bottom-20 left-10 w-64 h-64 bg-gold/15 rounded-full blur-[100px]" />
@@ -85,7 +85,7 @@ export default function HomePage() {
             <StartBookingButton />
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   )
 }
