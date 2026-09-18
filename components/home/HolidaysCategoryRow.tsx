@@ -25,13 +25,13 @@ export default function HolidaysCategoryRow({ index }: { index: string }) {
     <div>
       <CategoryRowHeader index={index} title="Holidays" viewAllHref="/holidays" />
       {loading ? (
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="h-96 rounded-[1.75rem] bg-white border border-black/5 animate-pulse" />
+            <div key={i} className="h-64 rounded-[1.75rem] bg-white border border-black/5 animate-pulse sm:h-96" />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
           {packages.map(pkg => (
             <PackageCard key={pkg.slug} pkg={pkg} />
           ))}

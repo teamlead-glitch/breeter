@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { apiGet } from '@/lib/apiService'
 import { CabCategoriesData, CabCategory } from '@/types/cabs'
 import { VehicleTagsData } from '@/types/vehicleTags'
-import CabCategoryCard from '@/components/cabs/CabCategoryCard'
+import HomeVehicleCard from './HomeVehicleCard'
 import CategoryRowHeader from './CategoryRowHeader'
 
 const PREVIEW_COUNT = 4
@@ -56,13 +56,16 @@ export default function VehicleCategoryRow({
       {loading ? (
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="h-72 rounded-3xl bg-white border border-black/10 animate-pulse" />
+            <div key={i} className="flex flex-col items-center gap-3">
+              <div className="mx-auto aspect-square w-full max-w-[110px] animate-pulse rounded-full bg-ivory sm:max-w-[130px]" />
+              <div className="h-3 w-3/4 animate-pulse rounded-full bg-ivory" />
+            </div>
           ))}
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {vehicles.map(v => (
-            <CabCategoryCard key={v.id} v={v} />
+            <HomeVehicleCard key={v.id} v={v} />
           ))}
         </div>
       )}

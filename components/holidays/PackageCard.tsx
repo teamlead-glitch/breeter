@@ -7,14 +7,14 @@ export default function PackageCard({ pkg }: { pkg: FeaturedPackage }) {
   return (
     <Link
       href={`/holidays/${pkg.slug}`}
-      className="group relative isolate flex h-full min-h-96 flex-col overflow-hidden rounded-[1.75rem] bg-forest-mid"
+      className="group relative isolate flex h-full min-h-56 flex-col overflow-hidden rounded-2xl bg-forest-mid sm:min-h-72 sm:rounded-[1.75rem] lg:min-h-96"
     >
       {pkg.image ? (
         <Image
           src={pkg.image.url}
           alt={pkg.image.alt_text || pkg.title}
           fill
-          sizes="(max-width:768px) 100vw, (max-width:1024px) 50vw, 33vw"
+          sizes="(max-width:640px) 50vw, (max-width:1024px) 50vw, 33vw"
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
         />
       ) : (
@@ -25,18 +25,18 @@ export default function PackageCard({ pkg }: { pkg: FeaturedPackage }) {
 
       <div className="absolute inset-0 bg-gradient-to-t from-ink from-10% via-ink/70 via-45% to-transparent" />
 
-      <span className="absolute top-5 left-5 rounded-full bg-white/95 px-3 py-1.5 text-xs font-bold text-forest backdrop-blur-sm">
+      <span className="absolute top-2 left-2 rounded-full bg-white/95 px-2 py-1 text-[10px] font-bold text-forest backdrop-blur-sm sm:top-5 sm:left-5 sm:px-3 sm:py-1.5 sm:text-xs">
         {pkg.country.name}
       </span>
-      <span className="absolute top-5 right-5 font-mono text-sm font-semibold text-white/80">
+      <span className="absolute top-2 right-2 font-mono text-[10px] font-semibold text-white/80 sm:top-5 sm:right-5 sm:text-sm">
         {pkg.nights}N / {pkg.days}D
       </span>
 
-      <div className="relative z-10 mt-auto p-7 md:p-8">
-        <h3 className="mb-2 font-display text-2xl font-bold text-white md:text-3xl">{pkg.title}</h3>
-        <p className="mb-5 max-w-md text-sm leading-relaxed text-white/85 line-clamp-2">{pkg.short_description}</p>
-        <span className="inline-flex items-center gap-2 rounded-xl bg-cta px-5 py-2.5 text-sm font-bold text-white transition-colors group-hover:bg-cta-dark">
-          Enquire now <ArrowUpRight size={15} />
+      <div className="relative z-10 mt-auto p-3 sm:p-7 md:p-8">
+        <h3 className="mb-1 font-display text-sm font-bold text-white sm:mb-2 sm:text-2xl md:text-3xl">{pkg.title}</h3>
+        <p className="mb-2 line-clamp-2 max-w-md text-[11px] leading-relaxed text-white/85 sm:mb-5 sm:text-sm">{pkg.short_description}</p>
+        <span className="inline-flex items-center gap-1.5 rounded-lg bg-cta px-2.5 py-1.5 text-[11px] font-bold text-white transition-colors group-hover:bg-cta-dark sm:gap-2 sm:rounded-xl sm:px-5 sm:py-2.5 sm:text-sm">
+          Enquire now <ArrowUpRight size={13} className="sm:hidden" /><ArrowUpRight size={15} className="hidden sm:block" />
         </span>
       </div>
     </Link>
