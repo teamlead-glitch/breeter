@@ -49,9 +49,9 @@ export default function CabsGrid({ type }: { type: string }) {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
         {[1, 2, 3].map(i => (
-          <div key={i} className="h-64 rounded-2xl bg-white border border-black/10 animate-pulse" />
+          <div key={i} className="h-72 rounded-3xl bg-white border border-black/10 animate-pulse" />
         ))}
       </div>
     )
@@ -74,7 +74,7 @@ export default function CabsGrid({ type }: { type: string }) {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
       {cabs.map(v => (
         <CabCategoryCard key={v.id} v={v} />
       ))}

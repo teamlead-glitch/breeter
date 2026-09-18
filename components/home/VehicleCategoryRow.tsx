@@ -56,7 +56,7 @@ export default function VehicleCategoryRow({
       {loading ? (
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="h-64 rounded-2xl bg-white border border-black/10 animate-pulse" />
+            <div key={i} className="h-72 rounded-3xl bg-white border border-black/10 animate-pulse" />
           ))}
         </div>
       ) : (

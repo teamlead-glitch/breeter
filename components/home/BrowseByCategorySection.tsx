@@ -61,16 +61,16 @@ export default function BrowseByCategorySection() {
         </div>
 
         <div className="space-y-14">
-          <VehicleCategoryRow index="01" title="Cabs" viewAllHref="/cabs" />
-          <VehicleCategoryRow index="02" title="Luxury Cabs" tagTitle="Luxury" viewAllHref="/cabs?type=luxury" />
+          <HolidaysCategoryRow index="01" />
+          <VehicleCategoryRow index="02" title="Cabs" viewAllHref="/cabs" />
           {/* Van and Bus both pull the same "Van/Bus" tagged vehicles for now — the backend only
              has one combined tag. Once it can tell them apart (a dedicated tag or query param),
              point each row at its own filtered result. */}
           <VehicleCategoryRow index="03" title="Van" tagTitle="Van/Bus" viewAllHref="/cabs?type=bus-van" />
           <VehicleCategoryRow index="04" title="Bus" tagTitle="Van/Bus" viewAllHref="/cabs?type=bus-van" />
-          <HolidaysCategoryRow index="05" />
-          <StaticEnquiryRow id="hotel" index="06" title="Hotel" items={HOTEL_ITEMS} />
-          <StaticEnquiryRow index="07" title="Corporate Bookings" items={CORPORATE_ITEMS} />
+          <VehicleCategoryRow index="05" title="Luxury Cabs" tagTitle="Luxury" viewAllHref="/cabs?type=luxury" />
+          <StaticEnquiryRow index="06" title="Corporate Bookings" items={CORPORATE_ITEMS} />
+          <StaticEnquiryRow id="hotel" index="07" title="Hotel" items={HOTEL_ITEMS} />
         </div>
       </div>
     </section>
