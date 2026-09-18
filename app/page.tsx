@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import HeroBanner from '@/components/home/HeroBanner'
-import VehicleSwiper from '@/components/home/VehicleSwiper'
+import BrowseByCategorySection from '@/components/home/BrowseByCategorySection'
 import StartBookingButton from '@/components/home/StartBookingButton'
 import FeaturedPackagesSection from '@/components/home/FeaturedPackagesSection'
 import { whyBreeter } from '@/lib/data'
@@ -30,8 +30,8 @@ export default function HomePage() {
       {/* ─── HERO ──────────────────────────────────────────── */}
       <HeroBanner />
 
-      {/* ─── VEHICLE SWIPER (inverted dark section) ────────── */}
-      <VehicleSwiper />
+      {/* ─── BROWSE BY CATEGORY ─────────────────────────────── */}
+      <BrowseByCategorySection />
 
       {/* ─── FEATURED PACKAGES ─────────────────────────────── */}
       {/* <FeaturedPackagesSection /> */}
