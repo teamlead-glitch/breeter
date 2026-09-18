@@ -16,8 +16,10 @@ const ROW_2 = ITEMS.slice(3)
 function NavItem({ item }: { item: (typeof ITEMS)[number] }) {
   const Icon = item.icon
   return (
-    <Link href={item.href} className="flex flex-col items-center gap-2 text-ink-muted transition-colors hover:text-cta">
-      <Icon size={24} strokeWidth={1.75} />
+    <Link href={item.href} className="group flex flex-col items-center gap-2 text-ink-muted transition-colors hover:text-cta">
+      <span className="grid h-14 w-14 place-items-center rounded-full bg-ivory-dark text-ink-muted transition-colors group-hover:bg-cta/10 group-hover:text-cta sm:h-16 sm:w-16">
+        <Icon size={24} strokeWidth={1.75} />
+      </span>
       <span className="whitespace-nowrap text-xs font-semibold">{item.label}</span>
     </Link>
   )
@@ -25,9 +27,9 @@ function NavItem({ item }: { item: (typeof ITEMS)[number] }) {
 
 export default function QuickNav() {
   return (
-    <section className="bg-ivory py-6 sm:py-8">
+    <section className="bg-white py-6 sm:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-black/5 bg-white px-4 py-5 shadow-lg shadow-black/5 sm:px-6">
+        <div className="px-4 py-5 sm:px-6">
           {/* Mobile: two separate rows of 3 */}
           <div className="flex flex-col gap-5 sm:hidden">
             <div className="grid grid-cols-3 gap-x-2">
