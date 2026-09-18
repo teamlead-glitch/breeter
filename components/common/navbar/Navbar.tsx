@@ -1,35 +1,18 @@
 'use client'
-import { Suspense, useState, useEffect } from 'react'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
 import { useBookModal } from '@/components/common/BookModalContext'
 import NavbarLogo from './NavbarLogo'
-import DesktopNavLinks from './DesktopNavLinks'
 import MobileMenuDrawer from './MobileMenuDrawer'
 import BookCabModal from './BookCabModal'
 
 export default function Navbar() {
-  return (
-    <Suspense fallback={<NavbarShell currentType={null} />}>
-      <NavbarWithSearchParams />
-    </Suspense>
-  )
-}
-
-function NavbarWithSearchParams() {
-  const currentType = useSearchParams().get('type')
-  return <NavbarShell currentType={currentType} />
-}
-
-function NavbarShell({ currentType }: { currentType: string | null }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const { bookOpen, openBookModal, closeBookModal } = useBookModal()
   const pathname = usePathname()
   const isHome = pathname === '/'
-
-  // Icon menu switches on once the transparent home hero nav is scrolled past, and stays on everywhere else
-  const compact = !isHome || scrolled || mobileOpen
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 56)
@@ -56,8 +39,6 @@ function NavbarShell({ currentType }: { currentType: string | null }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:relative">
           <div className="flex items-center h-16 gap-6">
             <NavbarLogo />
-
-            {compact && <DesktopNavLinks pathname={pathname} currentType={currentType} />}
 
             {/* Right side — always visible, even on the unscrolled home hero */}
             <div className="ml-auto flex items-center gap-3">
