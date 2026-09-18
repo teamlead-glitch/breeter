@@ -75,7 +75,7 @@ export default async function PackageDetailPage({ params }: PageProps) {
                 <h2 className="font-bold text-ink text-lg mb-3">Overview</h2>
                 {pkg.description ? (
                   <div
-                    className="text-ink-muted text-sm leading-relaxed [&_p]:mb-3 [&_p:last-child]:mb-0"
+                    className="text-ink-muted text-sm leading-relaxed [&_p]:mb-3 [&_p:last-child]:mb-0 [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-5 [&_ol]:pl-5 [&_ul]:mb-3 [&_ol]:mb-3 [&_li]:mb-1 [&_ul:last-child]:mb-0 [&_ol:last-child]:mb-0"
                     dangerouslySetInnerHTML={{ __html: pkg.description }}
                   />
                 ) : (
