@@ -82,6 +82,7 @@ const TravellerDetailsForm = forwardRef<TravellerDetailsFormHandle, TravellerDet
       setOtpVerified(false)
       setVerifiedBookingId(null)
     }
+    if (errors.phone) setErrors(prev => ({ ...prev, phone: undefined }))
   }
 
   const fieldClass = (hasError?: string) =>
@@ -90,6 +91,23 @@ const TravellerDetailsForm = forwardRef<TravellerDetailsFormHandle, TravellerDet
     }`
 
   const phoneLooksValid = phone.replace(/\D/g, '').length >= 7
+
+  const handleVerifyClick = () => {
+    const nextErrors: FieldErrors = {}
+    if (!name.trim()) nextErrors.name = 'Enter your name'
+    if (!EMAIL_PATTERN.test(email.trim())) nextErrors.email = 'Enter a valid email address'
+
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(prev => ({ ...prev, ...nextErrors }))
+      const firstInvalidInput = nextErrors.name ? nameInputRef.current : emailInputRef.current
+      firstInvalidInput?.focus()
+      firstInvalidInput?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      return
+    }
+
+    setPhoneOtpOpen(true)
+    setVerifyNotice(null)
+  }
 
   return (
     <div className="bg-white rounded-2xl border border-black/5 p-4 sm:p-5">
@@ -102,7 +120,10 @@ const TravellerDetailsForm = forwardRef<TravellerDetailsFormHandle, TravellerDet
             name="name"
             autoComplete="name"
             value={name}
-            onChange={e => setName(e.target.value)}
+            onChange={e => {
+              setName(e.target.value)
+              if (errors.name) setErrors(prev => ({ ...prev, name: undefined }))
+            }}
             className={fieldClass(errors.name)}
             placeholder="Your full name"
           />
@@ -116,7 +137,10 @@ const TravellerDetailsForm = forwardRef<TravellerDetailsFormHandle, TravellerDet
             type="email"
             autoComplete="email"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={e => {
+              setEmail(e.target.value)
+              if (errors.email) setErrors(prev => ({ ...prev, email: undefined }))
+            }}
             className={fieldClass(errors.email)}
             placeholder="you@email.com"
           />
@@ -149,7 +173,7 @@ const TravellerDetailsForm = forwardRef<TravellerDetailsFormHandle, TravellerDet
             <button
               ref={verifyButtonRef}
               type="button"
-              onClick={() => { setPhoneOtpOpen(true); setVerifyNotice(null) }}
+              onClick={handleVerifyClick}
               disabled={!phoneLooksValid}
               className="inline-flex flex-none items-center justify-center rounded-full border border-cta px-4 py-2.5 text-xs font-bold text-cta transition-colors hover:bg-cta hover:text-white disabled:cursor-not-allowed disabled:border-ink-faint/30 disabled:text-ink-faint disabled:hover:bg-transparent">
               Verify number
