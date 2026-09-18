@@ -1,17 +1,35 @@
+'use client'
 import Image from 'next/image'
+import { useBookModal } from '@/components/common/BookModalContext'
 
 export default function HeroBanner() {
+  const { openBookModal } = useBookModal()
+
   return (
-    <section className="relative h-[55vh] overflow-hidden sm:h-[65vh] md:h-[75vh]">
+    <button
+      type="button"
+      onClick={openBookModal}
+      aria-label="Book a cab"
+      className="relative block h-[55vh] w-full overflow-hidden sm:h-[65vh] md:h-[75vh]"
+    >
       <Image
-        src="/images/banner.png"
-        alt="Black car on a night highway with a route pin trail and city skyline"
+        src="/images/hero-banner-mobile.svg"
+        alt="Book outstation cabs in minutes — transparent pricing, verified drivers, zero surprises"
         fill
         priority
+        unoptimized
         sizes="100vw"
-        className="object-cover object-center"
+        className="object-cover object-center md:hidden"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink/70" />
-    </section>
+      <Image
+        src="/images/hero-banner-desktop.svg"
+        alt="Book outstation cabs in minutes — transparent pricing, verified drivers, zero surprises"
+        fill
+        priority
+        unoptimized
+        sizes="100vw"
+        className="hidden object-cover object-center md:block"
+      />
+    </button>
   )
 }

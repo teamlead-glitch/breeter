@@ -32,11 +32,11 @@ export default function HomePage() {
       {/* ─── HERO ──────────────────────────────────────────── */}
       <HeroBanner />
 
-      {/* ─── QUICK NAV ─────────────────────────────────────── */}
-      <QuickNav />
-
       {/* ─── MARQUEE ───────────────────────────────────────── */}
       <MarqueeStrip />
+
+      {/* ─── QUICK NAV ─────────────────────────────────────── */}
+      <QuickNav />
 
       {/* ─── BROWSE BY CATEGORY ─────────────────────────────── */}
       <BrowseByCategorySection />
