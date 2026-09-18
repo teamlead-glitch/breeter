@@ -59,6 +59,15 @@ body {
 ::-webkit-scrollbar-track { background: var(--color-ivory); }
 ::-webkit-scrollbar-thumb { background: var(--color-ink-faint); border-radius: 99px; }
 
+/* ── Marquee ── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@utility animate-marquee {
+  animation: marquee 26s linear infinite;
+}
+
 /* ── Swiper overrides ── */
 .swiper-button-next,
 .swiper-button-prev {
