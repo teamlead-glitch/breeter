@@ -1,13 +1,13 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { ChevronRight, Check, X, Palmtree } from 'lucide-react'
+import { ChevronRight, Check, X } from 'lucide-react'
 import { apiGet } from '@/lib/apiService'
 import { mapSeoToMetadata } from '@/lib/seo'
 import { PackageDetailData, PackagesData } from '@/types/packages'
 import PackageEnquiryForm from '@/components/holidays/PackageEnquiryForm'
 import PackageCard from '@/components/holidays/PackageCard'
+import PackageGallery from '@/components/holidays/PackageGallery'
 
 type PageProps = { params: Promise<{ slug: string }> }
 
@@ -41,8 +41,6 @@ export default async function PackageDetailPage({ params }: PageProps) {
   const related = (relatedRes.data?.data ?? []).filter(p => p.id !== pkg.id).slice(0, 3)
 
   const locationLabel = pkg.states.length > 0 ? pkg.states.map(s => s.name).join(', ') : pkg.country.name
-  const [main, second, third] = pkg.images
-  const extraImageCount = pkg.images.length > 3 ? pkg.images.length - 3 : 0
 
   return (
     <>
@@ -60,32 +58,7 @@ export default async function PackageDetailPage({ params }: PageProps) {
       <div className="bg-ivory min-h-screen">
         {/* Gallery */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 h-64 md:h-80 mb-8 rounded-2xl overflow-hidden">
-            {main ? (
-              <div className="relative col-span-2 row-span-2 md:col-span-2">
-                <Image src={main.url} alt={main.alt_text || pkg.title} fill sizes="(max-width:768px) 100vw, 66vw" className="object-cover" />
-              </div>
-            ) : (
-              <div className="col-span-2 row-span-2 md:col-span-2 grid place-items-center bg-white">
-                <Palmtree size={40} className="text-ink-faint" />
-              </div>
-            )}
-            {second && (
-              <div className="relative hidden md:block">
-                <Image src={second.url} alt={second.alt_text || `${pkg.title} 2`} fill sizes="33vw" className="object-cover" />
-              </div>
-            )}
-            {third && (
-              <div className="relative hidden md:block">
-                <Image src={third.url} alt={third.alt_text || `${pkg.title} 3`} fill sizes="33vw" className={`object-cover ${extraImageCount > 0 ? 'opacity-50' : ''}`} />
-                {extraImageCount > 0 && (
-                  <div className="absolute inset-0 bg-forest/60 flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">+{extraImageCount} more</span>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+          <PackageGallery images={pkg.images} title={pkg.title} />
 
           <div className="flex gap-8 flex-col lg:flex-row items-start">
             {/* Main content */}
