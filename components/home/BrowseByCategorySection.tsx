@@ -39,7 +39,7 @@ export default function BrowseByCategorySection() {
           <VehicleCategoryRow index="03" title="Van" tagTitle="Van/Bus" viewAllHref="/cabs?type=bus-van" />
           <VehicleCategoryRow index="04" title="Bus" tagTitle="Van/Bus" viewAllHref="/cabs?type=bus-van" />
           <HolidaysCategoryRow index="05" />
-          <StaticEnquiryRow index="06" title="Hotel" items={HOTEL_ITEMS} />
+          <StaticEnquiryRow id="hotel" index="06" title="Hotel" items={HOTEL_ITEMS} />
           <StaticEnquiryRow index="07" title="Corporate Bookings" items={CORPORATE_ITEMS} />
         </div>
       </div>

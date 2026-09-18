@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import HeroBanner from '@/components/home/HeroBanner'
+import QuickNav from '@/components/home/QuickNav'
 import BrowseByCategorySection from '@/components/home/BrowseByCategorySection'
 import StartBookingButton from '@/components/home/StartBookingButton'
 import FeaturedPackagesSection from '@/components/home/FeaturedPackagesSection'
@@ -29,6 +30,9 @@ export default function HomePage() {
     <>
       {/* ─── HERO ──────────────────────────────────────────── */}
       <HeroBanner />
+
+      {/* ─── QUICK NAV ─────────────────────────────────────── */}
+      <QuickNav />
 
       {/* ─── BROWSE BY CATEGORY ─────────────────────────────── */}
       <BrowseByCategorySection />

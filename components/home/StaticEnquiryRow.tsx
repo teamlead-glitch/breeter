@@ -7,10 +7,12 @@ import EnquiryModal from './EnquiryModal'
 export type StaticCategoryItem = { name: string; desc: string; icon: LucideIcon }
 
 export default function StaticEnquiryRow({
+  id,
   index,
   title,
   items,
 }: {
+  id?: string
   index: string
   title: string
   items: StaticCategoryItem[]
@@ -18,7 +20,7 @@ export default function StaticEnquiryRow({
   const [active, setActive] = useState<StaticCategoryItem | null>(null)
 
   return (
-    <div>
+    <div id={id} className={id ? 'scroll-mt-24' : undefined}>
       <CategoryRowHeader index={index} title={title} />
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {items.map(item => {
