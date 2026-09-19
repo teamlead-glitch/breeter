@@ -1,37 +1,119 @@
-<svg width="1600" height="750" viewBox="0 0 1600 750" xmlns="http://www.w3.org/2000/svg">
+<svg width="1600" height="750" viewBox="0 0 1600 750" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0F3A1B"/>
-      <stop offset="55%" stop-color="#145225"/>
-      <stop offset="100%" stop-color="#1B7A33"/>
+      <stop offset="0%" stop-color="#0F5A24"/>
+      <stop offset="50%" stop-color="#1B7A33"/>
+      <stop offset="100%" stop-color="#289845"/>
     </linearGradient>
-    <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#289845" stop-opacity="0.55"/>
-      <stop offset="100%" stop-color="#289845" stop-opacity="0"/>
+    <radialGradient id="glowC" cx="50%" cy="45%" r="50%">
+      <stop offset="0%" stop-color="#7BE39A" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#7BE39A" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="glow2" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#D42929" stop-opacity="0.3"/>
-      <stop offset="100%" stop-color="#D42929" stop-opacity="0"/>
+    <radialGradient id="disc" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
     </radialGradient>
+    <linearGradient id="pinGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F26B5E"/>
+      <stop offset="100%" stop-color="#C62828"/>
+    </linearGradient>
+    <linearGradient id="carBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#DDE5E0"/>
+    </linearGradient>
+    <linearGradient id="suitGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F9D060"/>
+      <stop offset="100%" stop-color="#DE9A17"/>
+    </linearGradient>
+
+    <g id="pinSmall">
+      <path d="M0,0 C0,0 -14,-18 -14,-30 A14,14 0 1 1 14,-30 C14,-18 0,0 0,0 Z" fill="#FFFFFF" opacity="0.92"/>
+      <circle cx="0" cy="-30" r="5.5" fill="#1B7A33"/>
+    </g>
+    <path id="spark" d="M0,-10 L2.5,-2.5 L10,0 L2.5,2.5 L0,10 L-2.5,2.5 L-10,0 L-2.5,-2.5 Z" fill="#FFFFFF"/>
+    <g id="cloud" fill="#FFFFFF" opacity="0.14">
+      <circle cx="0" cy="0" r="18"/>
+      <circle cx="26" cy="-8" r="24"/>
+      <circle cx="54" cy="0" r="18"/>
+      <rect x="-18" y="0" width="90" height="18" rx="9"/>
+    </g>
+
+    <g id="illus">
+      <circle cx="350" cy="230" r="200" fill="url(#disc)"/>
+
+      <ellipse cx="350" cy="414" rx="300" ry="22" fill="#0B3016" opacity="0.35"/>
+      <path d="M20,402 C150,382 250,424 350,412 C450,400 550,382 680,400" fill="none" stroke="#FFFFFF" stroke-opacity="0.5" stroke-width="4" stroke-dasharray="3 14" stroke-linecap="round"/>
+
+      <!-- Map pin -->
+      <path d="M350,412 C350,412 258,300 258,196 A92,92 0 1 1 442,196 C442,300 350,412 350,412 Z" fill="url(#pinGrad)"/>
+      <circle cx="350" cy="196" r="40" fill="#FFFFFF"/>
+      <circle cx="350" cy="196" r="17" fill="#D42929"/>
+      <path d="M280,160 A76,76 0 0 1 326,116" fill="none" stroke="#FFFFFF" stroke-opacity="0.38" stroke-width="9" stroke-linecap="round"/>
+
+      <!-- Cab -->
+      <g transform="translate(105,331)">
+        <rect x="100" y="-9" width="36" height="11" rx="3" fill="#FFD54F"/>
+        <text x="118" y="0" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="800" fill="#1E272B">CAB</text>
+        <path d="M38,32 C46,8 66,0 96,0 L138,0 C158,0 172,14 182,32 Z" fill="url(#carBody)"/>
+        <rect x="0" y="30" width="200" height="38" rx="15" fill="url(#carBody)"/>
+        <path d="M50,30 C56,14 70,7 92,7 L100,7 L100,30 Z" fill="#2F4A56"/>
+        <path d="M108,7 L138,7 C152,7 162,17 168,30 L108,30 Z" fill="#2F4A56"/>
+        <line x1="104" y1="8" x2="104" y2="46" stroke="#C4CFCB" stroke-width="2"/>
+        <rect x="8" y="48" width="184" height="5" rx="2.5" fill="#D42929"/>
+        <rect x="190" y="38" width="10" height="8" rx="3" fill="#FFD54F"/>
+        <rect x="0" y="38" width="8" height="8" rx="3" fill="#EF5350"/>
+        <circle cx="46" cy="66" r="15" fill="#1E272B"/>
+        <circle cx="46" cy="66" r="7" fill="#C9D3D6"/>
+        <circle cx="154" cy="66" r="15" fill="#1E272B"/>
+        <circle cx="154" cy="66" r="7" fill="#C9D3D6"/>
+      </g>
+
+      <!-- Suitcase -->
+      <g transform="translate(470,262)">
+        <path d="M40,0 V-14 A8,8 0 0 1 48,-22 H72 A8,8 0 0 1 80,-14 V0" fill="none" stroke="#8A5A0B" stroke-width="6" stroke-linecap="round"/>
+        <rect width="120" height="150" rx="20" fill="url(#suitGrad)"/>
+        <rect x="30" width="10" height="150" fill="#000000" opacity="0.16"/>
+        <rect x="80" width="10" height="150" fill="#000000" opacity="0.16"/>
+        <rect x="10" y="14" width="9" height="96" rx="4.5" fill="#FFFFFF" opacity="0.3"/>
+        <circle cx="26" cy="152" r="8" fill="#1E272B"/>
+        <circle cx="94" cy="152" r="8" fill="#1E272B"/>
+      </g>
+
+      <use href="#pinSmall" transform="translate(96,190) scale(1.15)"/>
+      <use href="#pinSmall" transform="translate(612,160) scale(1.25)"/>
+      <use href="#pinSmall" transform="translate(586,330) scale(0.8)"/>
+      <use href="#spark" transform="translate(178,96) scale(1.1)" opacity="0.85"/>
+      <use href="#spark" transform="translate(540,80)" opacity="0.85"/>
+      <use href="#spark" transform="translate(650,250) scale(0.8)" opacity="0.8"/>
+      <use href="#spark" transform="translate(56,300) scale(0.8)" opacity="0.8"/>
+      <use href="#cloud" transform="translate(70,110)"/>
+      <use href="#cloud" transform="translate(560,205) scale(0.8)"/>
+    </g>
   </defs>
 
   <rect width="1600" height="750" fill="url(#bg)"/>
-  <circle cx="1250" cy="375" r="380" fill="url(#glow1)"/>
-  <circle cx="120" cy="375" r="300" fill="url(#glow2)"/>
+  <circle cx="800" cy="300" r="520" fill="url(#glowC)"/>
 
-  <!-- All content kept inside a centered safe band (roughly y=195 to y=555) so object-cover
-       cropping on real viewport aspect ratios never cuts it off. -->
+  <!-- Side decorations to fill the wide canvas -->
+  <use href="#cloud" transform="translate(150,190) scale(1.3)"/>
+  <use href="#cloud" transform="translate(1290,250) scale(1.4)"/>
+  <use href="#pinSmall" transform="translate(300,330) scale(1.3)"/>
+  <use href="#pinSmall" transform="translate(1330,420) scale(1.1)"/>
+  <use href="#spark" transform="translate(220,320) scale(1.2)" opacity="0.8"/>
+  <use href="#spark" transform="translate(1420,170) scale(1.3)" opacity="0.8"/>
+  <use href="#spark" transform="translate(1250,470) scale(0.9)" opacity="0.7"/>
 
-  <!-- Copy block, centered across the full canvas -->
-  <text x="800" y="255" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="4" fill="#8FE0A6">SOUTH INDIA, DOOR TO DOOR</text>
-  <text x="800" y="330" text-anchor="middle" font-family="Arial, sans-serif" font-size="60" font-weight="800" fill="#FFFFFF">Book outstation cabs</text>
-  <text x="800" y="398" text-anchor="middle" font-family="Arial, sans-serif" font-size="60" font-weight="800" fill="#FFFFFF">in minutes</text>
-  <text x="800" y="444" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#E7F5EC" opacity="0.85">Transparent pricing, verified drivers, zero surprises.</text>
+  <!-- Illustration + copy live inside the safe band (y=120 to y=680) so the navbar and
+       object-cover cropping never clip them. -->
+  <use href="#illus" transform="translate(527,112) scale(0.78)"/>
 
-  <g transform="translate(695,478)">
-    <rect x="0" y="0" width="210" height="58" rx="29" fill="#FFFFFF"/>
-    <text x="32" y="37" font-family="Arial, sans-serif" font-size="20" font-weight="800" fill="#145225">Book now</text>
-    <circle cx="178" cy="29" r="15" fill="#1B7A33"/>
-    <path d="M172,29 L184,29 M178,23 L184,29 L178,35" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="800" y="486" text-anchor="middle" font-family="Arial, sans-serif" font-size="23" fill="#FFFFFF" opacity="0.92">Outstation cabs, hourly rentals &amp; holiday packages</text>
+  <text x="800" y="542" text-anchor="middle" font-family="Arial, sans-serif" font-size="50" font-weight="800" fill="#FFFFFF">Transparent pricing, zero surprises</text>
+
+  <g transform="translate(688,562)">
+    <rect x="0" y="0" width="224" height="54" rx="27" fill="#0F3A1B"/>
+    <text x="32" y="35" font-family="Arial, sans-serif" font-size="20" font-weight="800" fill="#FFFFFF">Book now</text>
+    <circle cx="192" cy="27" r="14" fill="#FFFFFF"/>
+    <path d="M186,27 L198,27 M192,21 L198,27 L192,33" fill="none" stroke="#145225" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 </svg>

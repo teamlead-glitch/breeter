@@ -16,8 +16,8 @@ const ROW_2 = ITEMS.slice(3)
 function NavItem({ item }: { item: (typeof ITEMS)[number] }) {
   const Icon = item.icon
   return (
-    <Link href={item.href} className="group flex flex-col items-center gap-2 text-ink-muted transition-colors hover:text-cta">
-      <span className="grid h-14 w-14 place-items-center rounded-full bg-ivory-dark text-ink-muted transition-colors group-hover:bg-cta/10 group-hover:text-cta sm:h-16 sm:w-16">
+    <Link href={item.href} className="group flex flex-col items-center gap-2 text-ink transition-colors hover:text-cta">
+      <span className="grid h-14 w-14 place-items-center rounded-full bg-gradient-to-br from-cta-light to-cta-dark text-white shadow-md shadow-cta/30 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:shadow-lg group-hover:shadow-cta/40 sm:h-16 sm:w-16">
         <Icon size={24} strokeWidth={1.75} />
       </span>
       <span className="whitespace-nowrap text-xs font-semibold">{item.label}</span>
