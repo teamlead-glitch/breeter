@@ -47,10 +47,10 @@ export default function BrowseByCategorySection() {
       <div className="pointer-events-none absolute -bottom-32 -right-20 h-[28rem] w-[28rem] rounded-full bg-gold/5 blur-[120px]" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 sm:mb-12">
+        {/* <div className="mb-8 sm:mb-12">
           <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-cta">Everything in one place</p>
           <h2 className="font-display text-4xl font-bold text-ink md:text-5xl">Browse by category</h2>
-        </div>
+        </div> */}
 
         <div className="space-y-14">
           <HolidaysCategoryRow index="01" />
@@ -58,8 +58,8 @@ export default function BrowseByCategorySection() {
           {/* Van and Bus both pull the same "Van/Bus" tagged vehicles for now — the backend only
              has one combined tag. Once it can tell them apart (a dedicated tag or query param),
              point each row at its own filtered result. */}
-          <VehicleCategoryRow index="03" title="Van" tagTitle="Van" viewAllHref="/cabs?type=van" square/>
-          <VehicleCategoryRow index="04" title="Bus" tagTitle="Bus" viewAllHref="/cabs?type=bus" square/>
+          <VehicleCategoryRow index="03" title="Van" tagTitle="Van" viewAllHref="/cabs?type=van" square count={3}/>
+          <VehicleCategoryRow index="04" title="Bus" tagTitle="Bus" viewAllHref="/cabs?type=bus" square count={3}/>
           <VehicleCategoryRow index="05" title="Luxury Cabs" tagTitle="Luxury" viewAllHref="/cabs?type=luxury" square />
           {/* Client review only: same Luxury Cabs row, 3 items filling the row. Remove after review. */}
           {/* <VehicleCategoryRow index="05" title="Luxury Cabs (3 items)" tagTitle="Luxury" viewAllHref="/cabs?type=luxury" square count={3} /> */}
