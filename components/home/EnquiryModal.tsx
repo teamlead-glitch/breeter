@@ -26,7 +26,7 @@ function validate(values: FormValues): FormErrors {
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
 
-export default function EnquiryModal({ subject, onClose }: { subject: string; onClose: () => void }) {
+export default function EnquiryModal({ subject, category, onClose }: { subject: string; category: string; onClose: () => void }) {
   const [values, setValues] = useState<FormValues>(EMPTY_VALUES)
   const [errors, setErrors] = useState<FormErrors>({})
   const [status, setStatus] = useState<Status>('idle')
@@ -59,6 +59,7 @@ export default function EnquiryModal({ subject, onClose }: { subject: string; on
       name: values.name.trim(),
       phone: values.phone.trim(),
       email: values.email.trim(),
+      category,
       message: `[${subject}] ${message}`.trim(),
     })
 

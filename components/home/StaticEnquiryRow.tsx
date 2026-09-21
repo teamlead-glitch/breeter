@@ -1,10 +1,10 @@
-﻿'use client'
+'use client'
 import { useState } from 'react'
 import Image from 'next/image'
 import CategoryRowHeader from './CategoryRowHeader'
 import EnquiryModal from './EnquiryModal'
 
-export type StaticCategoryItem = { name: string; image: string }
+export type StaticCategoryItem = { name: string; category: string; image: string }
 
 export default function StaticEnquiryRow({
   id,
@@ -43,7 +43,7 @@ export default function StaticEnquiryRow({
         ))}
       </div>
 
-      {active && <EnquiryModal subject={`${title} — ${active.name}`} onClose={() => setActive(null)} />}
+      {active && <EnquiryModal category={active.category} subject={`${title} — ${active.name}`} onClose={() => setActive(null)} />}
     </div>
   )
 }

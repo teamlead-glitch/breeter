@@ -5,18 +5,22 @@ import StaticEnquiryRow, { StaticCategoryItem } from './StaticEnquiryRow'
 const HOTEL_ITEMS: StaticCategoryItem[] = [
   {
     name: '3 Star',
+    category: '3-star-hotels',
     image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: '4 Star',
+    category: '4-star-hotels',
     image: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: '5 Star',
+    category: '5-star-hotels',
     image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'Homestay',
+    category: 'homestays',
     image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80',
   },
 ]
@@ -24,18 +28,22 @@ const HOTEL_ITEMS: StaticCategoryItem[] = [
 const CORPORATE_ITEMS: StaticCategoryItem[] = [
   {
     name: 'Meetings',
+    category: 'corporate-meeting',
     image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'Incentives',
+    category: 'corporate-incentives',
     image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'Conferences',
+    category: 'corporate-conferences',
     image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'Exhibitions',
+    category: 'corporate-exhibitions',
     image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80',
   },
 ]
