@@ -14,10 +14,12 @@ export default function VehicleCategoryRow({
   tagTitle,
   viewAllHref,
   square = false,
+  count = PREVIEW_COUNT,
 }: {
   index: string
   title: string
   square?: boolean
+  count?: number
   // Matches a title in v1/vehicle-tags (see CabsGrid.tsx) — omit to show the untagged default list.
   tagTitle?: string
   viewAllHref: string
@@ -32,7 +34,7 @@ export default function VehicleCategoryRow({
       setLoading(true)
 
       const params = new URLSearchParams()
-      params.set('per_page', String(PREVIEW_COUNT))
+      params.set('per_page', String(count))
 
       if (tagTitle) {
         const tagsRes = await apiGet<VehicleTagsData>('v1/vehicle-tags?per_page=15')
@@ -42,13 +44,13 @@ export default function VehicleCategoryRow({
 
       const res = await apiGet<CabCategoriesData>(`v1/cab-categories?${params.toString()}`)
       if (cancelled) return
-      if (res.data) setVehicles(res.data.data)
+      if (res.data) setVehicles(res.data.data.slice(0, count))
       setLoading(false)
     }
 
     load()
     return () => { cancelled = true }
-  }, [tagTitle])
+  }, [tagTitle, count])
 
   if (!loading && vehicles.length === 0) return null
 
@@ -56,8 +58,8 @@ export default function VehicleCategoryRow({
     <div>
       <CategoryRowHeader index={index} title={title} viewAllHref={viewAllHref} />
       {loading ? (
-        <div className="grid grid-cols-4 gap-3 sm:gap-6">
-          {[1, 2, 3, 4].map(i => (
+        <div className={`grid gap-3 sm:gap-6 ${count === 3 ? 'grid-cols-3' : 'grid-cols-4'}`}>
+          {Array.from({ length: count }, (_, i) => i).map(i => (
             <div key={i} className="flex flex-col items-center gap-3">
               <div className={`mx-auto aspect-square w-full animate-pulse bg-ivory sm:max-w-[156px] ${square ? 'rounded-2xl' : 'rounded-full'}`} />
               <div className="h-3 w-3/4 animate-pulse rounded-full bg-ivory" />
@@ -65,7 +67,7 @@ export default function VehicleCategoryRow({
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-4 gap-3 sm:gap-6">
+        <div className={`grid gap-3 sm:gap-6 ${count === 3 ? 'grid-cols-3' : 'grid-cols-4'}`}>
           {vehicles.map(v => (
             <HomeVehicleCard key={v.id} v={v} square={square} />
           ))}

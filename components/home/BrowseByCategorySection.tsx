@@ -61,6 +61,8 @@ export default function BrowseByCategorySection() {
           <VehicleCategoryRow index="03" title="Van" tagTitle="Van/Bus" viewAllHref="/cabs?type=bus-van" />
           <VehicleCategoryRow index="04" title="Bus" tagTitle="Van/Bus" viewAllHref="/cabs?type=bus-van" />
           <VehicleCategoryRow index="05" title="Luxury Cabs" tagTitle="Luxury" viewAllHref="/cabs?type=luxury" square />
+          {/* Client review only: same Luxury Cabs row, 3 items filling the row. Remove after review. */}
+          <VehicleCategoryRow index="05" title="Luxury Cabs (3 items)" tagTitle="Luxury" viewAllHref="/cabs?type=luxury" square count={3} />
           <StaticEnquiryRow index="06" title="Corporate Bookings" items={CORPORATE_ITEMS} />
           <StaticEnquiryRow id="hotel" index="07" title="Hotel" items={HOTEL_ITEMS} />
         </div>
