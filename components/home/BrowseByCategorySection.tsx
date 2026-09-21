@@ -60,7 +60,7 @@ export default function BrowseByCategorySection() {
              point each row at its own filtered result. */}
           <VehicleCategoryRow index="03" title="Van" tagTitle="Van/Bus" viewAllHref="/cabs?type=bus-van" />
           <VehicleCategoryRow index="04" title="Bus" tagTitle="Van/Bus" viewAllHref="/cabs?type=bus-van" />
-          <VehicleCategoryRow index="05" title="Luxury Cabs" tagTitle="Luxury" viewAllHref="/cabs?type=luxury" />
+          <VehicleCategoryRow index="05" title="Luxury Cabs" tagTitle="Luxury" viewAllHref="/cabs?type=luxury" square />
           <StaticEnquiryRow index="06" title="Corporate Bookings" items={CORPORATE_ITEMS} />
           <StaticEnquiryRow id="hotel" index="07" title="Hotel" items={HOTEL_ITEMS} />
         </div>
