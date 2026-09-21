@@ -10,7 +10,7 @@ export default function HeroBanner() {
       type="button"
       onClick={openBookModal}
       aria-label="Book a cab"
-      className="relative block h-[55vh] cursor-pointer w-full overflow-hidden sm:h-[65vh] md:h-[75vh]"
+      className="relative block aspect-video w-full cursor-pointer overflow-hidden md:aspect-auto md:h-[75vh]"
     >
       <Image
         src="/images/hero-banner-mobile.svg"
