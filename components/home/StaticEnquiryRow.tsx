@@ -1,10 +1,10 @@
-'use client'
+﻿'use client'
 import { useState } from 'react'
 import Image from 'next/image'
 import CategoryRowHeader from './CategoryRowHeader'
 import EnquiryModal from './EnquiryModal'
 
-export type StaticCategoryItem = { name: string; desc: string; image: string }
+export type StaticCategoryItem = { name: string; image: string }
 
 export default function StaticEnquiryRow({
   id,
@@ -22,29 +22,23 @@ export default function StaticEnquiryRow({
   return (
     <div id={id} className={id ? 'scroll-mt-24' : undefined}>
       <CategoryRowHeader index={index} title={title} />
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-4 gap-2 sm:gap-5">
         {items.map(item => (
           <button
             key={item.name}
             type="button"
             onClick={() => setActive(item)}
-            className="group flex h-full flex-col overflow-hidden rounded-2xl border border-black/10 bg-white text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
-            <div className="relative h-44 flex-shrink-0 overflow-hidden bg-ivory">
+            className="group flex cursor-pointer flex-col items-center text-center transition-transform duration-300 hover:-translate-y-1">
+            <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-ivory shadow-[0_6px_16px_-8px_rgba(0,0,0,0.25)] ring-1 ring-black/5 transition-shadow duration-300 group-hover:shadow-[0_14px_32px_-8px_rgba(27,122,51,0.28)] sm:aspect-[4/3] sm:rounded-3xl">
               <Image
                 src={item.image}
                 alt={item.name}
                 fill
-                sizes="(max-width:640px) 50vw, 25vw"
+                sizes="(max-width:640px) 25vw, 25vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
-              <span className="absolute top-3 right-3 rounded-lg bg-cta/90 px-3 py-1.5 text-xs font-bold text-white backdrop-blur-sm transition-colors group-hover:bg-cta">
-                Enquire →
-              </span>
             </div>
-            <div className="flex flex-1 flex-col p-4">
-              <h3 className="mb-0.5 text-sm font-bold text-ink">{item.name}</h3>
-              <p className="text-xs text-ink-faint">{item.desc}</p>
-            </div>
+            <h3 className="mt-2 line-clamp-2 text-[11px] font-semibold leading-tight text-ink sm:mt-3 sm:text-base">{item.name}</h3>
           </button>
         ))}
       </div>

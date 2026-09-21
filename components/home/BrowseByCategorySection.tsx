@@ -1,26 +1,22 @@
-import VehicleCategoryRow from './VehicleCategoryRow'
+﻿import VehicleCategoryRow from './VehicleCategoryRow'
 import HolidaysCategoryRow from './HolidaysCategoryRow'
 import StaticEnquiryRow, { StaticCategoryItem } from './StaticEnquiryRow'
 
 const HOTEL_ITEMS: StaticCategoryItem[] = [
   {
     name: '3 Star',
-    desc: 'Budget-friendly comfort stays',
     image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: '4 Star',
-    desc: 'Elevated comfort & amenities',
     image: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: '5 Star',
-    desc: 'Luxury stays & fine dining',
     image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'Homestay',
-    desc: 'Local charm, personal touch',
     image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80',
   },
 ]
@@ -28,22 +24,18 @@ const HOTEL_ITEMS: StaticCategoryItem[] = [
 const CORPORATE_ITEMS: StaticCategoryItem[] = [
   {
     name: 'Meetings',
-    desc: 'Boardrooms & business travel',
     image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'Incentives',
-    desc: 'Reward trips for top performers',
     image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'Conferences',
-    desc: 'Large-scale event logistics',
     image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'Exhibitions',
-    desc: 'Trade shows & exhibit travel',
     image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80',
   },
 ]
