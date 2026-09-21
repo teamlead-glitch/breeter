@@ -56,7 +56,7 @@ export default function VehicleCategoryRow({
     <div>
       <CategoryRowHeader index={index} title={title} viewAllHref={viewAllHref} />
       {loading ? (
-        <div className="grid grid-cols-4 gap-2 sm:gap-6">
+        <div className="grid grid-cols-4 gap-3 sm:gap-6">
           {[1, 2, 3, 4].map(i => (
             <div key={i} className="flex flex-col items-center gap-3">
               <div className={`mx-auto aspect-square w-full animate-pulse bg-ivory sm:max-w-[156px] ${square ? 'rounded-2xl' : 'rounded-full'}`} />
@@ -65,7 +65,7 @@ export default function VehicleCategoryRow({
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-4 gap-2 sm:gap-6">
+        <div className="grid grid-cols-4 gap-3 sm:gap-6">
           {vehicles.map(v => (
             <HomeVehicleCard key={v.id} v={v} square={square} />
           ))}

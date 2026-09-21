@@ -22,14 +22,14 @@ export default function StaticEnquiryRow({
   return (
     <div id={id} className={id ? 'scroll-mt-24' : undefined}>
       <CategoryRowHeader index={index} title={title} />
-      <div className="grid grid-cols-4 gap-2 sm:gap-5">
+      <div className="grid grid-cols-4 gap-3 sm:gap-6">
         {items.map(item => (
           <button
             key={item.name}
             type="button"
             onClick={() => setActive(item)}
             className="group flex cursor-pointer flex-col items-center text-center transition-transform duration-300 hover:-translate-y-1">
-            <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-ivory shadow-[0_6px_16px_-8px_rgba(0,0,0,0.25)] ring-1 ring-black/5 transition-shadow duration-300 group-hover:shadow-[0_14px_32px_-8px_rgba(27,122,51,0.28)] sm:aspect-[4/3] sm:rounded-3xl">
+            <div className="relative mx-auto aspect-square w-[86%] overflow-hidden rounded-2xl bg-ivory sm:w-[80%] shadow-[0_6px_16px_-8px_rgba(0,0,0,0.25)] ring-1 ring-black/5 transition-shadow duration-300 group-hover:shadow-[0_14px_32px_-8px_rgba(27,122,51,0.28)] sm:aspect-[4/3] sm:rounded-3xl">
               <Image
                 src={item.image}
                 alt={item.name}

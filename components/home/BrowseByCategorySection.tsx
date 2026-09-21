@@ -42,12 +42,12 @@ const CORPORATE_ITEMS: StaticCategoryItem[] = [
 
 export default function BrowseByCategorySection() {
   return (
-    <section className="relative overflow-hidden bg-white py-20 border-t border-ivory-dark">
+    <section className="relative overflow-hidden bg-white pb-20 pt-6 sm:pt-10 border-t border-ivory-dark">
       <div className="pointer-events-none absolute -left-24 -top-24 h-96 w-96 rounded-full bg-cta/5 blur-[100px]" />
       <div className="pointer-events-none absolute -bottom-32 -right-20 h-[28rem] w-[28rem] rounded-full bg-gold/5 blur-[120px]" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-12">
+        <div className="mb-8 sm:mb-12">
           <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-cta">Everything in one place</p>
           <h2 className="font-display text-4xl font-bold text-ink md:text-5xl">Browse by category</h2>
         </div>

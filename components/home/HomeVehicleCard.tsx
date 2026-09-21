@@ -13,7 +13,7 @@ function stripHtml(html: string | null) {
 export default function HomeVehicleCard({ v, square = false }: { v: CabCategory; square?: boolean }) {
   const { dispatch } = useSearchState()
   const description = stripHtml(v.description) || 'Similar or equivalent'
-  const outerRadius = square ? 'rounded-2xl sm:rounded-3xl' : 'rounded-full'
+  const outerRadius = square ? 'w-[86%] rounded-2xl sm:w-[80%] sm:rounded-3xl' : 'w-full rounded-full'
   const innerRadius = square ? 'rounded-xl sm:rounded-[1.25rem]' : 'rounded-full'
 
   return (
@@ -22,7 +22,7 @@ export default function HomeVehicleCard({ v, square = false }: { v: CabCategory;
       onClick={() => dispatch({ type: 'SET_CAB_CATEGORY_ID', id: v.id })}
       className="group flex flex-col items-center text-center transition-transform duration-300 hover:-translate-y-1"
     >
-      <div className={`relative mx-auto w-full ${outerRadius} bg-white p-0.5 shadow-[0_6px_16px_-8px_rgba(0,0,0,0.22)] ring-1 ring-black/5 transition-all duration-300 group-hover:shadow-[0_14px_32px_-8px_rgba(27,122,51,0.28)] group-hover:ring-cta/30 sm:max-w-[156px] sm:p-1 sm:shadow-[0_10px_28px_-10px_rgba(0,0,0,0.22)]`}>
+      <div className={`relative mx-auto ${outerRadius} bg-white p-0.5 shadow-[0_6px_16px_-8px_rgba(0,0,0,0.22)] ring-1 ring-black/5 transition-all duration-300 group-hover:shadow-[0_14px_32px_-8px_rgba(27,122,51,0.28)] group-hover:ring-cta/30 sm:max-w-[156px] sm:p-1 sm:shadow-[0_10px_28px_-10px_rgba(0,0,0,0.22)]`}>
         <div className={`relative isolate aspect-square w-full overflow-hidden ${innerRadius} bg-ivory`}>
           {v.image ? (
             <Image

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import Image from 'next/image'
 import { useBookModal } from '@/components/common/BookModalContext'
 
@@ -13,7 +13,7 @@ export default function HeroBanner() {
       className="relative block aspect-video w-full cursor-pointer overflow-hidden md:aspect-auto md:h-[75vh]"
     >
       <Image
-        src="/images/hero-banner-mobile.svg"
+        src="/images/hero-banner-mobile-v2.svg"
         alt="Book outstation cabs in minutes — transparent pricing, verified drivers, zero surprises"
         fill
         priority
@@ -22,7 +22,7 @@ export default function HeroBanner() {
         className="object-cover object-center md:hidden"
       />
       <Image
-        src="/images/hero-banner-desktop.svg"
+        src="/images/hero-banner-desktop-v2.svg"
         alt="Book outstation cabs in minutes — transparent pricing, verified drivers, zero surprises"
         fill
         priority
