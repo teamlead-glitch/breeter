@@ -4,8 +4,8 @@ import { Bus, Car, Home, Palmtree, Sparkles, Truck } from 'lucide-react'
 const ITEMS = [
   { href: '/cabs', label: 'Cabs', icon: Car },
   { href: '/cabs?type=luxury', label: 'Luxury Cabs', icon: Sparkles },
-  { href: '/cabs?type=bus-van', label: 'Van', icon: Truck },
-  { href: '/cabs?type=bus-van', label: 'Bus', icon: Bus },
+  { href: '/cabs?type=van', label: 'Van', icon: Truck },
+  { href: '/cabs?type=bus', label: 'Bus', icon: Bus },
   { href: '/holidays', label: 'Holidays', icon: Palmtree },
   { href: '/#hotel', label: 'Hotel', icon: Home },
 ]

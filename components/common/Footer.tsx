@@ -4,7 +4,8 @@ const links = {
   cabs: [
     { href: '/cabs', label: 'All Cabs' },
     { href: '/cabs?type=luxury', label: 'Luxury Cabs' },
-    { href: '/cabs?type=bus-van', label: 'Bus / Van' },
+    { href: '/cabs?type=van', label: 'Van' },
+    { href: '/cabs?type=bus', label: 'Bus' },
     { href: '/search', label: 'Search Rides' },
   ],
   company: [

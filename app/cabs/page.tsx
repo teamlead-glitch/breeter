@@ -10,7 +10,8 @@ type PageProps = { searchParams: Promise<{ type?: string }> }
 const SEO_SLUGS: Record<string, string> = {
   cabs: 'page-cabs',
   luxury: 'page-luxury-cabs',
-  'bus-van': 'page-bus-van',
+  van: 'page-van',
+  bus: 'page-bus',
 }
 
 export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
@@ -36,10 +37,16 @@ const CATEGORIES = {
     desc: 'Premium chauffeur-driven cars for business travel, weddings, airport transfers and special occasions.',
     image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1400&q=80',
   },
-  'bus-van': {
+  van: {
     eyebrow: 'Group travel · Spacious',
-    title: 'Bus / Van',
-    desc: 'Spacious vans and buses for group tours, corporate trips and large family travel across South India.',
+    title: 'Van',
+    desc: 'Spacious vans and tempo travellers for group tours, corporate trips and large family travel across South India.',
+    image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1400&q=80',
+  },
+  bus: {
+    eyebrow: 'Group travel · Events',
+    title: 'Bus',
+    desc: 'Mini buses and AC coaches for large groups, events and long-distance tours across South India.',
     image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1400&q=80',
   },
 }
@@ -47,7 +54,7 @@ const CATEGORIES = {
 export default async function CabsPage({ searchParams }: PageProps) {
   const { type = 'cabs' } = await searchParams
   const cat = CATEGORIES[type as keyof typeof CATEGORIES] ?? CATEGORIES.cabs
-
+  console.log(cat,'cat++')
   return (
     <>
       {/* Banner */}

@@ -1,4 +1,4 @@
-﻿import VehicleCategoryRow from './VehicleCategoryRow'
+import VehicleCategoryRow from './VehicleCategoryRow'
 import HolidaysCategoryRow from './HolidaysCategoryRow'
 import StaticEnquiryRow, { StaticCategoryItem } from './StaticEnquiryRow'
 
@@ -58,8 +58,8 @@ export default function BrowseByCategorySection() {
           {/* Van and Bus both pull the same "Van/Bus" tagged vehicles for now — the backend only
              has one combined tag. Once it can tell them apart (a dedicated tag or query param),
              point each row at its own filtered result. */}
-          <VehicleCategoryRow index="03" title="Van" tagTitle="Van/Bus" viewAllHref="/cabs?type=bus-van" square/>
-          <VehicleCategoryRow index="04" title="Bus" tagTitle="Van/Bus" viewAllHref="/cabs?type=bus-van" square/>
+          <VehicleCategoryRow index="03" title="Van" tagTitle="Van/Bus" viewAllHref="/cabs?type=van" square/>
+          <VehicleCategoryRow index="04" title="Bus" tagTitle="Van/Bus" viewAllHref="/cabs?type=bus" square/>
           <VehicleCategoryRow index="05" title="Luxury Cabs" tagTitle="Luxury" viewAllHref="/cabs?type=luxury" square />
           {/* Client review only: same Luxury Cabs row, 3 items filling the row. Remove after review. */}
           {/* <VehicleCategoryRow index="05" title="Luxury Cabs (3 items)" tagTitle="Luxury" viewAllHref="/cabs?type=luxury" square count={3} /> */}

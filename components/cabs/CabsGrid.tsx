@@ -8,7 +8,8 @@ import CabCategoryCard from './CabCategoryCard'
 // Local to this page only — not part of the shared search filters/context.
 const TYPE_TAG_TITLES: Record<string, string> = {
   luxury: 'Luxury',
-  'bus-van': 'Van/Bus',
+  van: 'Van',
+  bus: 'Bus',
 }
 
 export default function CabsGrid({ type }: { type: string }) {
