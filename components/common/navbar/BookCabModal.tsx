@@ -5,11 +5,11 @@ export default function BookCabModal({ open, onClose }: { open: boolean; onClose
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center sm:px-4">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center px-3 sm:px-4">
       {/* Backdrop */}
       <div className="absolute inset-0 bg-ink/60 backdrop-blur-sm" onClick={onClose} />
       {/* Modal */}
-      <div className="relative w-full h-full sm:h-auto max-w-2xl md:max-w-5xl lg:max-w-6xl bg-white rounded-none sm:rounded-3xl shadow-2xl overflow-hidden overflow-y-auto">
+      <div className="relative w-full max-h-[90vh] sm:max-h-none max-w-2xl md:max-w-5xl lg:max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-5 border-b border-black/5">
           <div>
