@@ -52,9 +52,11 @@ export default function CabCategoryCard({ v }: { v: CabCategory }) {
         <h3 className="mb-1 text-sm font-bold text-ink sm:text-base">{v.name}</h3>
         <p className="mb-2 line-clamp-1 text-[11px] text-ink-faint sm:mb-3 sm:text-xs">{description}</p>
         <div className="mt-auto flex flex-wrap items-center gap-1.5 sm:gap-2">
-          <span className="flex items-center gap-1 rounded-full bg-ivory px-2 py-0.5 text-[10px] font-medium text-ink-muted sm:px-2.5 sm:py-1 sm:text-[11px]">
-            <Users size={10} /> 4 seats
-          </span>
+          {v.seating_capacity !== null && (
+            <span className="flex items-center gap-1 rounded-full bg-ivory px-2 py-0.5 text-[10px] font-medium text-ink-muted sm:px-2.5 sm:py-1 sm:text-[11px]">
+              <Users size={10} /> {v.seating_capacity} seats
+            </span>
+          )}
           <span className="flex items-center gap-1 rounded-full bg-ivory px-2 py-0.5 text-[10px] font-medium text-ink-muted sm:px-2.5 sm:py-1 sm:text-[11px]">
             <Wind size={10} /> AC
           </span>

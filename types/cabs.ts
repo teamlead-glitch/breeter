@@ -16,6 +16,7 @@ export type CabCategory = {
   name: string
   description: string | null
   slug: string
+  seating_capacity: number | null
   is_enquiry_only: boolean
   image: CabCategoryImage | null
   fare: CabCategoryFare | null
