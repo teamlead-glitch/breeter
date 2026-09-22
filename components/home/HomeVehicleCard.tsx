@@ -5,7 +5,7 @@ import { Car } from 'lucide-react'
 import { CabCategory } from '@/types/cabs'
 import { useSearchState } from '@/context/SearchContext'
 import EnquiryModal from './EnquiryModal'
-import VehicleSearchModal from './VehicleSearchModal'
+import VehicleSearchModal from '@/components/common/VehicleSearchModal'
 
 function stripHtml(html: string | null) {
   if (!html) return ''

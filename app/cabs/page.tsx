@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import SearchWidget from '@/components/common/SearchWidget'
 import CabsGrid from '@/components/cabs/CabsGrid'
 import { getSeoMetadata } from '@/lib/seo'
 
@@ -57,7 +56,7 @@ export default async function CabsPage({ searchParams }: PageProps) {
   return (
     <>
       {/* Banner */}
-      <section className="relative min-h-[22vh] sm:min-h-[32vh] flex items-end overflow-hidden">
+      <section className="relative min-h-[22vh] sm:min-h-[47vh] flex items-end overflow-hidden">
         <Image src={cat.image} alt={cat.title} fill priority sizes="100vw" className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-forest/20 via-forest/60 to-forest" />
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-5 pt-[76px] sm:pb-8 sm:pt-24">
@@ -80,13 +79,6 @@ export default async function CabsPage({ searchParams }: PageProps) {
               {val.title}
             </Link>
           ))}
-        </div>
-      </div>
-
-      {/* Search widget */}
-      <div className="bg-ivory-dark border-b border-black/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <SearchWidget />
         </div>
       </div>
 

@@ -1,11 +1,11 @@
 'use client'
 import { useState } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { Car, Luggage, Users, Wind } from 'lucide-react'
 import { CabCategory } from '@/types/cabs'
 import { useSearchState } from '@/context/SearchContext'
 import EnquiryModal from '@/components/home/EnquiryModal'
+import VehicleSearchModal from '@/components/common/VehicleSearchModal'
 
 function stripHtml(html: string | null) {
   if (!html) return ''
@@ -15,10 +15,11 @@ function stripHtml(html: string | null) {
 export default function CabCategoryCard({ v }: { v: CabCategory }) {
   const { dispatch } = useSearchState()
   const [enquiryOpen, setEnquiryOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const description = stripHtml(v.description) || 'Similar or equivalent'
 
   const className =
-    'group flex h-full flex-col overflow-hidden rounded-3xl border border-black/10 bg-white text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/10'
+    'group flex h-full cursor-pointer flex-col overflow-hidden rounded-3xl border border-black/10 bg-white text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/10'
 
   const content = (
     <>
@@ -82,8 +83,17 @@ export default function CabCategoryCard({ v }: { v: CabCategory }) {
   }
 
   return (
-    <Link href="/book" onClick={() => dispatch({ type: 'SET_CAB_CATEGORY_ID', id: v.id })} className={className}>
-      {content}
-    </Link>
+    <>
+      <button
+        type="button"
+        onClick={() => {
+          dispatch({ type: 'SET_CAB_CATEGORY_ID', id: v.id })
+          setSearchOpen(true)
+        }}
+        className={className}>
+        {content}
+      </button>
+      {searchOpen && <VehicleSearchModal vehicleName={v.name} onClose={() => setSearchOpen(false)} />}
+    </>
   )
 }

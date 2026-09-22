@@ -3,9 +3,9 @@ import { useEffect } from 'react'
 import { X } from 'lucide-react'
 import SearchWidget from '@/components/common/SearchWidget'
 
-// Opened from a home-page vehicle card: the vehicle is already chosen (its id was dispatched to
-// search state before this opened), so submitting here goes straight to /book instead of the
-// /search results list.
+// Opened from a vehicle card (home page or /cabs): the vehicle is already chosen (its id was
+// dispatched to search state before this opened), so submitting here goes straight to /book
+// instead of the /search results list.
 export default function VehicleSearchModal({ vehicleName, onClose }: { vehicleName: string; onClose: () => void }) {
   useEffect(() => {
     document.body.style.overflow = 'hidden'
