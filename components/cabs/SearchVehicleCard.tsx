@@ -41,7 +41,7 @@ export default function SearchVehicleCard({ v }: { v: PricedCabCategory }) {
       <div className="flex-shrink-0 flex flex-col items-end">
         <div>
           <p className="font-mono font-bold text-ink text-lg sm:text-2xl">₹{v.fare.amount.toLocaleString('en-IN')}</p>
-          <p className="text-ink-faint text-xs">est. fare</p>
+          <p className="text-ink-faint text-xs">taxes extra</p>
         </div>
         <Link
           href="/book"
