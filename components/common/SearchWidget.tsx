@@ -4,6 +4,7 @@ import { MapPin, CalendarClock, Plus, Search, X } from 'lucide-react'
 import Link from 'next/link'
 import { useSearchState, TripType, HourlyPackage } from '@/context/SearchContext'
 import DateTimePicker from '@/components/common/DateTimePicker'
+import { usePlacesAutocomplete } from '@/components/common/usePlacesAutocomplete'
 
 const TRIP_TYPES: TripType[] = ['Drop', 'Round Trip', 'Hourly Rental']
 
@@ -36,6 +37,17 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
     dispatch({ type: 'REMOVE_STOP', index })
   }
 
+  usePlacesAutocomplete(fromInputRef, value => {
+    dispatch({ type: 'SET_FROM', value })
+    setErrors(prev => ({ ...prev, from: false }))
+    setAlertMessages(prev => prev.filter(m => m.id !== 'from' && m.id !== 'same'))
+  })
+  usePlacesAutocomplete(toInputRef, value => {
+    dispatch({ type: 'SET_TO', value })
+    setErrors(prev => ({ ...prev, to: false }))
+    setAlertMessages(prev => prev.filter(m => m.id !== 'to' && m.id !== 'same'))
+  })
+
   return (
     <div className={bare ? '' : 'bg-white/96 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-5 md:p-10'}>
       {/* Trip type tabs */}
@@ -64,6 +76,7 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
               <input
                 ref={fromInputRef}
                 id="search-from-input"
+                autoComplete="off"
                 value={state.from}
                 onChange={e => {
                   dispatch({ type: 'SET_FROM', value: e.target.value })
@@ -133,6 +146,7 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
               <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">To</p>
               <input
                 ref={toInputRef}
+                autoComplete="off"
                 value={state.to}
                 onChange={e => {
                   dispatch({ type: 'SET_TO', value: e.target.value })
