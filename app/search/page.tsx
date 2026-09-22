@@ -92,10 +92,10 @@ export default function SearchResultsPage() {
                 <p className="text-xs text-ink-faint">Date / Time</p>
                 <p className="font-semibold text-ink text-sm">{formatDate(state.pickupDate)} · {formatTime(state.pickupDate)}</p>
               </div>
-              <div className="hidden md:block">
+              {/* <div className="hidden md:block">
                 <p className="text-xs text-ink-faint">Distance</p>
                 <p className="font-semibold text-ink text-sm font-mono">~295 km</p>
-              </div>
+              </div> */}
             </div>
             <button
               onClick={openBookModal}
