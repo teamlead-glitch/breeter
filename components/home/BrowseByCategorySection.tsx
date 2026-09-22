@@ -62,7 +62,7 @@ export default function BrowseByCategorySection() {
 
         <div className="space-y-14">
           <HolidaysCategoryRow index="01" />
-          <VehicleCategoryRow index="02" title="Cabs" viewAllHref="/cabs" square/>
+          <VehicleCategoryRow index="02" title="Cabs" viewAllHref="/cabs" square count={3}/>
           {/* Van and Bus both pull the same "Van/Bus" tagged vehicles for now — the backend only
              has one combined tag. Once it can tell them apart (a dedicated tag or query param),
              point each row at its own filtered result. */}
