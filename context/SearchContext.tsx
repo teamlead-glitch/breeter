@@ -1,6 +1,8 @@
 'use client'
 import { createContext, useContext, useEffect, useReducer, useRef, ReactNode, Dispatch } from 'react'
 import { searchReducer, initialSearchState, SearchState, SearchAction } from '@/context/searchReducer'
+import { fetchSiteSettings } from '@/lib/settings'
+import { SiteSettings } from '@/types/settings'
 
 export type { TripType, HourlyPackage, SearchFilters, SearchStop, SearchState, SearchAction } from '@/context/searchReducer'
 
@@ -31,6 +33,24 @@ function defaultTripDates() {
   return { pickupDate: now, dropDate: now }
 }
 
+// Only overrides from/to when the CMS actually set one — an unset saved trip still falls back to
+// initialSearchState's own from/to, not to a blank value.
+function defaultRouteFromSettings(settings: SiteSettings | null | undefined): Partial<SearchState> {
+  if (!settings) return {}
+  const route: Partial<SearchState> = {}
+  if (settings.default_from_location) {
+    route.from = settings.default_from_location
+    route.fromLat = settings.default_from_latitude
+    route.fromLng = settings.default_from_longitude
+  }
+  if (settings.default_to_location) {
+    route.to = settings.default_to_location
+    route.toLat = settings.default_to_latitude
+    route.toLng = settings.default_to_longitude
+  }
+  return route
+}
+
 export function SearchProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(searchReducer, initialSearchState)
   const hydratedRef = useRef(false)
@@ -48,17 +68,31 @@ export function SearchProvider({ children }: { children: ReactNode }) {
   }, [state])
 
   useEffect(() => {
-    let saved: Partial<SearchState> = {}
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw) saved = JSON.parse(raw)
-    } catch {
-      // Ignore corrupt/unavailable storage — falls back to defaults below.
+    let cancelled = false
+
+    async function hydrate() {
+      let saved: Partial<SearchState> = {}
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY)
+        if (raw) saved = JSON.parse(raw)
+      } catch {
+        // Ignore corrupt/unavailable storage — falls back to defaults below.
+      }
+
+      const settingsRes = await fetchSiteSettings()
+      if (cancelled) return
+
+      // pickupDate/dropDate default relative to "now", and from/to fall back to the CMS-configured
+      // route — a persisted search's own values still win over both.
+      dispatch({
+        type: 'HYDRATE',
+        state: { ...defaultTripDates(), ...defaultRouteFromSettings(settingsRes.data?.data), ...saved },
+      })
+      hydratedRef.current = true
     }
-    // pickupDate/dropDate default relative to "now" on a fresh visit; a persisted search's own
-    // dates still win.
-    dispatch({ type: 'HYDRATE', state: { ...defaultTripDates(), ...saved } })
-    hydratedRef.current = true
+
+    hydrate()
+    return () => { cancelled = true }
   }, [])
 
   return <SearchContext.Provider value={{ state, dispatch }}>{children}</SearchContext.Provider>

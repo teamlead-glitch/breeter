@@ -8,6 +8,7 @@ import FeaturedPackagesSection from '@/components/home/FeaturedPackagesSection'
 import { whyBreeter } from '@/lib/data'
 import { Shield, Star, Wallet } from 'lucide-react'
 import { getSeoMetadata } from '@/lib/seo'
+import { fetchSiteSettings } from '@/lib/settings'
 
 export async function generateMetadata(): Promise<Metadata> {
   return getSeoMetadata('page-home', {
@@ -26,14 +27,17 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 
 
 
-export default function HomePage() {
+export default async function HomePage() {
+  const settingsRes = await fetchSiteSettings()
+  const settings = settingsRes.data?.data
+
   return (
     <>
       {/* ─── HERO ──────────────────────────────────────────── */}
       <HeroBanner />
 
       {/* ─── MARQUEE ───────────────────────────────────────── */}
-      <MarqueeStrip />
+      <MarqueeStrip text={settings?.marquee_text} />
 
       {/* ─── QUICK NAV ─────────────────────────────────────── */}
       <QuickNav />

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { getSeoMetadata } from '@/lib/seo'
+import { fetchSiteSettings } from '@/lib/settings'
 import ContactForm from '@/components/contact/ContactForm'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -9,7 +10,19 @@ export async function generateMetadata(): Promise<Metadata> {
   })
 }
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const res = await fetchSiteSettings()
+  const settings = res.data?.data
+
+  const reachUs = [
+    { label: 'Phone', value: settings?.contact_phone },
+    { label: 'WhatsApp', value: settings?.contact_whatsapp },
+    { label: 'Email', value: settings?.contact_email },
+    { label: 'Hours', value: '24 × 7' },
+  ].filter((item): item is { label: string; value: string } => Boolean(item.value))
+
+  const addressLines = settings?.contact_address?.split(/\r?\n/).filter(Boolean) ?? []
+
   return (
     <div className="min-h-screen bg-ivory pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -28,31 +41,33 @@ export default function ContactPage() {
 
           {/* Sidebar */}
           <aside className="w-full lg:w-72 flex-shrink-0 space-y-4">
-            <div className="bg-white rounded-2xl border border-black/5 p-5">
-              <h3 className="font-bold text-ink text-sm mb-4">Reach us</h3>
-              <div className="space-y-3">
-                {[
-                  { label: 'Phone', value: '+91 98765 43210' },
-                  { label: 'WhatsApp', value: '+91 98765 43210' },
-                  { label: 'Email', value: 'hello@breeter.com' },
-                  { label: 'Hours', value: '24 × 7' },
-                ].map(item => (
-                  <div key={item.label} className="flex justify-between py-2 border-b border-black/5 last:border-0">
-                    <span className="text-ink-faint text-xs">{item.label}</span>
-                    <span className="font-semibold text-ink text-xs">{item.value}</span>
-                  </div>
-                ))}
+            {reachUs.length > 0 && (
+              <div className="bg-white rounded-2xl border border-black/5 p-5">
+                <h3 className="font-bold text-ink text-sm mb-4">Reach us</h3>
+                <div className="space-y-3">
+                  {reachUs.map(item => (
+                    <div key={item.label} className="flex justify-between py-2 border-b border-black/5 last:border-0">
+                      <span className="text-ink-faint text-xs">{item.label}</span>
+                      <span className="font-semibold text-ink text-xs">{item.value}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            <div className="bg-white rounded-2xl border border-black/5 p-5">
-              <h3 className="font-bold text-ink text-sm mb-2">Office</h3>
-              <p className="text-ink-muted text-xs leading-relaxed">
-                Breeter Travel Express<br />
-                MG Road, Kochi 682 035<br />
-                Kerala, India
-              </p>
-            </div>
+            {addressLines.length > 0 && (
+              <div className="bg-white rounded-2xl border border-black/5 p-5">
+                <h3 className="font-bold text-ink text-sm mb-2">Office</h3>
+                <p className="text-ink-muted text-xs leading-relaxed">
+                  {addressLines.map((line, i) => (
+                    <span key={i}>
+                      {line}
+                      {i < addressLines.length - 1 && <br />}
+                    </span>
+                  ))}
+                </p>
+              </div>
+            )}
 
             <div className="bg-forest/5 rounded-2xl p-5 flex items-center gap-3">
               <div className="w-9 h-9 bg-[#25D366] rounded-xl grid place-items-center flex-shrink-0">

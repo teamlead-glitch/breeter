@@ -1,30 +1,28 @@
-const ITEMS = [
+const FALLBACK_TEXT = [
   'Transparent pricing, zero surprises',
   'Verified drivers across South India',
   '24/7 customer support',
   'Outstation cabs · Hourly rentals · Curated holidays',
   'Instant fare estimates',
   'Trusted by 10,000+ travellers',
-]
+].join('   •   ')
 
-function MarqueeSet({ hidden }: { hidden?: boolean }) {
+function MarqueeSet({ text, hidden }: { text: string; hidden?: boolean }) {
   return (
-    <div className="flex items-center gap-10 pr-10" aria-hidden={hidden || undefined}>
-      {ITEMS.map((text, i) => (
-        <span key={i} className="whitespace-nowrap text-sm font-semibold text-white/90">
-          {text}
-        </span>
-      ))}
-    </div>
+    <span className="whitespace-nowrap pr-10 text-sm font-semibold text-white/90" aria-hidden={hidden || undefined}>
+      {text}
+    </span>
   )
 }
 
-export default function MarqueeStrip() {
+export default function MarqueeStrip({ text }: { text?: string | null }) {
+  const marqueeText = text?.trim() || FALLBACK_TEXT
+
   return (
     <div className="overflow-hidden bg-forest py-3" aria-label="Breeter highlights">
       <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
-        <MarqueeSet />
-        <MarqueeSet hidden />
+        <MarqueeSet text={marqueeText} />
+        <MarqueeSet text={marqueeText} hidden />
       </div>
     </div>
   )
