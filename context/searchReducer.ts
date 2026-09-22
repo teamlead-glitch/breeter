@@ -6,6 +6,8 @@ export type SearchFilters = {
   addOns: string[]
 }
 
+export type SearchStop = { location: string; lat: number | null; lng: number | null }
+
 export type SearchState = {
   tripType: TripType
   from: string
@@ -14,7 +16,7 @@ export type SearchState = {
   to: string
   toLat: number | null
   toLng: number | null
-  stops: string[]
+  stops: SearchStop[]
   pickupDate: string
   dropDate: string
   hourlyPackage: HourlyPackage
@@ -29,7 +31,8 @@ export type SearchAction =
   | { type: 'SET_FROM_COORDS'; lat: number | null; lng: number | null }
   | { type: 'SET_TO'; value: string }
   | { type: 'SET_TO_COORDS'; lat: number | null; lng: number | null }
-  | { type: 'ADD_STOP'; value: string }
+  | { type: 'ADD_STOP'; stop: SearchStop }
+  | { type: 'SET_STOP_COORDS'; index: number; lat: number | null; lng: number | null }
   | { type: 'REMOVE_STOP'; index: number }
   | { type: 'SET_PICKUP_DATE'; value: string }
   | { type: 'SET_DROP_DATE'; value: string }
@@ -80,7 +83,12 @@ export function searchReducer(state: SearchState, action: SearchAction): SearchS
     case 'SET_TO_COORDS':
       return { ...state, toLat: action.lat, toLng: action.lng }
     case 'ADD_STOP':
-      return { ...state, stops: [...state.stops, action.value] }
+      return { ...state, stops: [...state.stops, action.stop] }
+    case 'SET_STOP_COORDS':
+      return {
+        ...state,
+        stops: state.stops.map((stop, i) => (i === action.index ? { ...stop, lat: action.lat, lng: action.lng } : stop)),
+      }
     case 'REMOVE_STOP':
       return { ...state, stops: state.stops.filter((_, i) => i !== action.index) }
     case 'SET_PICKUP_DATE':

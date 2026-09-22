@@ -13,7 +13,11 @@ export function buildBookingDetailsPayload(state: SearchState, addOns: string[])
     to_location: state.to,
     to_latitude: state.toLat ?? PLACEHOLDER_LAT_LNG,
     to_longitude: state.toLng ?? PLACEHOLDER_LAT_LNG,
-    stops: state.stops.map(location => ({ location, latitude: PLACEHOLDER_LAT_LNG, longitude: PLACEHOLDER_LAT_LNG })),
+    stops: state.stops.map(stop => ({
+      location: stop.location,
+      latitude: stop.lat ?? PLACEHOLDER_LAT_LNG,
+      longitude: stop.lng ?? PLACEHOLDER_LAT_LNG,
+    })),
     booking_date: state.pickupDate.split('T')[0],
     with_language: addOns.includes('lang'),
     with_carrier: addOns.includes('roof'),

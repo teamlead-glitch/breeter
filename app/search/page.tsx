@@ -18,7 +18,7 @@ function buildCabCategoryParams(state: SearchState): URLSearchParams {
   params.set('trip_type_id', String(TRIP_TYPE_IDS[state.tripType]))
   params.set('start_location', state.from)
   params.set('end_location', state.to)
-  state.stops.forEach(stop => params.append('stops[]', stop))
+  state.stops.forEach(stop => params.append('stops[]', stop.location))
   params.set('from_date', state.pickupDate)
 
   if (state.tripType === 'Round Trip') {

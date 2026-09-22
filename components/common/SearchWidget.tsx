@@ -51,12 +51,14 @@ export default function SearchWidget({
   const dropDateRef = useRef<HTMLDivElement>(null)
   const [fromOpen, setFromOpen] = useState(false)
   const [toOpen, setToOpen] = useState(false)
+  const [stopOpen, setStopOpen] = useState(false)
 
-  const saveStop = () => {
-    const value = stopInput.trim()
-    if (value) dispatch({ type: 'ADD_STOP', value })
+  const saveStop = (lat: number | null = null, lng: number | null = null) => {
+    const location = stopInput.trim()
+    if (location) dispatch({ type: 'ADD_STOP', stop: { location, lat, lng } })
     setStopInput('')
     setAddingStop(false)
+    setStopOpen(false)
   }
 
   const removeStop = (index: number) => {
@@ -65,6 +67,7 @@ export default function SearchWidget({
 
   const { suggestions: fromSuggestions, endSession: endFromSession } = usePlaceSuggestions(state.from)
   const { suggestions: toSuggestions, endSession: endToSession } = usePlaceSuggestions(state.to)
+  const { suggestions: stopSuggestions, endSession: endStopSession } = usePlaceSuggestions(stopInput)
 
   return (
     <div className={bare ? '' : 'bg-white/96 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-5 md:p-10'}>
@@ -128,44 +131,64 @@ export default function SearchWidget({
             <MapPin size={15} className="text-forest flex-shrink-0" />
             <div className="min-w-0 flex-1">
               <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Stop {i + 1}</p>
-              <p className="text-sm font-semibold text-ink truncate">{stop}</p>
+              <p className="text-sm font-semibold text-ink truncate">{stop.location}</p>
             </div>
-            <button type="button" onClick={() => removeStop(i)} aria-label={`Remove stop ${stop}`} className="text-ink-faint hover:text-ink flex-shrink-0">
+            <button type="button" onClick={() => removeStop(i)} aria-label={`Remove stop ${stop.location}`} className="text-ink-faint hover:text-ink flex-shrink-0">
               <X size={14} />
             </button>
           </div>
         ))}
 
         {tripType !== 'Hourly Rental' && (
-          <div className="flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
-            {addingStop ? (
-              <>
-                <Plus size={15} className="text-forest flex-shrink-0" />
-                <div className="min-w-0 flex-1">
-                  <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Stop</p>
-                  <input
-                    autoFocus
-                    value={stopInput}
-                    onChange={e => setStopInput(e.target.value)}
-                    onKeyDown={e => {
-                      if (e.key === 'Enter') { e.preventDefault(); saveStop() }
-                      if (e.key === 'Escape') { setAddingStop(false); setStopInput('') }
-                    }}
-                    onBlur={() => { if (!stopInput) setAddingStop(false) }}
-                    placeholder="Enter stop city"
-                    className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint"
-                  />
-                </div>
-                <button type="button" onClick={() => { setAddingStop(false); setStopInput('') }} aria-label="Cancel add stop"
-                  className="text-ink-faint hover:text-ink flex-shrink-0">
-                  <X size={14} />
+          <div className="relative">
+            <div className="flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+              {addingStop ? (
+                <>
+                  <Plus size={15} className="text-forest flex-shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Stop</p>
+                    <input
+                      autoFocus
+                      value={stopInput}
+                      onChange={e => setStopInput(e.target.value)}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') { e.preventDefault(); saveStop() }
+                        if (e.key === 'Escape') { setAddingStop(false); setStopInput(''); setStopOpen(false) }
+                      }}
+                      onFocus={() => setStopOpen(true)}
+                      onBlur={() => { setStopOpen(false); if (!stopInput) setAddingStop(false) }}
+                      placeholder="Enter stop city"
+                      className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint"
+                    />
+                  </div>
+                  <button type="button" onClick={() => { setAddingStop(false); setStopInput(''); setStopOpen(false) }} aria-label="Cancel add stop"
+                    className="text-ink-faint hover:text-ink flex-shrink-0">
+                    <X size={14} />
+                  </button>
+                </>
+              ) : (
+                <button type="button" onClick={() => setAddingStop(true)} className="flex items-center gap-3 w-full text-left">
+                  <Plus size={15} className="text-forest flex-shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Stop</p>
+                    <span className="block text-sm font-semibold text-ink-muted">Add stop</span>
+                  </div>
                 </button>
-              </>
-            ) : (
-              <button type="button" onClick={() => setAddingStop(true)} className="flex items-center gap-3 w-full text-left">
-                <Plus size={15} className="text-forest flex-shrink-0" />
-                <span className="text-sm font-semibold text-ink-muted">Add stop</span>
-              </button>
+              )}
+            </div>
+            {addingStop && stopOpen && (
+              <PlaceSuggestionsDropdown
+                suggestions={stopSuggestions}
+                onSelect={s => {
+                  const index = stops.length
+                  dispatch({ type: 'ADD_STOP', stop: { location: s.text, lat: null, lng: null } })
+                  setStopInput('')
+                  setAddingStop(false)
+                  setStopOpen(false)
+                  endStopSession()
+                  fetchSuggestionCoords(s).then(({ lat, lng }) => dispatch({ type: 'SET_STOP_COORDS', index, lat, lng }))
+                }}
+              />
             )}
           </div>
         )}
