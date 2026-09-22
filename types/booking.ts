@@ -62,6 +62,7 @@ export type BookingDetails = {
     name: string
     description: string | null
     seating_capacity: number
+    number_of_bags: number | null
     slug: string
     image: CabCategoryImage | null
   }

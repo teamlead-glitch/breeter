@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Car, Users, Wind } from 'lucide-react'
+import { Car, Luggage, Users, Wind } from 'lucide-react'
 import { CabCategory } from '@/types/cabs'
 import { useSearchState } from '@/context/SearchContext'
 
@@ -29,7 +29,12 @@ export default function SearchVehicleCard({ v }: { v: PricedCabCategory }) {
         <h3 className="font-bold text-ink text-sm sm:text-base mb-0.5">{v.name}</h3>
         <p className="text-ink-faint text-xs mb-3">{description}</p>
         <div className="flex flex-wrap items-center gap-2">
-          <span className="flex items-center gap-1 bg-ivory text-ink-muted text-[11px] font-medium px-2.5 py-1 rounded-full"><Users size={12} /> 4 seats</span>
+          {v.seating_capacity !== null && (
+            <span className="flex items-center gap-1 bg-ivory text-ink-muted text-[11px] font-medium px-2.5 py-1 rounded-full"><Users size={12} /> {v.seating_capacity} seats</span>
+          )}
+          {v.number_of_bags !== null && (
+            <span className="flex items-center gap-1 bg-ivory text-ink-muted text-[11px] font-medium px-2.5 py-1 rounded-full"><Luggage size={12} /> {v.number_of_bags} bags</span>
+          )}
           <span className="flex items-center gap-1 bg-ivory text-ink-muted text-[11px] font-medium px-2.5 py-1 rounded-full"><Wind size={12} /> AC</span>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { Car, Users, Wind } from 'lucide-react'
+import { Car, Luggage, Users, Wind } from 'lucide-react'
 import { BookingDetails } from '@/types/booking'
 
 function stripHtml(html: string | null) {
@@ -27,6 +27,9 @@ export default function CabInfoCard({ cabCategory }: { cabCategory: BookingDetai
           <p className="text-ink-faint text-xs mb-2 truncate">{description}</p>
           <div className="flex flex-wrap items-center gap-3">
             <span className="flex items-center gap-1 text-xs text-ink-muted"><Users size={11}/> {cabCategory.seating_capacity} Seats</span>
+            {cabCategory.number_of_bags !== null && (
+              <span className="flex items-center gap-1 text-xs text-ink-muted"><Luggage size={11}/> {cabCategory.number_of_bags} Bags</span>
+            )}
             <span className="flex items-center gap-1 text-xs text-ink-muted"><Wind size={11}/> AC</span>
           </div>
         </div>
