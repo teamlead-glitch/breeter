@@ -34,14 +34,14 @@ export default function TripSummary({
           <span className="w-3.5 h-3.5 rounded-full border-2 border-ink-faint/40 bg-white flex-shrink-0" />
           <div>
             <p className="font-bold text-ink text-lg leading-tight">{fromLocation}</p>
-            <p className="text-ink-faint text-xs">{stateName}</p>
+            {/* <p className="text-ink-faint text-xs">{stateName}</p> */}
           </div>
         </div>
         <div className="relative flex items-center gap-3">
           <span className="w-3.5 h-3.5 rounded-full bg-cta flex-shrink-0" />
           <div>
             <p className="font-bold text-ink text-lg leading-tight">{toLocation}</p>
-            <p className="text-ink-faint text-xs">{stateName}</p>
+            {/* <p className="text-ink-faint text-xs">{stateName}</p> */}
           </div>
         </div>
       </div>
@@ -50,7 +50,7 @@ export default function TripSummary({
       <div className="hidden sm:flex items-center gap-3">
         <div>
           <p className="font-bold text-ink text-lg leading-tight">{fromLocation}</p>
-          <p className="text-ink-faint text-xs">{stateName}</p>
+          {/* <p className="text-ink-faint text-xs">{stateName}</p> */}
         </div>
         <div className="flex-1 flex items-center gap-1 px-2">
           <span className="w-2 h-2 rounded-full border-2 border-ink-faint/40 flex-shrink-0" />
@@ -59,7 +59,7 @@ export default function TripSummary({
         </div>
         <div className="text-right">
           <p className="font-bold text-ink text-lg leading-tight">{toLocation}</p>
-          <p className="text-ink-faint text-xs">{stateName}</p>
+          {/* <p className="text-ink-faint text-xs">{stateName}</p> */}
         </div>
       </div>
       <p className="text-ink-faint text-xs mt-3">📅 {formatDate(pickupDate, { withYear: true })}, {formatTime(pickupDate)} · ~{distanceKm} km</p>

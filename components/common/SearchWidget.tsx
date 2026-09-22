@@ -4,7 +4,8 @@ import { MapPin, CalendarClock, Plus, Search, X } from 'lucide-react'
 import Link from 'next/link'
 import { useSearchState, TripType, HourlyPackage } from '@/context/SearchContext'
 import DateTimePicker from '@/components/common/DateTimePicker'
-import { usePlacesAutocomplete } from '@/components/common/usePlacesAutocomplete'
+import { usePlaceSuggestions } from '@/components/common/usePlaceSuggestions'
+import PlaceSuggestionsDropdown from '@/components/common/PlaceSuggestionsDropdown'
 
 const TRIP_TYPES: TripType[] = ['Drop', 'Round Trip', 'Hourly Rental']
 
@@ -25,6 +26,8 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
   const toInputRef = useRef<HTMLInputElement>(null)
   const pickupDateRef = useRef<HTMLDivElement>(null)
   const dropDateRef = useRef<HTMLDivElement>(null)
+  const [fromOpen, setFromOpen] = useState(false)
+  const [toOpen, setToOpen] = useState(false)
 
   const saveStop = () => {
     const value = stopInput.trim()
@@ -37,16 +40,8 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
     dispatch({ type: 'REMOVE_STOP', index })
   }
 
-  usePlacesAutocomplete(fromInputRef, value => {
-    dispatch({ type: 'SET_FROM', value })
-    setErrors(prev => ({ ...prev, from: false }))
-    setAlertMessages(prev => prev.filter(m => m.id !== 'from' && m.id !== 'same'))
-  })
-  usePlacesAutocomplete(toInputRef, value => {
-    dispatch({ type: 'SET_TO', value })
-    setErrors(prev => ({ ...prev, to: false }))
-    setAlertMessages(prev => prev.filter(m => m.id !== 'to' && m.id !== 'same'))
-  })
+  const { suggestions: fromSuggestions, endSession: endFromSession } = usePlaceSuggestions(state.from)
+  const { suggestions: toSuggestions, endSession: endToSession } = usePlaceSuggestions(state.to)
 
   return (
     <div className={bare ? '' : 'bg-white/96 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-5 md:p-10'}>
@@ -66,7 +61,7 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
 
       {/* Fields */}
       <div className="grid gap-2 mb-4 grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(280px,1fr))]">
-        <div>
+        <div className="relative">
           <div className={`flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 transition-colors ${
             errors.from ? 'border-red-300' : 'border-transparent focus-within:border-forest/25'
           }`}>
@@ -83,11 +78,25 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
                   if (errors.from) setErrors(prev => ({ ...prev, from: false }))
                   setAlertMessages(prev => prev.filter(m => m.id !== 'from' && m.id !== 'same'))
                 }}
+                onFocus={() => setFromOpen(true)}
+                onBlur={() => setFromOpen(false)}
                 className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint"
                 placeholder="Pickup city"
               />
             </div>
           </div>
+          {fromOpen && (
+            <PlaceSuggestionsDropdown
+              suggestions={fromSuggestions}
+              onSelect={s => {
+                dispatch({ type: 'SET_FROM', value: s.text })
+                setErrors(prev => ({ ...prev, from: false }))
+                setAlertMessages(prev => prev.filter(m => m.id !== 'from' && m.id !== 'same'))
+                setFromOpen(false)
+                endFromSession()
+              }}
+            />
+          )}
         </div>
 
         {tripType !== 'Hourly Rental' && stops.map((stop, i) => (
@@ -137,7 +146,7 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
           </div>
         )}
 
-        <div>
+        <div className="relative">
           <div className={`flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 transition-colors ${
             errors.to ? 'border-red-300' : 'border-transparent focus-within:border-forest/25'
           }`}>
@@ -153,11 +162,25 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
                   if (errors.to) setErrors(prev => ({ ...prev, to: false }))
                   setAlertMessages(prev => prev.filter(m => m.id !== 'to' && m.id !== 'same'))
                 }}
+                onFocus={() => setToOpen(true)}
+                onBlur={() => setToOpen(false)}
                 className="block w-full text-sm font-semibold text-ink bg-transparent outline-none placeholder-ink-faint"
                 placeholder="Drop city"
               />
             </div>
           </div>
+          {toOpen && (
+            <PlaceSuggestionsDropdown
+              suggestions={toSuggestions}
+              onSelect={s => {
+                dispatch({ type: 'SET_TO', value: s.text })
+                setErrors(prev => ({ ...prev, to: false }))
+                setAlertMessages(prev => prev.filter(m => m.id !== 'to' && m.id !== 'same'))
+                setToOpen(false)
+                endToSession()
+              }}
+            />
+          )}
         </div>
 
         <div ref={pickupDateRef} className={`flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 transition-colors ${
