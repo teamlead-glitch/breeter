@@ -77,7 +77,7 @@ export default function CabCategoryCard({ v }: { v: CabCategory }) {
         <button type="button" onClick={() => setEnquiryOpen(true)} className={className}>
           {content}
         </button>
-        {enquiryOpen && <EnquiryModal category={v.slug} subject={v.name} onClose={() => setEnquiryOpen(false)} />}
+        {enquiryOpen && <EnquiryModal cabCategoryId={v.id} subject={v.name} onClose={() => setEnquiryOpen(false)} />}
       </>
     )
   }
