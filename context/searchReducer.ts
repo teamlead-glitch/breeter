@@ -9,7 +9,11 @@ export type SearchFilters = {
 export type SearchState = {
   tripType: TripType
   from: string
+  fromLat: number | null
+  fromLng: number | null
   to: string
+  toLat: number | null
+  toLng: number | null
   stops: string[]
   pickupDate: string
   dropDate: string
@@ -22,7 +26,9 @@ export type SearchState = {
 export type SearchAction =
   | { type: 'SET_TRIP_TYPE'; tripType: TripType }
   | { type: 'SET_FROM'; value: string }
+  | { type: 'SET_FROM_COORDS'; lat: number | null; lng: number | null }
   | { type: 'SET_TO'; value: string }
+  | { type: 'SET_TO_COORDS'; lat: number | null; lng: number | null }
   | { type: 'ADD_STOP'; value: string }
   | { type: 'REMOVE_STOP'; index: number }
   | { type: 'SET_PICKUP_DATE'; value: string }
@@ -38,7 +44,11 @@ export type SearchAction =
 export const initialSearchState: SearchState = {
   tripType: 'Drop',
   from: 'Kochi',
+  fromLat: null,
+  fromLng: null,
   to: 'Kannur',
+  toLat: null,
+  toLng: null,
   stops: [],
   pickupDate: '2026-08-23T10:00',
   dropDate: '2026-08-25T10:00',
@@ -60,9 +70,15 @@ export function searchReducer(state: SearchState, action: SearchAction): SearchS
     case 'SET_TRIP_TYPE':
       return { ...state, tripType: action.tripType }
     case 'SET_FROM':
-      return { ...state, from: action.value }
+      // Coords are only known right after a suggestion is picked (see SET_FROM_COORDS) — any
+      // further edit to the text invalidates them until the next pick.
+      return { ...state, from: action.value, fromLat: null, fromLng: null }
+    case 'SET_FROM_COORDS':
+      return { ...state, fromLat: action.lat, fromLng: action.lng }
     case 'SET_TO':
-      return { ...state, to: action.value }
+      return { ...state, to: action.value, toLat: null, toLng: null }
+    case 'SET_TO_COORDS':
+      return { ...state, toLat: action.lat, toLng: action.lng }
     case 'ADD_STOP':
       return { ...state, stops: [...state.stops, action.value] }
     case 'REMOVE_STOP':

@@ -2,7 +2,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { loadGoogleMapsPlaces } from '@/lib/googleMaps'
 
-export type PlaceSuggestion = { placeId: string; text: string }
+// Keeps the original PlacePrediction so a selection can fetch its coordinates via the same
+// session (toPlace().fetchFields(...)) instead of an unsessioned, separately-billed lookup.
+export type PlaceSuggestion = { placeId: string; text: string; prediction: google.maps.places.PlacePrediction }
 
 const DEBOUNCE_MS = 250
 const MIN_QUERY_LENGTH = 2
@@ -39,7 +41,7 @@ export function usePlaceSuggestions(query: string) {
           const next = res.suggestions
             .map(s => s.placePrediction)
             .filter((p): p is google.maps.places.PlacePrediction => p !== null)
-            .map(p => ({ placeId: p.placeId, text: p.text.text }))
+            .map(p => ({ placeId: p.placeId, text: p.text.text, prediction: p }))
           setSuggestions(next)
         })
         .catch(() => {

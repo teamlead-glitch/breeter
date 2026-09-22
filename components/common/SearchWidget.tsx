@@ -4,10 +4,21 @@ import { MapPin, CalendarClock, Plus, Search, X } from 'lucide-react'
 import Link from 'next/link'
 import { useSearchState, TripType, HourlyPackage } from '@/context/SearchContext'
 import DateTimePicker from '@/components/common/DateTimePicker'
-import { usePlaceSuggestions } from '@/components/common/usePlaceSuggestions'
+import { usePlaceSuggestions, PlaceSuggestion } from '@/components/common/usePlaceSuggestions'
 import PlaceSuggestionsDropdown from '@/components/common/PlaceSuggestionsDropdown'
 
 const TRIP_TYPES: TripType[] = ['Drop', 'Round Trip', 'Hourly Rental']
+
+// Fetches the picked suggestion's coordinates via the same autocomplete session (cheaper and more
+// accurate than a fresh, unsessioned geocode lookup for the same place).
+async function fetchSuggestionCoords(suggestion: PlaceSuggestion) {
+  try {
+    const { place } = await suggestion.prediction.toPlace().fetchFields({ fields: ['location'] })
+    return { lat: place.location?.lat() ?? null, lng: place.location?.lng() ?? null }
+  } catch {
+    return { lat: null, lng: null }
+  }
+}
 
 const HOURLY_PACKAGES: { value: HourlyPackage; label: string }[] = [
   { value: '4', label: '4 Hrs' },
@@ -94,6 +105,7 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
                 setAlertMessages(prev => prev.filter(m => m.id !== 'from' && m.id !== 'same'))
                 setFromOpen(false)
                 endFromSession()
+                fetchSuggestionCoords(s).then(({ lat, lng }) => dispatch({ type: 'SET_FROM_COORDS', lat, lng }))
               }}
             />
           )}
@@ -178,6 +190,7 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
                 setAlertMessages(prev => prev.filter(m => m.id !== 'to' && m.id !== 'same'))
                 setToOpen(false)
                 endToSession()
+                fetchSuggestionCoords(s).then(({ lat, lng }) => dispatch({ type: 'SET_TO_COORDS', lat, lng }))
               }}
             />
           )}
