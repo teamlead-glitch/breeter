@@ -1,9 +1,11 @@
 'use client'
+import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Car } from 'lucide-react'
 import { CabCategory } from '@/types/cabs'
 import { useSearchState } from '@/context/SearchContext'
+import EnquiryModal from './EnquiryModal'
 
 function stripHtml(html: string | null) {
   if (!html) return ''
@@ -12,16 +14,14 @@ function stripHtml(html: string | null) {
 
 export default function HomeVehicleCard({ v, square = false }: { v: CabCategory; square?: boolean }) {
   const { dispatch } = useSearchState()
+  const [enquiryOpen, setEnquiryOpen] = useState(false)
   const description = stripHtml(v.description) || 'Similar or equivalent'
   const outerRadius = square ? 'w-[86%] rounded-2xl sm:w-[80%] sm:rounded-3xl' : 'w-full rounded-full'
   const innerRadius = square ? 'rounded-xl sm:rounded-[1.25rem]' : 'rounded-full'
+  const className = 'group flex flex-col items-center text-center transition-transform duration-300 hover:-translate-y-1'
 
-  return (
-    <Link
-      href="/book"
-      onClick={() => dispatch({ type: 'SET_CAB_CATEGORY_ID', id: v.id })}
-      className="group flex flex-col items-center text-center transition-transform duration-300 hover:-translate-y-1"
-    >
+  const content = (
+    <>
       <div className={`relative mx-auto ${outerRadius} bg-white p-0.5 shadow-[0_6px_16px_-8px_rgba(0,0,0,0.22)] ring-1 ring-black/5 transition-all duration-300 group-hover:shadow-[0_14px_32px_-8px_rgba(27,122,51,0.28)] group-hover:ring-cta/30 sm:max-w-[156px] sm:p-1 sm:shadow-[0_10px_28px_-10px_rgba(0,0,0,0.22)]`}>
         <div className={`relative isolate aspect-square w-full overflow-hidden ${innerRadius} bg-ivory`}>
           {v.image ? (
@@ -49,6 +49,23 @@ export default function HomeVehicleCard({ v, square = false }: { v: CabCategory;
           <span className="ml-1 font-sans text-[10px] font-normal text-ink-faint">onwards</span>
         </p>
       )}
+    </>
+  )
+
+  if (v.is_enquiry_only) {
+    return (
+      <>
+        <button type="button" onClick={() => setEnquiryOpen(true)} className={className}>
+          {content}
+        </button>
+        {enquiryOpen && <EnquiryModal category={v.slug} subject={v.name} onClose={() => setEnquiryOpen(false)} />}
+      </>
+    )
+  }
+
+  return (
+    <Link href="/book" onClick={() => dispatch({ type: 'SET_CAB_CATEGORY_ID', id: v.id })} className={className}>
+      {content}
     </Link>
   )
 }

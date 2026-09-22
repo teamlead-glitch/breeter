@@ -1,9 +1,11 @@
 'use client'
+import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Car, Users, Wind } from 'lucide-react'
 import { CabCategory } from '@/types/cabs'
 import { useSearchState } from '@/context/SearchContext'
+import EnquiryModal from '@/components/home/EnquiryModal'
 
 function stripHtml(html: string | null) {
   if (!html) return ''
@@ -12,14 +14,14 @@ function stripHtml(html: string | null) {
 
 export default function CabCategoryCard({ v }: { v: CabCategory }) {
   const { dispatch } = useSearchState()
+  const [enquiryOpen, setEnquiryOpen] = useState(false)
   const description = stripHtml(v.description) || 'Similar or equivalent'
 
-  return (
-    <Link
-      href="/book"
-      onClick={() => dispatch({ type: 'SET_CAB_CATEGORY_ID', id: v.id })}
-      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-black/10 bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/10"
-    >
+  const className =
+    'group flex h-full flex-col overflow-hidden rounded-3xl border border-black/10 bg-white text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/10'
+
+  const content = (
+    <>
       <div className="relative h-32 flex-shrink-0 overflow-hidden bg-ivory grid place-items-center sm:h-44">
         {v.image ? (
           <Image
@@ -35,7 +37,7 @@ export default function CabCategoryCard({ v }: { v: CabCategory }) {
         <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-ink/50 to-transparent" />
 
         <span className="absolute top-2 right-2 rounded-lg bg-cta/90 px-2 py-1 text-[10px] font-bold text-white backdrop-blur-sm transition-colors group-hover:bg-cta sm:top-3 sm:right-3 sm:px-3 sm:py-1.5 sm:text-xs">
-          Select →
+          {v.is_enquiry_only ? 'Enquire →' : 'Select →'}
         </span>
 
         {v.fare !== null && (
@@ -58,6 +60,23 @@ export default function CabCategoryCard({ v }: { v: CabCategory }) {
           </span>
         </div>
       </div>
+    </>
+  )
+
+  if (v.is_enquiry_only) {
+    return (
+      <>
+        <button type="button" onClick={() => setEnquiryOpen(true)} className={className}>
+          {content}
+        </button>
+        {enquiryOpen && <EnquiryModal category={v.slug} subject={v.name} onClose={() => setEnquiryOpen(false)} />}
+      </>
+    )
+  }
+
+  return (
+    <Link href="/book" onClick={() => dispatch({ type: 'SET_CAB_CATEGORY_ID', id: v.id })} className={className}>
+      {content}
     </Link>
   )
 }
