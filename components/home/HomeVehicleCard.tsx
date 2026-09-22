@@ -1,11 +1,11 @@
 'use client'
 import { useState } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { Car } from 'lucide-react'
 import { CabCategory } from '@/types/cabs'
 import { useSearchState } from '@/context/SearchContext'
 import EnquiryModal from './EnquiryModal'
+import VehicleSearchModal from './VehicleSearchModal'
 
 function stripHtml(html: string | null) {
   if (!html) return ''
@@ -15,6 +15,7 @@ function stripHtml(html: string | null) {
 export default function HomeVehicleCard({ v, square = false }: { v: CabCategory; square?: boolean }) {
   const { dispatch } = useSearchState()
   const [enquiryOpen, setEnquiryOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const description = stripHtml(v.description) || 'Similar or equivalent'
   const outerRadius = square ? 'w-[86%] rounded-2xl sm:w-[80%] sm:rounded-3xl' : 'w-full rounded-full'
   const innerRadius = square ? 'rounded-xl sm:rounded-[1.25rem]' : 'rounded-full'
@@ -64,8 +65,17 @@ export default function HomeVehicleCard({ v, square = false }: { v: CabCategory;
   }
 
   return (
-    <Link href="/book" onClick={() => dispatch({ type: 'SET_CAB_CATEGORY_ID', id: v.id })} className={className}>
-      {content}
-    </Link>
+    <>
+      <button
+        type="button"
+        onClick={() => {
+          dispatch({ type: 'SET_CAB_CATEGORY_ID', id: v.id })
+          setSearchOpen(true)
+        }}
+        className={className}>
+        {content}
+      </button>
+      {searchOpen && <VehicleSearchModal vehicleName={v.name} onClose={() => setSearchOpen(false)} />}
+    </>
   )
 }

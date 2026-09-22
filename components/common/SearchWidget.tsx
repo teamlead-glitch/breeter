@@ -26,7 +26,19 @@ const HOURLY_PACKAGES: { value: HourlyPackage; label: string }[] = [
   { value: '8', label: '8 Hrs' },
 ]
 
-export default function SearchWidget({ onSearch, bare = false }: { onSearch?: () => void; bare?: boolean } = {}) {
+export default function SearchWidget({
+  onSearch,
+  bare = false,
+  searchHref = '/search',
+  submitLabel = 'Search Cabs',
+}: {
+  onSearch?: () => void
+  bare?: boolean
+  // Where the submit button navigates once the trip is valid — e.g. straight to /book when a
+  // specific vehicle was already picked, skipping the /search results list.
+  searchHref?: string
+  submitLabel?: string
+} = {}) {
   const { state, dispatch } = useSearchState()
   const { tripType, stops } = state
   const [addingStop, setAddingStop] = useState(false)
@@ -272,7 +284,7 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
       {/* Footer row */}
       <div className="flex items-center gap-2 flex-wrap">
         <div className="flex-1" />
-        <Link href="/search" onClick={e => {
+        <Link href={searchHref} onClick={e => {
             const nextErrors: { from?: boolean; to?: boolean; pastDate?: boolean; dropBeforePickup?: boolean } = {}
             const messages: { id: 'from' | 'to' | 'same' | 'pastDate' | 'dropBeforePickup'; text: string }[] = []
             const from = state.from.trim()
@@ -321,7 +333,7 @@ export default function SearchWidget({ onSearch, bare = false }: { onSearch?: ()
             onSearch?.()
           }}
           className="flex items-center gap-2 bg-cta hover:bg-cta-dark text-white font-bold text-sm px-6 py-3 rounded-xl transition-colors shadow-lg shadow-cta/20">
-          <Search size={15} /> Search Cabs
+          <Search size={15} /> {submitLabel}
         </Link>
       </div>
     </div>
