@@ -19,7 +19,7 @@ export default function HomeVehicleCard({ v, square = false }: { v: CabCategory;
   const description = stripHtml(v.description) || 'Similar or equivalent'
   const outerRadius = square ? 'w-[86%] rounded-2xl sm:w-[80%] sm:rounded-3xl' : 'w-full rounded-full'
   const innerRadius = square ? 'rounded-xl sm:rounded-[1.25rem]' : 'rounded-full'
-  const className = 'group flex flex-col items-center text-center transition-transform duration-300 hover:-translate-y-1'
+  const className = 'group flex cursor-pointer flex-col items-center text-center transition-transform duration-300 hover:-translate-y-1'
 
   const content = (
     <>
