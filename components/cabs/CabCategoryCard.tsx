@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Car, Users, Wind } from 'lucide-react'
+import { Car, Luggage, Users, Wind } from 'lucide-react'
 import { CabCategory } from '@/types/cabs'
 import { useSearchState } from '@/context/SearchContext'
 import EnquiryModal from '@/components/home/EnquiryModal'
@@ -55,6 +55,11 @@ export default function CabCategoryCard({ v }: { v: CabCategory }) {
           {v.seating_capacity !== null && (
             <span className="flex items-center gap-1 rounded-full bg-ivory px-2 py-0.5 text-[10px] font-medium text-ink-muted sm:px-2.5 sm:py-1 sm:text-[11px]">
               <Users size={10} /> {v.seating_capacity} seats
+            </span>
+          )}
+          {v.number_of_bags !== null && (
+            <span className="flex items-center gap-1 rounded-full bg-ivory px-2 py-0.5 text-[10px] font-medium text-ink-muted sm:px-2.5 sm:py-1 sm:text-[11px]">
+              <Luggage size={10} /> {v.number_of_bags} bags
             </span>
           )}
           <span className="flex items-center gap-1 rounded-full bg-ivory px-2 py-0.5 text-[10px] font-medium text-ink-muted sm:px-2.5 sm:py-1 sm:text-[11px]">
