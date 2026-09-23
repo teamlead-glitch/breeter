@@ -1,9 +1,11 @@
 export default function PriceBreakdownList({
   breakdown,
+  tax,
   total,
   refreshing = false,
 }: {
   breakdown: { label: string; amount: number }[]
+  tax?: number
   total: number
   refreshing?: boolean
 }) {
@@ -21,6 +23,12 @@ export default function PriceBreakdownList({
             <span className="flex-shrink-0 font-mono font-bold whitespace-nowrap text-ink-faint">₹{line.amount.toLocaleString('en-IN')}</span>
           </div>
         ))}
+        {tax !== undefined && tax > 0 && (
+          <div className="flex items-start justify-between gap-1.5 text-xs">
+            <span className="min-w-0 flex-1 text-ink-faint">Taxes &amp; fees</span>
+            <span className="flex-shrink-0 font-mono font-bold whitespace-nowrap text-ink-faint">₹{tax.toLocaleString('en-IN')}</span>
+          </div>
+        )}
       </div>
 
       <div className="border-t border-black/5 pt-3">

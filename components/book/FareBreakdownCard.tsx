@@ -6,6 +6,7 @@ import { RazorpayPaymentType } from '@/types/payments'
 
 export default function FareBreakdownCard({
   breakdown,
+  tax,
   total,
   payNow,
   balance,
@@ -15,6 +16,7 @@ export default function FareBreakdownCard({
   onPayNow,
 }: {
   breakdown: { label: string; amount: number }[]
+  tax?: number
   total: number
   payNow: number
   balance: number
@@ -30,7 +32,7 @@ export default function FareBreakdownCard({
 
   return (
     <div className={`bg-white rounded-2xl border border-black/5 p-5 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto transition-opacity ${refreshing ? 'opacity-60' : ''}`}>
-      <PriceBreakdownList breakdown={breakdown} total={total} refreshing={refreshing} />
+      <PriceBreakdownList breakdown={breakdown} tax={tax} total={total} refreshing={refreshing} />
 
       <div role="radiogroup" aria-label="Payment option" className="space-y-2 mb-4 mt-3">
         <label

@@ -84,6 +84,7 @@ export type BookingDetails = {
     type: string
     detail: BookingPricingDetail
     total_amount: number
+    tax_amount: number
     breakdown: BookingFareLine[]
   }
 }

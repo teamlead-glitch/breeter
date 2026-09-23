@@ -147,6 +147,7 @@ export default function BookPage() {
           <aside className="hidden lg:block w-72 flex-shrink-0 lg:self-stretch">
             <FareBreakdownCard
               breakdown={details.pricing.breakdown}
+              tax={details.pricing.tax_amount}
               total={total}
               payNow={payNow}
               balance={balance}
