@@ -1,9 +1,11 @@
 'use client'
+import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Car, Luggage, Users, Wind } from 'lucide-react'
 import { CabCategory } from '@/types/cabs'
 import { useSearchState } from '@/context/SearchContext'
+import EnquiryModal from '@/components/home/EnquiryModal'
 
 export type PricedCabCategory = CabCategory & { fare: NonNullable<CabCategory['fare']> }
 
@@ -14,6 +16,7 @@ function stripHtml(html: string | null) {
 
 export default function SearchVehicleCard({ v }: { v: PricedCabCategory }) {
   const { dispatch } = useSearchState()
+  const [enquiryOpen, setEnquiryOpen] = useState(false)
   const description = stripHtml(v.description) || 'Similar or equivalent'
 
   return (
@@ -41,14 +44,26 @@ export default function SearchVehicleCard({ v }: { v: PricedCabCategory }) {
       <div className="flex-shrink-0 flex flex-col items-end">
         <div>
           <p className="font-mono font-bold text-ink text-lg sm:text-2xl">₹{v.fare.amount.toLocaleString('en-IN')}</p>
-          <p className="text-ink-faint text-xs">taxes extra</p>
+          <p className="text-ink-faint text-xs">Taxes extra</p>
         </div>
-        <Link
-          href="/book"
-          onClick={() => dispatch({ type: 'SET_CAB_CATEGORY_ID', id: v.id })}
-          className="bg-cta hover:bg-cta-dark text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-colors mt-3">
-          Select
-        </Link>
+        {v.is_enquiry_only ? (
+          <>
+            <button
+              type="button"
+              onClick={() => setEnquiryOpen(true)}
+              className="bg-cta hover:bg-cta-dark text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-colors mt-3">
+              Enquire
+            </button>
+            {enquiryOpen && <EnquiryModal cabCategoryId={v.id} subject={v.name} onClose={() => setEnquiryOpen(false)} />}
+          </>
+        ) : (
+          <Link
+            href="/book"
+            onClick={() => dispatch({ type: 'SET_CAB_CATEGORY_ID', id: v.id })}
+            className="bg-cta hover:bg-cta-dark text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-colors mt-3">
+            Select
+          </Link>
+        )}
       </div>
     </div>
   )
