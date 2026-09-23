@@ -11,6 +11,10 @@ import { DEFAULT_STATE_ID, PLACEHOLDER_DISTANCE_KM, TRIP_TYPE_IDS } from '@/lib/
 import { CabCategoriesData } from '@/types/cabs'
 import { formatDate, formatTime } from '@/lib/date'
 
+function truncateLocation(value: string, max = 23) {
+  return value.length > max ? `${value.slice(0, max)}...` : value
+}
+
 function buildCabCategoryParams(state: SearchState): URLSearchParams {
   const params = new URLSearchParams()
   params.set('per_page', '15')
@@ -86,7 +90,12 @@ export default function SearchResultsPage() {
               <span className="bg-forest text-white text-xs font-semibold px-3 py-1 rounded-full">{state.tripType}</span>
               <div>
                 <p className="text-xs text-ink-faint">Route</p>
-                <p className="font-semibold text-ink text-sm">{state.from} → {state.to}</p>
+                <p className="font-semibold text-ink text-sm">{truncateLocation(state.from)} → {truncateLocation(state.to)}</p>
+                {state.stops.length > 0 && (
+                  <p className="text-xs text-ink-faint mt-0.5">
+                    via {state.stops.map(s => s.location.split(',')[0].trim()).join(', ')}
+                  </p>
+                )}
               </div>
               <div className="hidden sm:block">
                 <p className="text-xs text-ink-faint">Date / Time</p>

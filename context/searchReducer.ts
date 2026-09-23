@@ -71,7 +71,9 @@ function toggle<T>(list: T[], value: T) {
 export function searchReducer(state: SearchState, action: SearchAction): SearchState {
   switch (action.type) {
     case 'SET_TRIP_TYPE':
-      return { ...state, tripType: action.tripType }
+      // Hourly Rental has no stops field in the UI — clear any left over from Drop/Round Trip
+      // so they don't linger in state (and get sent with the booking) unseen.
+      return { ...state, tripType: action.tripType, stops: action.tripType === 'Hourly Rental' ? [] : state.stops }
     case 'SET_FROM':
       // Coords are only known right after a suggestion is picked (see SET_FROM_COORDS) — any
       // further edit to the text invalidates them until the next pick.
