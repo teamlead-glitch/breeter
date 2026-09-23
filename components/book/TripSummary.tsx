@@ -6,6 +6,7 @@ export default function TripSummary({
   tripTypeName,
   fromLocation,
   toLocation,
+  stops = [],
   stateName,
   distanceKm,
   pickupDate,
@@ -13,6 +14,7 @@ export default function TripSummary({
   tripTypeName: string
   fromLocation: string
   toLocation: string
+  stops?: string[]
   stateName: string
   distanceKm: number
   pickupDate: string
@@ -37,6 +39,12 @@ export default function TripSummary({
             {/* <p className="text-ink-faint text-xs">{stateName}</p> */}
           </div>
         </div>
+        {stops.map((stop, i) => (
+          <div key={i} className="relative flex items-center gap-3 pb-4">
+            <span className="w-2.5 h-2.5 ml-0.5 rounded-full border-2 border-ink-faint/40 bg-ivory flex-shrink-0" />
+            <p className="text-ink-muted text-sm font-semibold leading-tight">{stop}</p>
+          </div>
+        ))}
         <div className="relative flex items-center gap-3">
           <span className="w-3.5 h-3.5 rounded-full bg-cta flex-shrink-0" />
           <div>
@@ -62,6 +70,9 @@ export default function TripSummary({
           {/* <p className="text-ink-faint text-xs">{stateName}</p> */}
         </div>
       </div>
+      {stops.length > 0 && (
+        <p className="hidden sm:block text-ink-faint text-xs mt-2">via {stops.join(', ')}</p>
+      )}
       <p className="text-ink-faint text-xs mt-3">📅 {formatDate(pickupDate, { withYear: true })}, {formatTime(pickupDate)} · ~{distanceKm} km</p>
     </div>
   )

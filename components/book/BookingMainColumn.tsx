@@ -47,6 +47,7 @@ export default function BookingMainColumn({
         tripTypeName={details.trip_type.name}
         fromLocation={details.route.from.location}
         toLocation={details.route.to.location}
+        stops={details.route.stops.map(s => s.location.split(',')[0].trim())}
         stateName={details.state.name}
         distanceKm={details.route.distance_km}
         pickupDate={pickupDate}
