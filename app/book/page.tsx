@@ -113,8 +113,11 @@ export default function BookPage() {
     roof: details.pricing.detail.carrier_rate,
   }
   const total = details.pricing.total_amount
-  const payNow = Math.round(total * 0.2)
-  const balance = total - payNow
+  // Rounded to the nearest paise (2 decimals), matching the backend's advance-amount calculation
+  // for the actual Razorpay order — rounding to a whole rupee here would show a different figure
+  // than what the checkout popup ends up charging.
+  const payNow = Math.round(total * 0.2 * 100) / 100
+  const balance = Math.round((total - payNow) * 100) / 100
   const isRefreshingFare = detailsLoading
   const bookingPayload = buildBookingDetailsPayload(state, addOns)
   const pickupTime = state.pickupDate.split('T')[1] ?? ''
