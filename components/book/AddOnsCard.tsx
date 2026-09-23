@@ -22,19 +22,22 @@ export default function AddOnsCard({
         <h3 className="font-bold text-ink text-base">Add-ons &amp; preferences</h3>
         <p className="text-ink-faint text-xs mt-1">Optional — each adds a flat charge to your fare</p>
       </div>
-      {ADD_ONS.map((a, i) => (
+      {ADD_ONS.map((a, i) => {
+        const rate = rates[a.id] ?? 0
+        const itemDisabled = disabled || rate === 0
+        return (
         <div
           key={a.id}
           role="checkbox"
           aria-checked={addOns.includes(a.id)}
-          aria-disabled={disabled}
-          tabIndex={disabled ? -1 : 0}
-          onClick={() => !disabled && onToggle(a.id)}
+          aria-disabled={itemDisabled}
+          tabIndex={itemDisabled ? -1 : 0}
+          onClick={() => !itemDisabled && onToggle(a.id)}
           onKeyDown={e => {
-            if (!disabled && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onToggle(a.id) }
+            if (!itemDisabled && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onToggle(a.id) }
           }}
           className={`flex items-start gap-4 px-4 sm:px-5 py-4 transition-colors ${
-            disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-ivory/60'
+            itemDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-ivory/60'
           } ${i < ADD_ONS.length - 1 ? 'border-b border-black/5' : ''}`}>
           <span
             aria-hidden
@@ -64,9 +67,10 @@ export default function AddOnsCard({
               </div>
             )}
           </div>
-          <span className="font-mono font-semibold text-ink text-sm flex-shrink-0 mt-0.5">+₹{rates[a.id]}</span>
+          <span className="font-mono font-semibold text-ink text-sm flex-shrink-0 mt-0.5">+₹{rate}</span>
         </div>
-      ))}
+        )
+      })}
     </div>
   )
 }
