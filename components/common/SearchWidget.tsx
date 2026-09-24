@@ -53,14 +53,6 @@ export default function SearchWidget({
   const [toOpen, setToOpen] = useState(false)
   const [stopOpen, setStopOpen] = useState(false)
 
-  const saveStop = (lat: number | null = null, lng: number | null = null) => {
-    const location = stopInput.trim()
-    if (location) dispatch({ type: 'ADD_STOP', stop: { location, lat, lng } })
-    setStopInput('')
-    setAddingStop(false)
-    setStopOpen(false)
-  }
-
   const removeStop = (index: number) => {
     dispatch({ type: 'REMOVE_STOP', index })
   }
@@ -152,7 +144,8 @@ export default function SearchWidget({
                       value={stopInput}
                       onChange={e => setStopInput(e.target.value)}
                       onKeyDown={e => {
-                        if (e.key === 'Enter') { e.preventDefault(); saveStop() }
+                        // Stops must be picked from the suggestions (so they have coords) — Enter does nothing.
+                        if (e.key === 'Enter') e.preventDefault()
                         if (e.key === 'Escape') { setAddingStop(false); setStopInput(''); setStopOpen(false) }
                       }}
                       onFocus={() => setStopOpen(true)}
