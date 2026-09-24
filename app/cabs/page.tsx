@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import SearchWidget from '@/components/common/SearchWidget'
 import CabsGrid from '@/components/cabs/CabsGrid'
 import { getSeoMetadata } from '@/lib/seo'
 
@@ -79,6 +80,13 @@ export default async function CabsPage({ searchParams }: PageProps) {
               {val.title}
             </Link>
           ))}
+        </div>
+      </div>
+
+      {/* Search widget */}
+      <div className="bg-ivory-dark border-b border-black/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <SearchWidget />
         </div>
       </div>
 
