@@ -30,6 +30,7 @@ export type SendOtpRequest = {
   with_carrier: boolean
   with_vehicle_below_5yr: boolean
   notes: string
+  is_enquiry: boolean
 }
 
 export type SendOtpResponse = {

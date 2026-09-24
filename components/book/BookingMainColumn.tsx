@@ -67,7 +67,7 @@ export default function BookingMainColumn({
         <PriceBreakdownList breakdown={details.pricing.breakdown} tax={details.pricing.tax_amount} total={total} refreshing={isRefreshingFare} />
       </div>
 
-      <TravellerDetailsForm ref={travellerFormRef} booking={bookingPayload} pickupTime={pickupTime} />
+      <TravellerDetailsForm ref={travellerFormRef} booking={bookingPayload} pickupTime={pickupTime} isEnquiry={Boolean(details.cab_category.is_enquiry_only)} />
 
       {/* Mobile/tablet: terms checkbox — the sidebar with this is desktop-only, but the fixed pay bar's button needs it too */}
       <div className="lg:hidden bg-white rounded-2xl border border-black/5 p-4">

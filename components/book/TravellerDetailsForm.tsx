@@ -19,13 +19,15 @@ type TravellerDetailsFormProps = {
   // Trip context the send-otp API needs alongside the traveller's own details.
   booking: BookingDetailsRequest
   pickupTime: string
+  // Enquiry-only cab — tells the backend to store this as an enquiry, not a payable booking.
+  isEnquiry: boolean
 }
 
 type FieldErrors = { name?: string; phone?: string; email?: string }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-const TravellerDetailsForm = forwardRef<TravellerDetailsFormHandle, TravellerDetailsFormProps>(({ booking, pickupTime }, ref) => {
+const TravellerDetailsForm = forwardRef<TravellerDetailsFormHandle, TravellerDetailsFormProps>(({ booking, pickupTime, isEnquiry }, ref) => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
@@ -201,6 +203,7 @@ const TravellerDetailsForm = forwardRef<TravellerDetailsFormHandle, TravellerDet
             customer_email: email.trim(),
             notes: notes.trim(),
             pickup_time: pickupTime,
+            is_enquiry: isEnquiry,
           }}
           onClose={() => setPhoneOtpOpen(false)}
           onVerified={bookingId => {
