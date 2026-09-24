@@ -5,7 +5,7 @@ export type TravellerInfo = {
   notes: string
 }
 
-export type RazorpayPaymentType = 'advance' | 'full'
+export type RazorpayPaymentType = 'advance' | 'balance'
 
 export type CreateRazorpayOrderRequest = {
   booking_id: number
