@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
 import { ChevronDown, Search, SearchX } from 'lucide-react'
 import PackageCard from '@/components/holidays/PackageCard'
+import PackageTile from '@/components/holidays/PackageTile'
 import { apiGet } from '@/lib/apiService'
 import { State, StatesData } from '@/types/states'
 import { FeaturedPackage, PackagesData } from '@/types/packages'
@@ -194,9 +195,9 @@ export default function HolidaysPage() {
       <div className="bg-ivory min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-3 gap-3 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
               {[1, 2, 3].map(i => (
-                <div key={i} className="h-96 rounded-2xl bg-white border border-black/4 animate-pulse" />
+                <div key={i} className="aspect-square sm:aspect-auto sm:h-96 rounded-2xl bg-white border border-black/4 animate-pulse" />
               ))}
             </div>
           ) : error ? (
@@ -231,9 +232,12 @@ export default function HolidaysPage() {
                   )}
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-3 gap-3 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
                   {filteredPackages.map(pkg => (
-                    <PackageCard key={pkg.id} pkg={pkg} />
+                    <div key={pkg.id}>
+                      <div className="sm:hidden"><PackageTile pkg={pkg} /></div>
+                      <div className="hidden h-full sm:block"><PackageCard pkg={pkg} /></div>
+                    </div>
                   ))}
                 </div>
               )}
@@ -241,9 +245,9 @@ export default function HolidaysPage() {
               {hasMore && (
                 <div ref={sentinelRef} className="mt-8">
                   {loadingMore && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-3 gap-3 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
                       {[1, 2, 3].map(i => (
-                        <div key={i} className="h-96 rounded-2xl bg-white border border-black/4 animate-pulse" />
+                        <div key={i} className="aspect-square sm:aspect-auto sm:h-96 rounded-2xl bg-white border border-black/4 animate-pulse" />
                       ))}
                     </div>
                   )}
