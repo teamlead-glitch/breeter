@@ -11,7 +11,7 @@ export default function MarqueeStrip({ text }: { text?: string | null }) {
   const marqueeText = text?.trim() || FALLBACK_TEXT
 
   return (
-    <div className="overflow-hidden bg-[#0A2A80] py-3" aria-label="Breeter highlights">
+    <div className="overflow-hidden bg-cta-dark py-3" aria-label="Breeter highlights">
       <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
         <span className="whitespace-nowrap text-sm font-semibold text-white/90">{marqueeText}</span>
       </div>

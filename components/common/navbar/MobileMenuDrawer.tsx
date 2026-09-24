@@ -14,7 +14,7 @@ const menuLinks = [
 
 export default function MobileMenuDrawer({ onNavigate, onBookCab }: { onNavigate: () => void; onBookCab: () => void }) {
   return (
-    <div className="-mx-4 sm:-mx-6 md:mx-0 bg-forest border-t border-white/10 md:absolute md:right-6 lg:right-8 md:top-16 md:w-64 md:border md:shadow-2xl md:overflow-hidden">
+    <div className="-mx-4 sm:-mx-6 md:mx-0 bg-cta border-t border-white/10 md:absolute md:right-6 lg:right-8 md:top-16 md:w-64 md:border md:shadow-2xl md:overflow-hidden">
       <div className="px-4 py-4 space-y-0.5">
         {menuLinks.map(l => (
           <Link key={l.label} href={l.href} onClick={onNavigate}
@@ -25,7 +25,7 @@ export default function MobileMenuDrawer({ onNavigate, onBookCab }: { onNavigate
         ))}
         <button
           onClick={() => { onNavigate(); onBookCab() }}
-          className="block w-full mt-3 px-3 py-3 bg-cta text-white font-bold text-sm rounded-xl text-center md:hidden">
+          className="block w-full mt-3 px-3 py-3 bg-cta-dark text-white font-bold text-sm rounded-xl text-center md:hidden">
           Book a Cab
         </button>
       </div>

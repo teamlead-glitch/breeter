@@ -96,7 +96,7 @@ export default function PaymentModal({
       description: cabCategoryName ? `${cabCategoryName} booking` : 'Cab booking',
       order_id,
       prefill: { name: traveller.name, email: traveller.email, contact: traveller.phone },
-      theme: { color: '#1B7A33' },
+      theme: { color: '#1F6B7B' },
       modal: {
         ondismiss: () => {
           if (!paymentHandledRef.current && mountedRef.current) setStatus('cancelled')

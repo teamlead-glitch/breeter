@@ -21,7 +21,7 @@ const links = {
 
 export default function Footer() {
   return (
-    <footer className="bg-forest text-white">
+    <footer className="bg-cta text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
           {/* Brand */}
@@ -30,7 +30,7 @@ export default function Footer() {
               <span className="w-8 h-8 bg-gold rounded-lg grid place-items-center font-display font-bold text-white text-lg">B</span>
               <span className="font-display font-bold text-white text-xl">Breeter</span>
             </Link>
-            <p className="text-white/50 text-sm leading-relaxed max-w-[220px]">
+            <p className="text-white/90 text-sm leading-relaxed max-w-[220px]">
               Outstation cabs, hourly rentals & curated holiday packages across South India.
             </p>
           </div>
@@ -40,7 +40,7 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {links.cabs.map(l => (
                 <li key={l.href + l.label}>
-                  <Link href={l.href} className="text-white/50 hover:text-white text-sm transition-colors">{l.label}</Link>
+                  <Link href={l.href} className="text-white/90 hover:text-white text-sm transition-colors">{l.label}</Link>
                 </li>
               ))}
             </ul>
@@ -51,7 +51,7 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {links.company.map(l => (
                 <li key={l.href + l.label}>
-                  <Link href={l.href} className="text-white/50 hover:text-white text-sm transition-colors">{l.label}</Link>
+                  <Link href={l.href} className="text-white/90 hover:text-white text-sm transition-colors">{l.label}</Link>
                 </li>
               ))}
             </ul>
@@ -62,16 +62,16 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {links.legal.map(l => (
                 <li key={l.href + l.label}>
-                  <Link href={l.href} className="text-white/50 hover:text-white text-sm transition-colors">{l.label}</Link>
+                  <Link href={l.href} className="text-white/90 hover:text-white text-sm transition-colors">{l.label}</Link>
                 </li>
               ))}
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between gap-3">
-          <p className="text-white/30 text-xs">© 2026 Breeter Travel Express. All rights reserved.</p>
-          <p className="text-white/30 text-xs">Kerala · Tamil Nadu · Pan India outstation</p>
+        <div className="mt-12 pt-6 border-t border-white/25 flex flex-col sm:flex-row justify-between gap-3">
+          <p className="text-white/80 text-xs">© 2026 Breeter Travel Express. All rights reserved.</p>
+          <p className="text-white/80 text-xs">Kerala · Tamil Nadu · Pan India outstation</p>
         </div>
       </div>
     </footer>

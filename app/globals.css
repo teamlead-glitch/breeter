@@ -21,10 +21,10 @@
   --color-ink-muted: #555555;
   --color-ink-faint: #555555;
 
-  /* CTA green — all primary buttons */
-  --color-cta: #1B7A33;
-  --color-cta-dark: #145225;
-  --color-cta-light: #289845;
+  /* CTA teal blue — all primary buttons */
+  --color-cta: #1F6B7B;
+  --color-cta-dark: #164F5B;
+  --color-cta-light: #2A8597;
 
   /* Typography */
   --font-display: var(--font-sans);

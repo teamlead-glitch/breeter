@@ -31,7 +31,7 @@ export default function Navbar() {
 
   const navBg = isHome && !scrolled && !mobileOpen
     ? 'bg-transparent'
-    : 'bg-forest shadow-xl'
+    : 'bg-cta shadow-xl'
 
   return (
     <>
@@ -44,7 +44,7 @@ export default function Navbar() {
             <div className="ml-auto flex items-center gap-3">
               <button
                 onClick={openBookModal}
-                className="hidden md:inline-flex items-center bg-cta hover:bg-cta-dark text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-colors">
+                className="hidden md:inline-flex items-center bg-cta-dark hover:bg-[#123F48] text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-colors">
                 Book a Cab
               </button>
               <button onClick={() => setMobileOpen(!mobileOpen)} className="text-white p-2 rounded-lg">
