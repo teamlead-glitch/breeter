@@ -6,6 +6,7 @@ import Footer from '@/components/common/Footer'
 import WhatsAppFab from '@/components/common/WhatsAppFab'
 import { BookModalProvider } from '@/components/common/BookModalContext'
 import { SearchProvider } from '@/context/SearchContext'
+import { fetchSiteSettings } from '@/lib/settings'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -19,7 +20,10 @@ export const metadata: Metadata = {
     'Book outstation cabs, hourly rentals and curated holiday packages across South India. Transparent pricing, verified operators.',
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const settingsRes = await fetchSiteSettings()
+  const whatsapp = settingsRes.data?.data.contact_whatsapp ?? null
+
   return (
     <html
       lang="en"
@@ -31,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Navbar />
             <main className="flex-1">{children}</main>
             <Footer />
-            <WhatsAppFab />
+            <WhatsAppFab number={whatsapp} />
           </BookModalProvider>
         </SearchProvider>
       </body>

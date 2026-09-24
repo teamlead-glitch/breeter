@@ -1,13 +1,20 @@
 'use client'
 import { usePathname } from 'next/navigation'
 
-export default function WhatsAppFab() {
+// wa.me needs digits only, with country code — assume India (+91) for bare 10-digit numbers.
+function toWaNumber(raw: string | null) {
+  const digits = raw?.replace(/\D/g, '') ?? ''
+  return digits.length === 10 ? `91${digits}` : digits
+}
+
+export default function WhatsAppFab({ number }: { number: string | null }) {
   const pathname = usePathname()
-  if (pathname !== '/') return null
+  const waNumber = toWaNumber(number)
+  if (pathname !== '/' || !waNumber) return null
 
   return (
     <a
-      href="https://wa.me/919999999999"
+      href={`https://wa.me/${waNumber}`}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
