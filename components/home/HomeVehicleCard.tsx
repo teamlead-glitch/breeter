@@ -4,7 +4,6 @@ import Image from 'next/image'
 import { Car } from 'lucide-react'
 import { CabCategory } from '@/types/cabs'
 import { useSearchState } from '@/context/SearchContext'
-import EnquiryModal from './EnquiryModal'
 import VehicleSearchModal from '@/components/common/VehicleSearchModal'
 
 function stripHtml(html: string | null) {
@@ -14,7 +13,6 @@ function stripHtml(html: string | null) {
 
 export default function HomeVehicleCard({ v, square = false }: { v: CabCategory; square?: boolean }) {
   const { dispatch } = useSearchState()
-  const [enquiryOpen, setEnquiryOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const description = stripHtml(v.description) || 'Similar or equivalent'
   const outerRadius = square ? 'w-[86%] rounded-2xl sm:w-[80%] sm:rounded-3xl' : 'w-full rounded-full'
@@ -52,17 +50,6 @@ export default function HomeVehicleCard({ v, square = false }: { v: CabCategory;
       )}
     </>
   )
-
-  if (v.is_enquiry_only) {
-    return (
-      <>
-        <button type="button" onClick={() => setEnquiryOpen(true)} className={className}>
-          {content}
-        </button>
-        {enquiryOpen && <EnquiryModal cabCategoryId={v.id} subject={v.name} onClose={() => setEnquiryOpen(false)} />}
-      </>
-    )
-  }
 
   return (
     <>

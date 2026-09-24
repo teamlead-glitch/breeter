@@ -26,11 +26,9 @@ function validate(values: FormValues): FormErrors {
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
 
-type EnquiryModalProps =
-  | { subject: string; onClose: () => void; category: string; cabCategoryId?: undefined }
-  | { subject: string; onClose: () => void; category?: undefined; cabCategoryId: number }
+type EnquiryModalProps = { subject: string; onClose: () => void; category: string }
 
-export default function EnquiryModal({ subject, category, cabCategoryId, onClose }: EnquiryModalProps) {
+export default function EnquiryModal({ subject, category, onClose }: EnquiryModalProps) {
   const [values, setValues] = useState<FormValues>(EMPTY_VALUES)
   const [errors, setErrors] = useState<FormErrors>({})
   const [status, setStatus] = useState<Status>('idle')
@@ -59,22 +57,13 @@ export default function EnquiryModal({ subject, category, cabCategoryId, onClose
 
     setStatus('submitting')
     const message = values.message.trim()
-    const res =
-      cabCategoryId !== undefined
-        ? await apiPost('v1/cab-category-enquiries', {
-            cab_category_id: cabCategoryId,
-            name: values.name.trim(),
-            phone: values.phone.trim(),
-            email: values.email.trim(),
-            message,
-          })
-        : await apiPost('v1/contact-enquiries', {
-            name: values.name.trim(),
-            phone: values.phone.trim(),
-            email: values.email.trim(),
-            category,
-            message: `[${subject}] ${message}`.trim(),
-          })
+    const res = await apiPost('v1/contact-enquiries', {
+      name: values.name.trim(),
+      phone: values.phone.trim(),
+      email: values.email.trim(),
+      category,
+      message: `[${subject}] ${message}`.trim(),
+    })
 
     if (res.error) {
       setSubmitError(res.error)

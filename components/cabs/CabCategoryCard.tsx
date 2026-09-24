@@ -4,7 +4,6 @@ import Image from 'next/image'
 import { Car, Luggage, Users, Wind } from 'lucide-react'
 import { CabCategory } from '@/types/cabs'
 import { useSearchState } from '@/context/SearchContext'
-import EnquiryModal from '@/components/home/EnquiryModal'
 import VehicleSearchModal from '@/components/common/VehicleSearchModal'
 
 function stripHtml(html: string | null) {
@@ -14,7 +13,6 @@ function stripHtml(html: string | null) {
 
 export default function CabCategoryCard({ v }: { v: CabCategory }) {
   const { dispatch } = useSearchState()
-  const [enquiryOpen, setEnquiryOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const description = stripHtml(v.description) || 'Similar or equivalent'
 
@@ -38,7 +36,7 @@ export default function CabCategoryCard({ v }: { v: CabCategory }) {
         <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-ink/50 to-transparent" />
 
         <span className="absolute top-2 right-2 rounded-lg bg-cta/90 px-2 py-1 text-[10px] font-bold text-white backdrop-blur-sm transition-colors group-hover:bg-cta sm:top-3 sm:right-3 sm:px-3 sm:py-1.5 sm:text-xs">
-          {v.is_enquiry_only ? 'Enquire →' : 'Select →'}
+          Select →
         </span>
 
         {v.fare !== null && (
@@ -70,17 +68,6 @@ export default function CabCategoryCard({ v }: { v: CabCategory }) {
       </div>
     </>
   )
-
-  if (v.is_enquiry_only) {
-    return (
-      <>
-        <button type="button" onClick={() => setEnquiryOpen(true)} className={className}>
-          {content}
-        </button>
-        {enquiryOpen && <EnquiryModal cabCategoryId={v.id} subject={v.name} onClose={() => setEnquiryOpen(false)} />}
-      </>
-    )
-  }
 
   return (
     <>
