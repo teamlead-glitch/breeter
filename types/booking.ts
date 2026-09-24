@@ -65,6 +65,7 @@ export type BookingDetails = {
     number_of_bags: number | null
     slug: string
     image: CabCategoryImage | null
+    is_enquiry_only?: boolean
   }
   state: {
     id: number

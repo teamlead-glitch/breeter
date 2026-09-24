@@ -10,6 +10,8 @@ export default function MobilePayBar({
   refreshing = false,
   onPayAttempt,
   onPayNow,
+  isEnquiry = false,
+  onSendEnquiry,
 }: {
   payNow: number
   total: number
@@ -17,9 +19,39 @@ export default function MobilePayBar({
   refreshing?: boolean
   onPayAttempt: () => void
   onPayNow: (type: RazorpayPaymentType) => void
+  isEnquiry?: boolean
+  onSendEnquiry?: () => void
 }) {
   const [payOption, setPayOption] = useState<'partial' | 'full'>('partial')
   const balance = total - payNow
+
+  if (isEnquiry) {
+    return (
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-40">
+        <div className="bg-[#E3EFE6] px-4 py-2.5 text-center">
+          <p className="text-xs font-semibold text-cta-dark">No payment needed now — we&apos;ll confirm and get back to you.</p>
+        </div>
+        <div className="bg-ink px-4 pt-3 pb-4 shadow-[0_-8px_24px_rgba(0,0,0,0.25)]">
+          <div className="flex items-center gap-3">
+            <div className="flex-1 min-w-0">
+              <p className="text-[11px] font-semibold text-white/70">Estimated fare</p>
+              <p className="font-mono text-sm font-bold text-white">₹{total.toLocaleString('en-IN')}</p>
+            </div>
+            <button
+              disabled={refreshing}
+              onClick={() => { if (!refreshing) onSendEnquiry?.() }}
+              className={`flex-none uppercase tracking-wide font-bold text-sm px-7 py-3.5 rounded-xl transition-all ${
+                refreshing
+                  ? 'bg-white/10 text-white/40'
+                  : 'bg-gradient-to-r from-cta-light to-cta text-white shadow-lg shadow-cta/30 active:scale-95'
+              }`}>
+              Send enquiry
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="lg:hidden fixed bottom-0 inset-x-0 z-40">

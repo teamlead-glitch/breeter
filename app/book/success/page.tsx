@@ -8,6 +8,7 @@ function BookingSuccessContent() {
   const searchParams = useSearchParams()
   const bookingId = searchParams.get('booking_id')
   const email = searchParams.get('email')
+  const isEnquiry = searchParams.get('type') === 'enquiry'
 
   return (
     <div className="min-h-screen bg-ivory grid place-items-center px-4 py-16">
@@ -16,16 +17,24 @@ function BookingSuccessContent() {
           <CheckCircle2 size={40} />
         </div>
 
-        <h1 className="font-display text-ink text-2xl md:text-3xl font-bold mb-2">Your booking is confirmed!</h1>
-        {bookingId && <p className="font-mono text-ink-faint text-xs mb-4">Booking ID #{bookingId}</p>}
+        <h1 className="font-display text-ink text-2xl md:text-3xl font-bold mb-2">
+          {isEnquiry ? 'Enquiry submitted successfully!' : 'Your booking is confirmed!'}
+        </h1>
+        {bookingId && <p className="font-mono text-ink-faint text-xs mb-4">{isEnquiry ? 'Enquiry' : 'Booking'} ID #{bookingId}</p>}
 
         <p className="text-ink-muted text-sm leading-relaxed mb-8">
-          {email ? (
-            <>We&apos;ve sent the full details to <span className="font-semibold text-ink">{email}</span>.</>
+          {isEnquiry ? (
+            <>Thanks for your enquiry. Our team will contact you soon to confirm availability and finalise your trip.</>
           ) : (
-            "We've sent the full details to your email."
-          )}{' '}
-          Our team will follow up with you shortly to finalise your trip.
+            <>
+              {email ? (
+                <>We&apos;ve sent the full details to <span className="font-semibold text-ink">{email}</span>.</>
+              ) : (
+                "We've sent the full details to your email."
+              )}{' '}
+              Our team will follow up with you shortly to finalise your trip.
+            </>
+          )}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -42,7 +51,7 @@ function BookingSuccessContent() {
         </div>
 
         <div className="mt-10 pt-8 border-t border-black/5 flex items-center justify-center gap-6 text-xs text-ink-faint">
-          <span className="flex items-center gap-1.5"><Mail size={13} /> Confirmation emailed</span>
+          {!isEnquiry && <span className="flex items-center gap-1.5"><Mail size={13} /> Confirmation emailed</span>}
           <span className="flex items-center gap-1.5"><PhoneCall size={13} /> We&apos;ll call you soon</span>
         </div>
       </div>

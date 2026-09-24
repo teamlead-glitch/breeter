@@ -14,6 +14,8 @@ export default function FareBreakdownCard({
   refreshing = false,
   onToggleAgree,
   onPayNow,
+  isEnquiry = false,
+  onSendEnquiry,
 }: {
   breakdown: { label: string; amount: number }[]
   tax?: number
@@ -24,14 +26,32 @@ export default function FareBreakdownCard({
   refreshing?: boolean
   onToggleAgree: () => void
   onPayNow: (type: RazorpayPaymentType) => void
+  isEnquiry?: boolean
+  onSendEnquiry?: () => void
 }) {
   const [payOption, setPayOption] = useState<'partial' | 'full'>('partial')
   const [termsError, setTermsError] = useState<string | undefined>()
   const termsRef = useRef<HTMLLabelElement>(null)
   const payAmount = payOption === 'partial' ? payNow : total
+  const cardClass = `bg-white rounded-2xl border border-black/5 p-5 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto transition-opacity ${refreshing ? 'opacity-60' : ''}`
+  const buttonClass = `w-full font-bold py-3.5 rounded-xl text-sm transition-colors ${
+    refreshing ? 'bg-ink-faint/15 text-ink-faint cursor-not-allowed' : 'bg-cta hover:bg-cta-dark text-white'
+  }`
+
+  if (isEnquiry) {
+    return (
+      <div className={cardClass}>
+        <PriceBreakdownList breakdown={breakdown} tax={tax} total={total} refreshing={refreshing} />
+        <p className="text-xs text-ink-faint mt-3 mb-4">No payment needed now — our team will confirm availability and get back to you.</p>
+        <button disabled={refreshing} onClick={() => { if (!refreshing) onSendEnquiry?.() }} className={buttonClass}>
+          Send enquiry →
+        </button>
+      </div>
+    )
+  }
 
   return (
-    <div className={`bg-white rounded-2xl border border-black/5 p-5 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto transition-opacity ${refreshing ? 'opacity-60' : ''}`}>
+    <div className={cardClass}>
       <PriceBreakdownList breakdown={breakdown} tax={tax} total={total} refreshing={refreshing} />
 
       <div role="radiogroup" aria-label="Payment option" className="space-y-2 mb-4 mt-3">
@@ -103,9 +123,7 @@ export default function FareBreakdownCard({
           }
           onPayNow(payOption === 'partial' ? 'advance' : 'full')
         }}
-        className={`w-full font-bold py-3.5 rounded-xl text-sm transition-colors ${
-          refreshing ? 'bg-ink-faint/15 text-ink-faint cursor-not-allowed' : 'bg-cta hover:bg-cta-dark text-white'
-        }`}>
+        className={buttonClass}>
         Pay ₹{payAmount.toLocaleString('en-IN')} now →
       </button>
     </div>

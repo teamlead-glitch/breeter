@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { ADD_ON_FILTER_LABELS, ADD_ONS } from '@/components/book/data'
 import BookingIssueNotice from '@/components/book/BookingIssueNotice'
 import BookingTitleBar from '@/components/book/BookingTitleBar'
@@ -16,6 +17,7 @@ import { RazorpayPaymentType, TravellerInfo } from '@/types/payments'
 
 export default function BookPage() {
   const { state } = useSearchState()
+  const router = useRouter()
   const [details, setDetails] = useState<BookingDetails | null>(null)
   const [detailsLoading, setDetailsLoading] = useState(Boolean(state.cabCategoryId))
   const [detailsError, setDetailsError] = useState(false)
@@ -58,22 +60,38 @@ export default function BookPage() {
     mobileAgreeRef.current?.focus()
   }
 
-  const handlePayNow = (type: RazorpayPaymentType) => {
-    if (!travellerFormRef.current?.validate()) return
+  // Validates traveller details + phone OTP (which is what stores the booking) and returns its id.
+  const getVerifiedBookingId = (): number | null => {
+    if (!travellerFormRef.current?.validate()) return null
     if (!travellerFormRef.current.isPhoneVerified()) {
       travellerFormRef.current.requirePhoneVerification()
-      return
+      return null
     }
     const bookingId = travellerFormRef.current.getBookingId()
     if (bookingId === null) {
       // Shouldn't happen once isPhoneVerified() is true, but guard against it regardless.
       travellerFormRef.current.requirePhoneVerification()
-      return
     }
+    return bookingId
+  }
+
+  const handlePayNow = (type: RazorpayPaymentType) => {
+    const bookingId = getVerifiedBookingId()
+    if (bookingId === null || !travellerFormRef.current) return
     setTravellerInfo(travellerFormRef.current.getValues())
     setPaymentBookingId(bookingId)
     setPaymentType(type)
     setPaymentModalOpen(true)
+  }
+
+  // Enquiry-only cabs: booking data is already stored on OTP verification, so just confirm.
+  const handleSendEnquiry = () => {
+    const bookingId = getVerifiedBookingId()
+    if (bookingId === null || !travellerFormRef.current) return
+    const params = new URLSearchParams({ type: 'enquiry', booking_id: String(bookingId) })
+    const { email } = travellerFormRef.current.getValues()
+    if (email) params.set('email', email)
+    router.push(`/book/success?${params}`)
   }
 
   if (!state.cabCategoryId) {
@@ -121,6 +139,7 @@ export default function BookPage() {
   const isRefreshingFare = detailsLoading
   const bookingPayload = buildBookingDetailsPayload(state, addOns)
   const pickupTime = state.pickupDate.split('T')[1] ?? ''
+  const isEnquiry = Boolean(details.cab_category.is_enquiry_only)
 
   return (
     <div className="min-h-screen bg-ivory">
@@ -158,6 +177,8 @@ export default function BookPage() {
               refreshing={isRefreshingFare}
               onToggleAgree={() => setAgreed(a => !a)}
               onPayNow={handlePayNow}
+              isEnquiry={isEnquiry}
+              onSendEnquiry={handleSendEnquiry}
             />
           </aside>
         </div>
@@ -170,6 +191,8 @@ export default function BookPage() {
         refreshing={isRefreshingFare}
         onPayAttempt={handleMobilePayAttempt}
         onPayNow={handlePayNow}
+        isEnquiry={isEnquiry}
+        onSendEnquiry={handleSendEnquiry}
       />
 
       {paymentModalOpen && travellerInfo && paymentBookingId !== null && (
