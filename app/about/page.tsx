@@ -20,7 +20,7 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative min-h-[260px] sm:min-h-[47vh] flex items-end overflow-hidden">
+      <section className="relative min-h-[260px] sm:min-h-[47vh] lg:min-h-[60vh] flex items-end overflow-hidden">
         <Image
           src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1400&q=80"
           alt="About Breeter"
@@ -37,23 +37,33 @@ export default function AboutPage() {
 
       <div className="bg-ivory min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="max-w-3xl space-y-5">
-            <div className="bg-white rounded-2xl border border-black/5 p-6">
-              <h2 className="font-bold text-ink text-lg mb-3">Our story</h2>
-              <p className="text-ink-muted text-sm leading-relaxed">
-                Breeter was born from a simple observation: booking an outstation cab in South India was unnecessarily stressful. Hidden charges, unreliable operators, and no upfront pricing. We set out to change that.
-              </p>
-              <p className="text-ink-muted text-sm leading-relaxed mt-3">
-                Founded in Kochi in 2021, Breeter partners exclusively with verified, background-checked local cab operators across Kerala, Tamil Nadu, and beyond — giving travellers the confidence to book without surprises.
-              </p>
+          {/* Mobile/tablet: stacked. Desktop: two columns so the content uses the full width. */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <div className="space-y-5">
+              <div className="bg-white rounded-2xl border border-black/5 p-6">
+                <h2 className="font-bold text-ink text-lg mb-3">Our story</h2>
+                <p className="text-ink-muted text-sm leading-relaxed">
+                  Breeter was born from a simple observation: booking an outstation cab in South India was unnecessarily stressful. Hidden charges, unreliable operators, and no upfront pricing. We set out to change that.
+                </p>
+                <p className="text-ink-muted text-sm leading-relaxed mt-3">
+                  Founded in Kochi in 2021, Breeter partners exclusively with verified, background-checked local cab operators across Kerala, Tamil Nadu, and beyond — giving travellers the confidence to book without surprises.
+                </p>
+              </div>
+
+              <div className="bg-white rounded-2xl border border-black/5 p-6">
+                <h3 className="font-bold text-ink text-base mb-3">Why travellers choose us</h3>
+                <p className="text-ink-muted text-sm leading-relaxed">
+                  Our all-inclusive, slab-based pricing means you know the exact fare before you book. No surge pricing, no toll surprises. Every cab on Breeter is inspected, and every driver is trained to provide a safe, courteous experience.
+                </p>
+              </div>
             </div>
 
             <div className="flex gap-5 flex-col sm:flex-row">
-              <div className="relative flex-1 h-52 rounded-2xl overflow-hidden">
+              <div className="relative flex-1 h-52 sm:h-auto sm:min-h-52 rounded-2xl overflow-hidden">
                 <Image
                   src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=600&q=80"
                   alt="Breeter team"
-                  fill sizes="(max-width:640px) 100vw, 50vw" className="object-cover"
+                  fill sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 25vw" className="object-cover"
                 />
               </div>
               <div className="bg-white rounded-2xl border border-black/5 p-5 flex-1">
@@ -67,13 +77,6 @@ export default function AboutPage() {
                   ))}
                 </ul>
               </div>
-            </div>
-
-            <div className="bg-white rounded-2xl border border-black/5 p-6">
-              <h3 className="font-bold text-ink text-base mb-3">Why travellers choose us</h3>
-              <p className="text-ink-muted text-sm leading-relaxed">
-                Our all-inclusive, slab-based pricing means you know the exact fare before you book. No surge pricing, no toll surprises. Every cab on Breeter is inspected, and every driver is trained to provide a safe, courteous experience.
-              </p>
             </div>
           </div>
         </div>
