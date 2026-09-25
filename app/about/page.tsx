@@ -20,13 +20,16 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative min-h-[44vh] flex items-end overflow-hidden">
+      <section className="relative min-h-[260px] sm:min-h-[47vh] flex items-end overflow-hidden">
         <Image
           src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1400&q=80"
           alt="About Breeter"
-          fill priority sizes="100vw" className="object-cover object-bottom"
+          fill priority sizes="100vw" className="object-cover object-center"
         />
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 pt-28">
+        {/* Dark overlay so the white heading stays readable on the bright road photo (web + mobile). */}
+        <div className="absolute inset-0 bg-linear-to-t from-ink/90 via-ink/60 to-ink/35" />
+        <div className="absolute inset-0 bg-linear-to-r from-ink/50 to-transparent" />
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-5 pt-[76px] sm:pb-8 sm:pt-24">
           <p className="font-mono text-white/80 text-xs tracking-[0.2em] uppercase mb-2 drop-shadow-sm">About Breeter</p>
           <h1 className="font-display text-white text-4xl md:text-5xl font-bold drop-shadow-md">Travel made simple &amp; transparent</h1>
         </div>

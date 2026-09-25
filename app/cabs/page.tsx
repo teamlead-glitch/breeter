@@ -29,41 +29,51 @@ const CATEGORIES = {
     title: 'Cabs',
     desc: 'Comfortable, verified cabs for drop, round trips and hourly rentals at transparent slab-based fares.',
     image: '/images/cabs/cabs.jpg',
+    // Per-image crop + left shade: bright photos (sky behind the text) need a stronger shade.
+    position: 'object-[center_45%]',
+    shade: 'from-ink/70 via-ink/30',
   },
   luxury: {
     eyebrow: 'Premium · Chauffeur driven',
     title: 'Luxury Cabs',
     desc: 'Premium chauffeur-driven cars for business travel, weddings, airport transfers and special occasions.',
     image: '/images/cabs/luxury.jpg',
+    position: 'object-[center_55%]',
+    shade: 'from-ink/60 via-ink/20',
   },
   van: {
     eyebrow: 'Group travel · Spacious',
     title: 'Van',
     desc: 'Spacious vans and tempo travellers for group tours, corporate trips and large family travel across South India.',
     image: '/images/cabs/van.jpg',
+    position: 'object-[center_70%]',
+    shade: 'from-ink/85 via-ink/50',
   },
   bus: {
     eyebrow: 'Group travel · Events',
     title: 'Bus',
     desc: 'Mini buses and AC coaches for large groups, events and long-distance tours across South India.',
     image: '/images/cabs/bus.jpg',
+    position: 'object-[center_60%]',
+    shade: 'from-ink/80 via-ink/40',
   },
 }
 
 export default async function CabsPage({ searchParams }: PageProps) {
   const { type = 'cabs' } = await searchParams
   const cat = CATEGORIES[type as keyof typeof CATEGORIES] ?? CATEGORIES.cabs
-  console.log(cat,'cat++')
   return (
     <>
       {/* Banner */}
-      <section className="relative min-h-[22vh] sm:min-h-[47vh] flex items-end overflow-hidden">
-        <Image src={cat.image} alt={cat.title} fill priority sizes="100vw" className="object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-forest/20 via-forest/60 to-forest" />
+      <section className="relative min-h-[260px] sm:min-h-[47vh] flex items-end overflow-hidden">
+        <Image src={cat.image} alt={cat.title} fill priority sizes="100vw" className={`object-cover ${cat.position}`} />
+        {/* Keep the photo clear: shade only behind the text (left) and a short fade into the tab bar (bottom). */}
+        <div className={`absolute inset-0 bg-gradient-to-r ${cat.shade} to-transparent`} />
+        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-forest to-transparent" />
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-5 pt-[76px] sm:pb-8 sm:pt-24">
           <p className="font-mono text-white/80 text-xs tracking-[0.2em] uppercase mb-2 drop-shadow-sm">{cat.eyebrow}</p>
           <h1 className="font-display text-white text-4xl md:text-5xl font-bold mb-2 drop-shadow-md">{cat.title}</h1>
-          <p className="text-white/70 max-w-lg text-sm drop-shadow-sm">{cat.desc}</p>
+          <p className="text-white/90 max-w-lg text-sm drop-shadow-md">{cat.desc}</p>
         </div>
       </section>
 
