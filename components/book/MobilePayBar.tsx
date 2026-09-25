@@ -115,7 +115,7 @@ export default function MobilePayBar({
 
           <button
             disabled={refreshing}
-            onClick={() => { if (!agreed) onPayAttempt(); else onPayNow(payOption === 'partial' ? 'advance' : 'balance') }}
+            onClick={() => { if (!agreed) onPayAttempt(); else onPayNow(payOption === 'partial' ? 'advance' : 'full') }}
             className={`flex-none uppercase tracking-wide font-bold text-sm px-7 py-3.5 rounded-xl transition-all ${
               refreshing
                 ? 'bg-white/10 text-white/40'

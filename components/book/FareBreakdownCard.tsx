@@ -121,7 +121,7 @@ export default function FareBreakdownCard({
             termsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
             return
           }
-          onPayNow(payOption === 'partial' ? 'advance' : 'balance')
+          onPayNow(payOption === 'partial' ? 'advance' : 'full')
         }}
         className={buttonClass}>
         Pay ₹{payAmount.toLocaleString('en-IN')} now →
