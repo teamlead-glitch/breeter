@@ -192,8 +192,8 @@ export default function HolidaysPage() {
       </div>
 
       {/* Package grid */}
-      <div className="bg-ivory min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="bg-ivory sm:min-h-screen">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
           {loading ? (
             <div className="grid grid-cols-3 gap-3 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
               {[1, 2, 3].map(i => (
