@@ -306,9 +306,16 @@ export default function SearchWidget({
             const from = state.from.trim()
             const to = state.to.trim()
 
+            // Coords are only set when a suggestion is picked (typing clears them), so missing coords
+            // means the text was typed freely and isn't a verified place.
+            const fromPicked = state.fromLat !== null && state.fromLng !== null
+            const toPicked = state.toLat !== null && state.toLng !== null
+
             if (!from) { nextErrors.from = true; messages.push({ id: 'from', text: 'Enter a pickup city.' }) }
+            else if (!fromPicked) { nextErrors.from = true; messages.push({ id: 'from', text: 'Select a valid pickup location from the suggestions.' }) }
             if (!to) { nextErrors.to = true; messages.push({ id: 'to', text: 'Enter a drop city.' }) }
-            if (from && to && from.toLowerCase() === to.toLowerCase()) {
+            else if (!toPicked) { nextErrors.to = true; messages.push({ id: 'to', text: 'Select a valid drop location from the suggestions.' }) }
+            if (from && to && fromPicked && toPicked && from.toLowerCase() === to.toLowerCase()) {
               nextErrors.from = true
               nextErrors.to = true
               messages.push({ id: 'same', text: "Pickup and drop locations can't be the same." })
