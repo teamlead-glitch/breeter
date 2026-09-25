@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from 'react'
 import { Check } from 'lucide-react'
 import { apiPost } from '@/lib/apiService'
+import MathCaptchaField, { useMathCaptcha } from '@/components/common/MathCaptcha'
 
 type FormValues = {
   name: string
@@ -40,6 +41,7 @@ export default function ContactForm() {
   const [errors, setErrors] = useState<FormErrors>({})
   const [status, setStatus] = useState<Status>('idle')
   const [submitError, setSubmitError] = useState('')
+  const captcha = useMathCaptcha()
 
   function handleChange(field: keyof FormValues, value: string) {
     setValues(prev => ({ ...prev, [field]: value }))
@@ -50,7 +52,8 @@ export default function ContactForm() {
     e.preventDefault()
     const nextErrors = validate(values)
     setErrors(nextErrors)
-    if (Object.keys(nextErrors).length > 0) return
+    const captchaOk = captcha.verify()
+    if (Object.keys(nextErrors).length > 0 || !captchaOk) return
 
     setStatus('submitting')
     const res = await apiPost('v1/contact-enquiries', {
@@ -135,6 +138,9 @@ export default function ContactForm() {
         />
         {errors.message && <p className="text-red-500 text-[11px] mt-1">{errors.message}</p>}
       </div>
+
+      <MathCaptchaField captcha={captcha} className="mb-5" />
+
 
       {status === 'error' && (
         <p className="text-red-500 text-xs mb-3">{submitError || 'Something went wrong. Please try again.'}</p>

@@ -2,6 +2,7 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { Check, X } from 'lucide-react'
 import { apiPost } from '@/lib/apiService'
+import MathCaptchaField, { useMathCaptcha } from '@/components/common/MathCaptcha'
 
 type FormValues = { name: string; phone: string; email: string; message: string }
 type FormErrors = Partial<Record<keyof FormValues, string>>
@@ -33,6 +34,7 @@ export default function EnquiryModal({ subject, category, onClose }: EnquiryModa
   const [errors, setErrors] = useState<FormErrors>({})
   const [status, setStatus] = useState<Status>('idle')
   const [submitError, setSubmitError] = useState('')
+  const captcha = useMathCaptcha()
 
   useEffect(() => {
     document.body.style.overflow = 'hidden'
@@ -53,7 +55,8 @@ export default function EnquiryModal({ subject, category, onClose }: EnquiryModa
     e.preventDefault()
     const nextErrors = validate(values)
     setErrors(nextErrors)
-    if (Object.keys(nextErrors).length > 0) return
+    const captchaOk = captcha.verify()
+    if (Object.keys(nextErrors).length > 0 || !captchaOk) return
 
     setStatus('submitting')
     const message = values.message.trim()
@@ -132,6 +135,9 @@ export default function EnquiryModal({ subject, category, onClose }: EnquiryModa
                 />
               </div>
             </div>
+
+            <MathCaptchaField captcha={captcha} className="mb-5" />
+
 
             {status === 'error' && <p className="text-red-500 text-xs mb-3">{submitError || 'Something went wrong. Please try again.'}</p>}
 
