@@ -129,6 +129,8 @@ body {
   color: var(--color-ink);
 }
 .breeter-datepicker .react-datepicker__navigation { top: 0.6rem; }
+/* Library offsets the next arrow 85px to clear its default-width time column; ours is 110px. */
+.breeter-datepicker .react-datepicker__navigation--next--with-time:not(.react-datepicker__navigation--next--with-today-button) { right: 114px; }
 .breeter-datepicker .react-datepicker__navigation-icon::before { border-color: var(--color-ink-muted); }
 .breeter-datepicker .react-datepicker__day-name {
   width: 2.25rem;
@@ -187,4 +189,7 @@ body {
 }
 .react-datepicker__portal .breeter-datepicker .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box { width: 100%; }
 .react-datepicker__portal .breeter-datepicker .react-datepicker__time-list { height: 180px !important; }
+/* Time list sits below the calendar here, so the next arrow goes back to the right edge. */
+.react-datepicker__portal .breeter-datepicker .react-datepicker__navigation--next--with-time:not(.react-datepicker__navigation--next--with-today-button) { right: 8px; }
+.react-datepicker__portal .breeter-datepicker .react-datepicker__navigation--previous { left: 8px; }
 
