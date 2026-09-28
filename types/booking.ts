@@ -93,3 +93,32 @@ export type BookingDetails = {
 export type BookingDetailsResponse = {
   data: BookingDetails
 }
+
+export type CancellableBooking = {
+  booking_id: number
+  booking_reference: string
+  customer_name: string
+  trip_type: string
+  cab_category: string
+  from_location: string
+  to_location: string | null
+  booking_date: string
+  to_date: string | null
+  pickup_time: string
+  total_amount: number
+  amount_paid: number
+  status: string
+  cancelled_at: string | null
+  cancelled_by: string | null
+}
+
+export type CancellableBookingResponse = {
+  message: string
+  data: CancellableBooking
+}
+
+// NOTE: POST response shape is still assumed — only `message` is relied on.
+export type CancelBookingResponse = {
+  message: string
+  data?: Partial<CancellableBooking>
+}

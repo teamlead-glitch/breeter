@@ -1,6 +1,7 @@
 import { SearchState } from '@/context/SearchContext'
 import { DEFAULT_STATE_ID, PLACEHOLDER_LAT_LNG, TRIP_TYPE_IDS } from '@/lib/constants'
-import { BookingDetailsRequest } from '@/types/booking'
+import { apiGet, apiPost } from '@/lib/apiService'
+import { BookingDetailsRequest, CancelBookingResponse, CancellableBookingResponse } from '@/types/booking'
 
 export function buildBookingDetailsPayload(state: SearchState, addOns: string[]): BookingDetailsRequest {
   const payload: BookingDetailsRequest = {
@@ -28,4 +29,13 @@ export function buildBookingDetailsPayload(state: SearchState, addOns: string[])
   if (state.tripType === 'Hourly Rental') payload.actual_hours = Number(state.hourlyPackage)
 
   return payload
+}
+
+// Token comes from the emailed cancellation link — encoded since it's user-controlled URL input.
+export function fetchCancellableBooking(token: string) {
+  return apiGet<CancellableBookingResponse>(`v1/bookings/cancel/${encodeURIComponent(token)}`)
+}
+
+export function cancelBooking(token: string) {
+  return apiPost<CancelBookingResponse>(`v1/bookings/cancel/${encodeURIComponent(token)}`)
 }
