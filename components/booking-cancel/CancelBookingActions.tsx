@@ -1,3 +1,5 @@
+'use client'
+import { useEffect, useRef } from 'react'
 import { AlertTriangle, Loader2 } from 'lucide-react'
 
 // Two-step cancel: the first button only reveals the confirmation; the POST runs on "Yes, cancel".
@@ -16,6 +18,17 @@ export default function CancelBookingActions({
   onKeep: () => void
   onConfirm: () => void
 }) {
+  const confirmRef = useRef<HTMLDivElement>(null)
+  const keepButtonRef = useRef<HTMLButtonElement>(null)
+
+  // Bring the confirmation into view and focus the safe choice ("Keep booking"), so an accidental
+  // Enter/Space can't cancel the booking.
+  useEffect(() => {
+    if (!confirming) return
+    confirmRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    keepButtonRef.current?.focus({ preventScroll: true })
+  }, [confirming])
+
   return (
     <>
       {error && (
@@ -30,17 +43,23 @@ export default function CancelBookingActions({
           Cancel booking
         </button>
       ) : (
-        <div className="rounded-2xl border border-red-200 bg-red-50 p-4 sm:p-5">
-          <p className="flex items-start gap-2 text-sm font-semibold text-red-800 mb-1">
+        <div
+          ref={confirmRef}
+          role="alertdialog"
+          aria-labelledby="cancel-confirm-title"
+          aria-describedby="cancel-confirm-desc"
+          className="rounded-2xl border border-red-200 bg-red-50 p-4 sm:p-5">
+          <p id="cancel-confirm-title" className="flex items-start gap-2 text-sm font-semibold text-red-800 mb-1">
             <AlertTriangle size={16} className="mt-0.5 flex-none" /> Are you sure you want to cancel?
           </p>
-          <p className="text-xs text-red-700 mb-4 pl-6">This can&apos;t be undone. Refunds follow our cancellation policy.</p>
+          <p id="cancel-confirm-desc" className="text-xs text-red-700 mb-4 pl-6">This can&apos;t be undone. Refunds follow our cancellation policy.</p>
           <div className="flex flex-col-reverse sm:flex-row gap-2">
             <button
+              ref={keepButtonRef}
               type="button"
               disabled={cancelling}
               onClick={onKeep}
-              className="flex-1 bg-white border border-black/10 hover:border-black/20 disabled:opacity-60 text-ink font-bold text-sm py-3 rounded-xl transition-colors">
+              className="flex-1 bg-white border border-black/10 hover:border-black/20 disabled:opacity-60 text-ink font-bold text-sm py-3 rounded-xl transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cta/40">
               Keep booking
             </button>
             <button
