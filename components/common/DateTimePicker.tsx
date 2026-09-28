@@ -1,55 +1,97 @@
 'use client'
+import { forwardRef, useEffect, useState } from 'react'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+
+// Value format (shared with SearchContext): "YYYY-MM-DDTHH:mm", local time.
 
 function pad(n: number) {
   return String(n).padStart(2, '0')
 }
 
-function parseValue(value: string) {
-  const [datePart, timePart] = value.split('T')
-  const [hour, minute] = (timePart || '00:00').split(':').map(Number)
-  return { datePart, hour, minute }
+function toDate(value: string) {
+  const [datePart, timePart = '00:00'] = value.split('T')
+  const [y, m, d] = datePart.split('-').map(Number)
+  const [hh, mm] = timePart.split(':').map(Number)
+  const date = new Date(y, (m || 1) - 1, d || 1, hh || 0, mm || 0)
+  return Number.isNaN(date.getTime()) ? null : date
 }
 
-function formatValue(datePart: string, hour: number, minute: number) {
-  return `${datePart}T${pad(hour)}:${pad(minute)}`
+function toValue(date: Date) {
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
 }
 
-const HOURS = Array.from({ length: 24 }, (_, i) => i)
-const MINUTES = Array.from({ length: 60 }, (_, i) => i)
+function isSameDay(a: Date, b: Date) {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+}
+
+function startOfDay(date: Date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate())
+}
+
+// Big, tappable trigger instead of the library's text input — no keyboard pops up on mobile.
+const PickerTrigger = forwardRef<HTMLButtonElement, { value?: string; onClick?: () => void; label: string }>(
+  ({ value, onClick, label }, ref) => (
+    <button
+      ref={ref}
+      type="button"
+      onClick={onClick}
+      aria-label={`${label}: ${value}`}
+      className="block w-full text-left text-sm font-semibold text-ink outline-none truncate">
+      {value || 'Select date & time'}
+    </button>
+  ),
+)
+PickerTrigger.displayName = 'PickerTrigger'
 
 type Props = {
   value: string
   onChange: (value: string) => void
+  // Earliest selectable moment ("YYYY-MM-DDTHH:mm" or "YYYY-MM-DD"); defaults to now.
+  minDate?: string
+  label?: string
 }
 
-export default function DateTimePicker({ value, onChange }: Props) {
-  const { datePart, hour, minute } = parseValue(value)
+export default function DateTimePicker({ value, onChange, minDate, label = 'Select date and time' }: Props) {
+  const selected = toDate(value)
+  const min = (minDate && toDate(minDate)) || new Date()
+  // Centered modal on phones (the popover would be cramped); anchored popover on larger screens.
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)')
+    const update = () => setIsMobile(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+
+  // On the earliest allowed day, hide times before `min`; other days allow the full day.
+  const onMinDay = selected ? isSameDay(selected, min) : true
+  const dayStart = startOfDay(selected ?? min)
+  const minTime = onMinDay ? min : dayStart
+  const maxTime = new Date(dayStart.getFullYear(), dayStart.getMonth(), dayStart.getDate(), 23, 59)
 
   return (
-    <div className="flex flex-nowrap items-center gap-3 min-w-0 flex-1">
-      <input
-        type="date"
-        value={datePart}
-        onChange={e => e.target.value && onChange(formatValue(e.target.value, hour, minute))}
-        className="w-28 h-6 flex-none text-sm font-semibold text-ink bg-transparent outline-none"
-      />
-      <div className="flex items-center gap-1 flex-shrink-0">
-        <select
-          aria-label="Hour"
-          value={hour}
-          onChange={e => onChange(formatValue(datePart, Number(e.target.value), minute))}
-          className="w-11 h-6 appearance-none bg-ivory-dark rounded-md px-1 py-0 text-sm font-semibold text-ink text-center outline-none">
-          {HOURS.map(h => <option key={h} value={h}>{pad(h)}</option>)}
-        </select>
-        <span className="text-ink-faint font-bold">:</span>
-        <select
-          aria-label="Minute"
-          value={minute}
-          onChange={e => onChange(formatValue(datePart, hour, Number(e.target.value)))}
-          className="w-11 h-6 appearance-none bg-ivory-dark rounded-md px-1 py-0 text-sm font-semibold text-ink text-center outline-none">
-          {MINUTES.map(m => <option key={m} value={m}>{pad(m)}</option>)}
-        </select>
-      </div>
-    </div>
+    <DatePicker
+      selected={selected}
+      onChange={(date: Date | null) => { if (date) onChange(toValue(date)) }}
+      showTimeSelect
+      timeIntervals={15}
+      timeCaption="Time"
+      dateFormat="EEE, d MMM yyyy · HH:mm"
+      timeFormat="HH:mm"
+      minDate={startOfDay(min)}
+      minTime={minTime}
+      maxTime={maxTime}
+      customInput={<PickerTrigger label={label} />}
+      withPortal={isMobile}
+      // Render the desktop popover at body level so modal/overflow containers can't clip it.
+      portalId="datepicker-portal"
+      popperPlacement="bottom-start"
+      // Picking a day keeps it open for the time; picking a time closes it.
+      calendarClassName="breeter-datepicker"
+      wrapperClassName="w-full"
+    />
   )
 }

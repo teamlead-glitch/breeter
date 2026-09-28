@@ -104,3 +104,87 @@ body {
   opacity: 0.35;
   pointer-events: none;
 }
+
+/* ── Date-time picker (react-datepicker) — brand theme ── */
+/* Higher specificity than the library's own `.react-datepicker-popper { z-index: 1 }`, which loads after
+   this file — must sit above the Book-a-Cab / vehicle modals (z-60/z-70). */
+#datepicker-portal .react-datepicker-popper { z-index: 80; }
+.breeter-datepicker.react-datepicker {
+  font-family: var(--font-sans);
+  border: 1px solid rgb(0 0 0 / 0.06);
+  border-radius: 1rem;
+  box-shadow: 0 20px 40px -12px rgb(0 0 0 / 0.25);
+  overflow: hidden;
+}
+.breeter-datepicker .react-datepicker__triangle { display: none; }
+.breeter-datepicker .react-datepicker__header {
+  background: #fff;
+  border-bottom: 1px solid rgb(0 0 0 / 0.06);
+  padding-top: 0.75rem;
+}
+.breeter-datepicker .react-datepicker__current-month,
+.breeter-datepicker .react-datepicker-time__header {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+.breeter-datepicker .react-datepicker__navigation { top: 0.6rem; }
+.breeter-datepicker .react-datepicker__navigation-icon::before { border-color: var(--color-ink-muted); }
+.breeter-datepicker .react-datepicker__day-name {
+  width: 2.25rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--color-ink-faint);
+}
+.breeter-datepicker .react-datepicker__day {
+  width: 2.25rem;
+  line-height: 2.25rem;
+  margin: 0.1rem;
+  border-radius: 0.6rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+.breeter-datepicker .react-datepicker__day:hover { background: color-mix(in srgb, var(--color-cta) 12%, transparent); }
+.breeter-datepicker .react-datepicker__day--today { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-cta) 45%, transparent); }
+.breeter-datepicker .react-datepicker__day--selected,
+.breeter-datepicker .react-datepicker__day--keyboard-selected {
+  background: var(--color-cta);
+  color: #fff;
+}
+.breeter-datepicker .react-datepicker__day--disabled,
+.breeter-datepicker .react-datepicker__day--disabled:hover {
+  color: rgb(0 0 0 / 0.2);
+  background: transparent;
+  cursor: not-allowed;
+}
+.breeter-datepicker .react-datepicker__time-container { border-left: 1px solid rgb(0 0 0 / 0.06); width: 110px; }
+.breeter-datepicker .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box { width: 110px; }
+.breeter-datepicker .react-datepicker__time-list-item {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  height: auto !important;
+  padding: 0.5rem 0.75rem !important;
+}
+.breeter-datepicker .react-datepicker__time-list-item:hover { background: color-mix(in srgb, var(--color-cta) 12%, transparent) !important; }
+.breeter-datepicker .react-datepicker__time-list-item--selected {
+  background: var(--color-cta) !important;
+  color: #fff !important;
+}
+.breeter-datepicker .react-datepicker__time-list-item--disabled { display: none; }
+
+/* Phones: centered modal (withPortal) — larger tap targets. */
+.react-datepicker__portal { background: rgb(24 24 24 / 0.6); }
+.react-datepicker__portal .breeter-datepicker .react-datepicker__day,
+.react-datepicker__portal .breeter-datepicker .react-datepicker__day-name { width: 2.4rem; line-height: 2.4rem; }
+/* Calendar + time side by side is too wide for a phone — stack the time list under it. */
+.react-datepicker__portal .breeter-datepicker.react-datepicker { display: flex; flex-direction: column; }
+.react-datepicker__portal .breeter-datepicker .react-datepicker__time-container {
+  float: none;
+  width: 100%;
+  border-left: 0;
+  border-top: 1px solid rgb(0 0 0 / 0.06);
+}
+.react-datepicker__portal .breeter-datepicker .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box { width: 100%; }
+.react-datepicker__portal .breeter-datepicker .react-datepicker__time-list { height: 180px !important; }
+

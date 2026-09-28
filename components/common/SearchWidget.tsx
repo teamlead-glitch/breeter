@@ -228,10 +228,11 @@ export default function SearchWidget({
           errors.pastDate ? 'border-red-300' : 'border-transparent focus-within:border-forest/25'
         }`}>
           <CalendarClock size={15} className="text-forest flex-shrink-0" />
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Pickup Date & Time</p>
             <DateTimePicker
               value={state.pickupDate}
+              label="Pickup date & time"
               onChange={value => {
                 dispatch({ type: 'SET_PICKUP_DATE', value })
                 if (errors.pastDate || errors.dropBeforePickup) {
@@ -248,10 +249,12 @@ export default function SearchWidget({
             errors.dropBeforePickup ? 'border-red-300' : 'border-transparent focus-within:border-forest/25'
           }`}>
             <CalendarClock size={15} className="text-ink-faint flex-shrink-0" />
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <p className="text-[10px] font-bold text-ink-faint uppercase tracking-wider mb-0.5">Drop Date & Time</p>
               <DateTimePicker
                 value={state.dropDate}
+                label="Drop date & time"
+                minDate={state.pickupDate}
                 onChange={value => {
                   dispatch({ type: 'SET_DROP_DATE', value })
                   if (errors.dropBeforePickup) setErrors(prev => ({ ...prev, dropBeforePickup: false }))
@@ -344,8 +347,8 @@ export default function SearchWidget({
                 : nextErrors.to
                   ? toInputRef.current
                   : nextErrors.pastDate
-                    ? pickupDateRef.current?.querySelector<HTMLInputElement>('input[type="date"]')
-                    : dropDateRef.current?.querySelector<HTMLInputElement>('input[type="date"]')
+                    ? pickupDateRef.current?.querySelector<HTMLButtonElement>('button')
+                    : dropDateRef.current?.querySelector<HTMLButtonElement>('button')
               target?.focus()
               target?.scrollIntoView({ behavior: 'smooth', block: 'center' })
               return
