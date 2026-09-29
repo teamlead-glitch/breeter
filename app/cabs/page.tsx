@@ -5,7 +5,8 @@ import SearchWidget from '@/components/common/SearchWidget'
 import CabsGrid from '@/components/cabs/CabsGrid'
 import { getSeoMetadata } from '@/lib/seo'
 
-type PageProps = { searchParams: Promise<{ type?: string }> }
+// `view=all` is only set by the home page "View all" links — those land on the list without the search form.
+type PageProps = { searchParams: Promise<{ type?: string; view?: string }> }
 
 const SEO_SLUGS: Record<string, string> = {
   cabs: 'page-cabs',
@@ -60,8 +61,9 @@ const CATEGORIES = {
 }
 
 export default async function CabsPage({ searchParams }: PageProps) {
-  const { type = 'cabs' } = await searchParams
+  const { type = 'cabs', view } = await searchParams
   const cat = CATEGORIES[type as keyof typeof CATEGORIES] ?? CATEGORIES.cabs
+  const showSearch = view !== 'all'
   return (
     <>
       {/* Banner */}
@@ -93,12 +95,14 @@ export default async function CabsPage({ searchParams }: PageProps) {
         </div>
       </div>
 
-      {/* Search widget */}
-      <div className="bg-ivory-dark border-b border-black/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <SearchWidget />
+      {/* Search widget — hidden when arriving from a home "View all" link */}
+      {showSearch && (
+        <div className="bg-ivory-dark border-b border-black/5">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <SearchWidget />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Vehicle grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

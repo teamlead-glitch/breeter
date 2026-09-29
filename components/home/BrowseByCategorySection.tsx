@@ -62,13 +62,13 @@ export default function BrowseByCategorySection() {
 
         <div className="space-y-14">
           <HolidaysCategoryRow index="01" />
-          <VehicleCategoryRow index="02" title="Cabs" viewAllHref="/cabs" square count={3}/>
+          <VehicleCategoryRow index="02" title="Cabs" viewAllHref="/cabs?view=all" square count={3}/>
           {/* Van and Bus both pull the same "Van/Bus" tagged vehicles for now — the backend only
              has one combined tag. Once it can tell them apart (a dedicated tag or query param),
              point each row at its own filtered result. */}
-          <VehicleCategoryRow index="03" title="Van" tagTitle="Van" viewAllHref="/cabs?type=van" square count={3}/>
-          <VehicleCategoryRow index="04" title="Bus" tagTitle="Bus" viewAllHref="/cabs?type=bus" square count={3}/>
-          <VehicleCategoryRow index="05" title="Luxury Cabs" tagTitle="Luxury" viewAllHref="/cabs?type=luxury" square />
+          <VehicleCategoryRow index="03" title="Van" tagTitle="Van" viewAllHref="/cabs?type=van&view=all" square count={3}/>
+          <VehicleCategoryRow index="04" title="Bus" tagTitle="Bus" viewAllHref="/cabs?type=bus&view=all" square count={3}/>
+          <VehicleCategoryRow index="05" title="Luxury Cabs" tagTitle="Luxury" viewAllHref="/cabs?type=luxury&view=all" square />
           {/* Client review only: same Luxury Cabs row, 3 items filling the row. Remove after review. */}
           {/* <VehicleCategoryRow index="05" title="Luxury Cabs (3 items)" tagTitle="Luxury" viewAllHref="/cabs?type=luxury" square count={3} /> */}
           <StaticEnquiryRow index="06" title="Corporate Bookings" items={CORPORATE_ITEMS} />
