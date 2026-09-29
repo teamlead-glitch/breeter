@@ -7,7 +7,7 @@ import SearchVehicleCard, { PricedCabCategory } from '@/components/cabs/SearchVe
 import { useBookModal } from '@/components/common/BookModalContext'
 import { SearchState, useSearchState } from '@/context/SearchContext'
 import { apiGet } from '@/lib/apiService'
-import { DEFAULT_STATE_ID, PLACEHOLDER_DISTANCE_KM, TRIP_TYPE_IDS } from '@/lib/constants'
+import { DEFAULT_STATE_ID, PLACEHOLDER_LAT_LNG, TRIP_TYPE_IDS } from '@/lib/constants'
 import { CabCategoriesData } from '@/types/cabs'
 import { formatDate, formatTime } from '@/lib/date'
 
@@ -20,9 +20,18 @@ function buildCabCategoryParams(state: SearchState): URLSearchParams {
   params.set('per_page', '15')
   params.set('state_id', String(DEFAULT_STATE_ID))
   params.set('trip_type_id', String(TRIP_TYPE_IDS[state.tripType]))
-  params.set('start_location', state.from)
-  params.set('end_location', state.to)
-  state.stops.forEach(stop => params.append('stops[]', stop.location))
+  // Same location fields as the booking-details API (lib/booking.ts), in Laravel's nested query format.
+  params.set('from_location', state.from)
+  params.set('from_latitude', String(state.fromLat ?? PLACEHOLDER_LAT_LNG))
+  params.set('from_longitude', String(state.fromLng ?? PLACEHOLDER_LAT_LNG))
+  params.set('to_location', state.to)
+  params.set('to_latitude', String(state.toLat ?? PLACEHOLDER_LAT_LNG))
+  params.set('to_longitude', String(state.toLng ?? PLACEHOLDER_LAT_LNG))
+  state.stops.forEach((stop, i) => {
+    params.set(`stops[${i}][location]`, stop.location)
+    params.set(`stops[${i}][latitude]`, String(stop.lat ?? PLACEHOLDER_LAT_LNG))
+    params.set(`stops[${i}][longitude]`, String(stop.lng ?? PLACEHOLDER_LAT_LNG))
+  })
   params.set('from_date', state.pickupDate)
 
   if (state.tripType === 'Round Trip') {
@@ -31,10 +40,6 @@ function buildCabCategoryParams(state: SearchState): URLSearchParams {
 
   if (state.tripType === 'Hourly Rental') {
     params.set('actual_hours', state.hourlyPackage)
-  } else {
-    // TODO: replace with a real route-distance calculation; backend will
-    // eventually derive this itself — remove once that lands.
-    params.set('distance_km', String(PLACEHOLDER_DISTANCE_KM))
   }
 
   // The API's boolean validation accepts 0/1, not the strings "true"/"false".

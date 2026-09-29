@@ -8,6 +8,10 @@ export type CabCategoryImage = {
 
 export type CabCategoryFare = {
   amount: number
+  // Pre-tax fare — what the search list shows ("Taxes extra").
+  sub_total?: number
+  tax_amount?: number
+  total_amount?: number
   breakdown: { label: string; amount: number }[]
 }
 
