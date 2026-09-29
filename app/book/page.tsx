@@ -131,6 +131,7 @@ export default function BookPage() {
     roof: details.pricing.detail.carrier_rate,
   }
   const total = details.pricing.total_amount
+  const subTotal = details.pricing.sub_total
   // Rounded to the nearest paise (2 decimals), matching the backend's advance-amount calculation
   // for the actual Razorpay order — rounding to a whole rupee here would show a different figure
   // than what the checkout popup ends up charging.
@@ -168,7 +169,7 @@ export default function BookPage() {
           {/* ── SIDEBAR ─────────────────────────────────── */}
           <aside className="hidden lg:block w-72 flex-shrink-0 lg:self-stretch">
             <FareBreakdownCard
-              breakdown={details.pricing.breakdown}
+              subTotal={subTotal}
               tax={details.pricing.tax_amount}
               total={total}
               payNow={payNow}

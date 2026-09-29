@@ -1,10 +1,11 @@
 export default function PriceBreakdownList({
-  breakdown,
+  subTotal,
   tax,
   total,
   refreshing = false,
 }: {
-  breakdown: { label: string; amount: number }[]
+  // Pre-tax fare (pricing.sub_total) — shown as a single "Base Fare" line so Base + Taxes = Total.
+  subTotal: number
   tax?: number
   total: number
   refreshing?: boolean
@@ -17,12 +18,10 @@ export default function PriceBreakdownList({
       </div>
 
       <div className="space-y-2.5 mb-4">
-        {breakdown.slice(0, 1).map(line => (
-          <div key={line.label} className="flex items-start justify-between gap-1.5 text-xs">
-            <span className="min-w-0 flex-1 text-ink-faint">{line.label}</span>
-            <span className="flex-shrink-0 font-mono font-bold whitespace-nowrap text-ink-faint">₹{line.amount.toLocaleString('en-IN')}</span>
-          </div>
-        ))}
+        <div className="flex items-start justify-between gap-1.5 text-xs">
+          <span className="min-w-0 flex-1 text-ink-faint">Base Fare</span>
+          <span className="flex-shrink-0 font-mono font-bold whitespace-nowrap text-ink-faint">₹{subTotal.toLocaleString('en-IN')}</span>
+        </div>
         {tax !== undefined && tax > 0 && (
           <div className="flex items-start justify-between gap-1.5 text-xs">
             <span className="min-w-0 flex-1 text-ink-faint">Taxes &amp; fees</span>

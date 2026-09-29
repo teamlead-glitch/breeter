@@ -64,7 +64,7 @@ export default function BookingMainColumn({
 
       {/* Mobile/tablet: price breakdown — the sidebar with this is desktop-only */}
       <div className="lg:hidden bg-white rounded-2xl border border-black/5 p-4 sm:p-5">
-        <PriceBreakdownList breakdown={details.pricing.breakdown} tax={details.pricing.tax_amount} total={total} refreshing={isRefreshingFare} />
+        <PriceBreakdownList subTotal={details.pricing.sub_total} tax={details.pricing.tax_amount} total={total} refreshing={isRefreshingFare} />
       </div>
 
       <TravellerDetailsForm ref={travellerFormRef} booking={bookingPayload} pickupTime={pickupTime} isEnquiry={Boolean(details.cab_category.is_enquiry_only)} />

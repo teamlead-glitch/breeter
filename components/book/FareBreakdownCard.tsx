@@ -5,7 +5,7 @@ import TermsAgreement from './TermsAgreement'
 import { RazorpayPaymentType } from '@/types/payments'
 
 export default function FareBreakdownCard({
-  breakdown,
+  subTotal,
   tax,
   total,
   payNow,
@@ -17,7 +17,7 @@ export default function FareBreakdownCard({
   isEnquiry = false,
   onSendEnquiry,
 }: {
-  breakdown: { label: string; amount: number }[]
+  subTotal: number
   tax?: number
   total: number
   payNow: number
@@ -41,7 +41,7 @@ export default function FareBreakdownCard({
   if (isEnquiry) {
     return (
       <div className={cardClass}>
-        <PriceBreakdownList breakdown={breakdown} tax={tax} total={total} refreshing={refreshing} />
+        <PriceBreakdownList subTotal={subTotal} tax={tax} total={total} refreshing={refreshing} />
         <p className="text-xs text-ink-faint mt-3 mb-4">No payment needed now — our team will confirm availability and get back to you.</p>
         <button disabled={refreshing} onClick={() => { if (!refreshing) onSendEnquiry?.() }} className={buttonClass}>
           Send enquiry →
@@ -52,7 +52,7 @@ export default function FareBreakdownCard({
 
   return (
     <div className={cardClass}>
-      <PriceBreakdownList breakdown={breakdown} tax={tax} total={total} refreshing={refreshing} />
+      <PriceBreakdownList subTotal={subTotal} tax={tax} total={total} refreshing={refreshing} />
 
       <div role="radiogroup" aria-label="Payment option" className="space-y-2 mb-4 mt-3">
         <label

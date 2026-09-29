@@ -90,6 +90,7 @@ export type BookingDetails = {
   pricing: {
     type: string
     detail: BookingPricingDetail
+    sub_total: number
     total_amount: number
     tax_amount: number
     breakdown: BookingFareLine[]
