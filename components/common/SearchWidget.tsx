@@ -43,10 +43,11 @@ export default function SearchWidget({
   const { tripType, stops } = state
   const [addingStop, setAddingStop] = useState(false)
   const [stopInput, setStopInput] = useState('')
-  const [errors, setErrors] = useState<{ from?: boolean; to?: boolean; pastDate?: boolean; dropBeforePickup?: boolean }>({})
+  const [errors, setErrors] = useState<{ from?: boolean; to?: boolean; stop?: boolean; pastDate?: boolean; dropBeforePickup?: boolean }>({})
   const [alertMessages, setAlertMessages] = useState<{ id: 'from' | 'to' | 'same' | 'pastDate' | 'dropBeforePickup'; text: string }[]>([])
   const fromInputRef = useRef<HTMLInputElement>(null)
   const toInputRef = useRef<HTMLInputElement>(null)
+  const stopFieldRef = useRef<HTMLDivElement>(null)
   const pickupDateRef = useRef<HTMLDivElement>(null)
   const dropDateRef = useRef<HTMLDivElement>(null)
   const [fromOpen, setFromOpen] = useState(false)
@@ -66,7 +67,11 @@ export default function SearchWidget({
       {/* Trip type tabs */}
       <div className="flex gap-2 mb-5 overflow-x-auto scrollbar-hide">
         {TRIP_TYPES.map(t => (
-          <button key={t} onClick={() => dispatch({ type: 'SET_TRIP_TYPE', tripType: t })}
+          <button key={t} onClick={() => {
+              dispatch({ type: 'SET_TRIP_TYPE', tripType: t })
+              setErrors(prev => ({ ...prev, stop: false }))
+              setAlertMessages(prev => prev.filter(m => m.id !== 'same'))
+            }}
             className={`flex-none px-5 py-2 sm:px-6 sm:py-2.5 rounded-full text-sm sm:text-base font-semibold transition-all border ${
               tripType === t
                 ? 'bg-cta text-white border-cta'
@@ -93,7 +98,7 @@ export default function SearchWidget({
                 value={state.from}
                 onChange={e => {
                   dispatch({ type: 'SET_FROM', value: e.target.value })
-                  if (errors.from) setErrors(prev => ({ ...prev, from: false }))
+                  if (errors.from || errors.stop) setErrors(prev => ({ ...prev, from: false, stop: false }))
                   setAlertMessages(prev => prev.filter(m => m.id !== 'from' && m.id !== 'same'))
                 }}
                 onFocus={() => setFromOpen(true)}
@@ -108,7 +113,7 @@ export default function SearchWidget({
               suggestions={fromSuggestions}
               onSelect={s => {
                 dispatch({ type: 'SET_FROM', value: s.text })
-                setErrors(prev => ({ ...prev, from: false }))
+                setErrors(prev => ({ ...prev, from: false, stop: false }))
                 setAlertMessages(prev => prev.filter(m => m.id !== 'from' && m.id !== 'same'))
                 setFromOpen(false)
                 endFromSession()
@@ -132,8 +137,10 @@ export default function SearchWidget({
         ))}
 
         {tripType !== 'Hourly Rental' && (
-          <div className="relative">
-            <div className="flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 border-transparent focus-within:border-forest/25 transition-colors">
+          <div ref={stopFieldRef} className="relative">
+            <div className={`flex items-center gap-3 bg-ivory-dark rounded-xl px-4 py-3 border-2 transition-colors ${
+              errors.stop ? 'border-red-300' : 'border-transparent focus-within:border-forest/25'
+            }`}>
               {addingStop ? (
                 <>
                   <Plus size={15} className="text-forest flex-shrink-0" />
@@ -175,6 +182,8 @@ export default function SearchWidget({
                 onSelect={s => {
                   const index = stops.length
                   dispatch({ type: 'ADD_STOP', stop: { location: s.text, lat: null, lng: null } })
+                  setErrors(prev => ({ ...prev, stop: false }))
+                  setAlertMessages(prev => prev.filter(m => m.id !== 'same'))
                   setStopInput('')
                   setAddingStop(false)
                   setStopOpen(false)
@@ -199,7 +208,7 @@ export default function SearchWidget({
                 value={state.to}
                 onChange={e => {
                   dispatch({ type: 'SET_TO', value: e.target.value })
-                  if (errors.to) setErrors(prev => ({ ...prev, to: false }))
+                  if (errors.to || errors.stop) setErrors(prev => ({ ...prev, to: false, stop: false }))
                   setAlertMessages(prev => prev.filter(m => m.id !== 'to' && m.id !== 'same'))
                 }}
                 onFocus={() => setToOpen(true)}
@@ -214,7 +223,7 @@ export default function SearchWidget({
               suggestions={toSuggestions}
               onSelect={s => {
                 dispatch({ type: 'SET_TO', value: s.text })
-                setErrors(prev => ({ ...prev, to: false }))
+                setErrors(prev => ({ ...prev, to: false, stop: false }))
                 setAlertMessages(prev => prev.filter(m => m.id !== 'to' && m.id !== 'same'))
                 setToOpen(false)
                 endToSession()
@@ -304,7 +313,7 @@ export default function SearchWidget({
       <div className="flex items-center gap-2 flex-wrap">
         <div className="flex-1" />
         <Link href={searchHref} onClick={e => {
-            const nextErrors: { from?: boolean; to?: boolean; pastDate?: boolean; dropBeforePickup?: boolean } = {}
+            const nextErrors: { from?: boolean; to?: boolean; stop?: boolean; pastDate?: boolean; dropBeforePickup?: boolean } = {}
             const messages: { id: 'from' | 'to' | 'same' | 'pastDate' | 'dropBeforePickup'; text: string }[] = []
             const from = state.from.trim()
             const to = state.to.trim()
@@ -318,10 +327,20 @@ export default function SearchWidget({
             else if (!fromPicked) { nextErrors.from = true; messages.push({ id: 'from', text: 'Select a valid pickup location from the suggestions.' }) }
             if (!to) { nextErrors.to = true; messages.push({ id: 'to', text: 'Enter a drop city.' }) }
             else if (!toPicked) { nextErrors.to = true; messages.push({ id: 'to', text: 'Select a valid drop location from the suggestions.' }) }
-            if (from && to && fromPicked && toPicked && from.toLowerCase() === to.toLowerCase()) {
+            // Drop (one-way): pickup and drop can never be the same.
+            // Round Trip: allowed, but only via at least one stop in between.
+            // Hourly Rental: allowed (it has no stops field).
+            const sameLocation = from && to && fromPicked && toPicked && (
+              from.toLowerCase() === to.toLowerCase() ||
+              (state.fromLat === state.toLat && state.fromLng === state.toLng)
+            )
+            if (sameLocation && tripType === 'Drop') {
               nextErrors.from = true
               nextErrors.to = true
               messages.push({ id: 'same', text: "Pickup and drop locations can't be the same." })
+            } else if (sameLocation && tripType === 'Round Trip' && stops.length === 0) {
+              nextErrors.stop = true
+              messages.push({ id: 'same', text: 'Pickup and drop are the same location — add at least one stop in between.' })
             }
 
             const pickup = new Date(state.pickupDate)
@@ -342,6 +361,12 @@ export default function SearchWidget({
               e.preventDefault()
               setErrors(nextErrors)
               setAlertMessages(messages)
+              if (!nextErrors.from && !nextErrors.to && nextErrors.stop) {
+                // Open the stop input (it auto-focuses) so the fix is one tap away.
+                setAddingStop(true)
+                stopFieldRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                return
+              }
               const target = nextErrors.from
                 ? fromInputRef.current
                 : nextErrors.to
