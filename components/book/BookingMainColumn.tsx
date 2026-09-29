@@ -50,6 +50,7 @@ export default function BookingMainColumn({
         stops={details.route.stops.map(s => s.location.split(',')[0].trim())}
         stateName={details.state.name}
         distanceKm={details.route.distance_km}
+        hourlyPackageHours={bookingPayload.actual_hours}
         pickupDate={pickupDate}
       />
       <CabInfoCard cabCategory={details.cab_category} />

@@ -9,6 +9,7 @@ export default function TripSummary({
   stops = [],
   stateName,
   distanceKm,
+  hourlyPackageHours,
   pickupDate,
 }: {
   tripTypeName: string
@@ -17,6 +18,8 @@ export default function TripSummary({
   stops?: string[]
   stateName: string
   distanceKm: number
+  // Only set for Hourly Rental (the 4/6/8 Hrs package picked in search).
+  hourlyPackageHours?: number
   pickupDate: string
 }) {
   const { openBookModal } = useBookModal()
@@ -74,7 +77,12 @@ export default function TripSummary({
         <p className="hidden sm:block text-ink-faint text-xs mt-2">via {stops.join(', ')}</p>
       )}
       <p className="text-ink-faint text-xs mt-3">📅 {formatDate(pickupDate, { withYear: true })}, {formatTime(pickupDate)}</p>
-      <p className="text-ink text-sm font-bold mt-1">~{distanceKm} km</p>
+      <div className="mt-1 flex flex-wrap items-center gap-2">
+        <p className="text-ink text-sm font-bold">~{distanceKm} km</p>
+        {hourlyPackageHours !== undefined && (
+          <span className="rounded-full bg-cta/10 px-2.5 py-0.5 text-xs font-bold text-cta">{hourlyPackageHours} Hrs package</span>
+        )}
+      </div>
     </div>
   )
 }
