@@ -67,7 +67,7 @@ export default async function CabsPage({ searchParams }: PageProps) {
   return (
     <>
       {/* Banner */}
-      <section className="relative min-h-[260px] sm:min-h-[47vh] flex items-end overflow-hidden">
+      <section className="relative sm:min-h-[47vh] flex items-end overflow-hidden">
         <Image src={cat.image} alt={cat.title} fill priority sizes="100vw" className={`object-cover ${cat.position}`} />
         {/* Keep the photo clear: shade only behind the text (left) and a short fade into the tab bar (bottom). */}
         <div className={`absolute inset-0 bg-gradient-to-r ${cat.shade} to-transparent`} />
