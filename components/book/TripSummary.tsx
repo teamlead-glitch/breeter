@@ -73,7 +73,8 @@ export default function TripSummary({
       {stops.length > 0 && (
         <p className="hidden sm:block text-ink-faint text-xs mt-2">via {stops.join(', ')}</p>
       )}
-      <p className="text-ink-faint text-xs mt-3">📅 {formatDate(pickupDate, { withYear: true })}, {formatTime(pickupDate)} · ~{distanceKm} km</p>
+      <p className="text-ink-faint text-xs mt-3">📅 {formatDate(pickupDate, { withYear: true })}, {formatTime(pickupDate)}</p>
+      <p className="text-ink text-sm font-bold mt-1">~{distanceKm} km</p>
     </div>
   )
 }
