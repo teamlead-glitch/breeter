@@ -107,6 +107,21 @@ export default function SearchWidget({
                 placeholder="Pickup city"
               />
             </div>
+            {state.from && (
+              <button
+                type="button"
+                aria-label="Clear pickup location"
+                // mousedown: keep the input focused so the suggestions stay usable after clearing.
+                onMouseDown={e => e.preventDefault()}
+                onClick={() => {
+                  dispatch({ type: 'SET_FROM', value: '' })
+                  setAlertMessages(prev => prev.filter(m => m.id !== 'from' && m.id !== 'same'))
+                  fromInputRef.current?.focus()
+                }}
+                className="grid h-6 w-6 flex-none place-items-center rounded-full text-ink-faint transition-colors hover:bg-black/5 hover:text-ink">
+                <X size={14} />
+              </button>
+            )}
           </div>
           {fromOpen && (
             <PlaceSuggestionsDropdown
@@ -217,6 +232,20 @@ export default function SearchWidget({
                 placeholder="Drop city"
               />
             </div>
+            {state.to && (
+              <button
+                type="button"
+                aria-label="Clear drop location"
+                onMouseDown={e => e.preventDefault()}
+                onClick={() => {
+                  dispatch({ type: 'SET_TO', value: '' })
+                  setAlertMessages(prev => prev.filter(m => m.id !== 'to' && m.id !== 'same'))
+                  toInputRef.current?.focus()
+                }}
+                className="grid h-6 w-6 flex-none place-items-center rounded-full text-ink-faint transition-colors hover:bg-black/5 hover:text-ink">
+                <X size={14} />
+              </button>
+            )}
           </div>
           {toOpen && (
             <PlaceSuggestionsDropdown
