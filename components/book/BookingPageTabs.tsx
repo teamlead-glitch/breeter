@@ -13,7 +13,15 @@ const TABS: { key: Tab; label: string }[] = [
   { key: 'cancellation', label: 'Cancellation Policy' },
 ]
 
-export default function BookingPageTabs({ inclusions }: { inclusions: TripTypeInclusion[] }) {
+export default function BookingPageTabs({
+  inclusions,
+  includedKm,
+  extraKmRate,
+}: {
+  inclusions: TripTypeInclusion[]
+  includedKm: number
+  extraKmRate?: number
+}) {
   const [activeTab, setActiveTab] = useState<Tab>('inclusions')
 
   return (
@@ -32,7 +40,7 @@ export default function BookingPageTabs({ inclusions }: { inclusions: TripTypeIn
           </button>
         ))}
       </div>
-      {activeTab === 'inclusions' && <InclusionsTabPanel inclusions={inclusions} />}
+      {activeTab === 'inclusions' && <InclusionsTabPanel inclusions={inclusions} includedKm={includedKm} extraKmRate={extraKmRate} />}
       {activeTab === 'cancellation' && <CancellationTabPanel />}
       {activeTab === 'terms' && <TermsTabPanel />}
     </div>

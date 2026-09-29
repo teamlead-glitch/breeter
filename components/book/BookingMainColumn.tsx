@@ -51,6 +51,7 @@ export default function BookingMainColumn({
         stateName={details.state.name}
         distanceKm={details.route.distance_km}
         hourlyPackageHours={bookingPayload.actual_hours}
+        extraKmRate={details.pricing.detail.extra_km_rate}
         pickupDate={pickupDate}
       />
       <CabInfoCard cabCategory={details.cab_category} />
@@ -61,7 +62,11 @@ export default function BookingMainColumn({
       )}
       <AddOnsCard addOns={addOns} rates={rates} disabled={isRefreshingFare} onToggle={onToggleAddon} />
 
-      <BookingPageTabs inclusions={details.trip_type.inclusions ?? []} />
+      <BookingPageTabs
+        inclusions={details.trip_type.inclusions ?? []}
+        includedKm={details.route.distance_km}
+        extraKmRate={details.pricing.detail.extra_km_rate}
+      />
 
       {/* Mobile/tablet: price breakdown — the sidebar with this is desktop-only */}
       <div className="lg:hidden bg-white rounded-2xl border border-black/5 p-4 sm:p-5">

@@ -10,6 +10,7 @@ export default function TripSummary({
   stateName,
   distanceKm,
   hourlyPackageHours,
+  extraKmRate,
   pickupDate,
 }: {
   tripTypeName: string
@@ -20,6 +21,8 @@ export default function TripSummary({
   distanceKm: number
   // Only set for Hourly Rental (the 4/6/8 Hrs package picked in search).
   hourlyPackageHours?: number
+  // pricing.detail.extra_km_rate — shown as a note when the route charges beyond the included kms.
+  extraKmRate?: number
   pickupDate: string
 }) {
   const { openBookModal } = useBookModal()
@@ -81,6 +84,9 @@ export default function TripSummary({
         <p className="text-ink text-sm font-bold">~{distanceKm} km</p>
         {hourlyPackageHours !== undefined && (
           <span className="rounded-full bg-cta/10 px-2.5 py-0.5 text-xs font-bold text-cta">{hourlyPackageHours} Hrs package</span>
+        )}
+        {extraKmRate !== undefined && extraKmRate > 0 && (
+          <span className="text-ink-faint text-xs">₹{extraKmRate}/km will apply beyond the included kms</span>
         )}
       </div>
     </div>
