@@ -4,6 +4,7 @@ import { apiGet } from '@/lib/apiService'
 import { CabCategoriesData, CabCategory } from '@/types/cabs'
 import { VehicleTagsData } from '@/types/vehicleTags'
 import CabCategoryCard from './CabCategoryCard'
+import HomeVehicleCard from '@/components/home/HomeVehicleCard'
 
 // Local to this page only — not part of the shared search filters/context.
 const TYPE_TAG_TITLES: Record<string, string> = {
@@ -50,9 +51,9 @@ export default function CabsGrid({ type }: { type: string }) {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
-        {[1, 2, 3].map(i => (
-          <div key={i} className="h-72 rounded-3xl bg-white border border-black/10 animate-pulse" />
+      <div className="grid grid-cols-3 gap-3 sm:gap-5 lg:grid-cols-4 lg:gap-6">
+        {[1, 2, 3, 4].map(i => (
+          <div key={i} className="aspect-square sm:aspect-auto sm:h-96 rounded-2xl sm:rounded-3xl bg-white border border-black/10 animate-pulse" />
         ))}
       </div>
     )
@@ -75,9 +76,15 @@ export default function CabsGrid({ type }: { type: string }) {
   }
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
+    <div className="grid grid-cols-3 gap-3 sm:gap-5 lg:grid-cols-4 lg:gap-6">
       {cabs.map(v => (
-        <CabCategoryCard key={v.id} v={v} />
+        <div key={v.id}>
+          {/* Phones: framed photo + title, same tile as the home listing. sm+: full card.
+              [&>button]:w-full — the tile is a <button>, which otherwise shrinks to its title width
+              and sizes its %-width photo by title length. */}
+          <div className="sm:hidden [&>button]:w-full"><HomeVehicleCard v={v} square /></div>
+          <div className="hidden h-full sm:block"><CabCategoryCard v={v} /></div>
+        </div>
       ))}
     </div>
   )
