@@ -9,8 +9,8 @@ type Tab = 'inclusions' | 'cancellation' | 'terms'
 
 const TABS: { key: Tab; label: string }[] = [
   { key: 'inclusions', label: 'Inclusions' },
-  { key: 'cancellation', label: 'Cancellation Policy' },
   { key: 'terms', label: 'Terms & Conditions' },
+  { key: 'cancellation', label: 'Cancellation Policy' },
 ]
 
 export default function BookingPageTabs({ inclusions }: { inclusions: TripTypeInclusion[] }) {
