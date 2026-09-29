@@ -60,7 +60,7 @@ export default function BookingMainColumn({
       )}
       <AddOnsCard addOns={addOns} rates={rates} disabled={isRefreshingFare} onToggle={onToggleAddon} />
 
-      <BookingPageTabs />
+      <BookingPageTabs inclusions={details.trip_type.inclusions ?? []} />
 
       {/* Mobile/tablet: price breakdown — the sidebar with this is desktop-only */}
       <div className="lg:hidden bg-white rounded-2xl border border-black/5 p-4 sm:p-5">

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import InclusionsTabPanel from './InclusionsTabPanel'
 import CancellationTabPanel from './CancellationTabPanel'
 import TermsTabPanel from './TermsTabPanel'
+import { TripTypeInclusion } from '@/types/booking'
 
 type Tab = 'inclusions' | 'cancellation' | 'terms'
 
@@ -12,15 +13,8 @@ const TABS: { key: Tab; label: string }[] = [
   { key: 'terms', label: 'Terms & Conditions' },
 ]
 
-const TAB_PANELS: Record<Tab, React.ComponentType> = {
-  inclusions: InclusionsTabPanel,
-  cancellation: CancellationTabPanel,
-  terms: TermsTabPanel,
-}
-
-export default function BookingPageTabs() {
+export default function BookingPageTabs({ inclusions }: { inclusions: TripTypeInclusion[] }) {
   const [activeTab, setActiveTab] = useState<Tab>('inclusions')
-  const ActivePanel = TAB_PANELS[activeTab]
 
   return (
     <div className="bg-white rounded-2xl border border-black/5 overflow-hidden">
@@ -38,7 +32,9 @@ export default function BookingPageTabs() {
           </button>
         ))}
       </div>
-      <ActivePanel />
+      {activeTab === 'inclusions' && <InclusionsTabPanel inclusions={inclusions} />}
+      {activeTab === 'cancellation' && <CancellationTabPanel />}
+      {activeTab === 'terms' && <TermsTabPanel />}
     </div>
   )
 }

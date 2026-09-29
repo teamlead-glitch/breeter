@@ -1,5 +1,11 @@
 import { CabCategoryImage } from '@/types/cabs'
 
+export type TripTypeInclusion = {
+  id: number
+  title: string
+  short_description: string | null
+}
+
 export type BookingDetailsStop = {
   location: string
   latitude: number
@@ -55,7 +61,7 @@ export type BookingDetails = {
     id: number
     name: string
     slug: string
-    inclusions: unknown[]
+    inclusions: TripTypeInclusion[]
   }
   cab_category: {
     id: number
