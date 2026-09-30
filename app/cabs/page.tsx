@@ -8,17 +8,14 @@ import { getSeoMetadata } from '@/lib/seo'
 // `view=all` is only set by the home page "View all" links — those land on the list without the search form.
 type PageProps = { searchParams: Promise<{ type?: string; view?: string }> }
 
-const SEO_SLUGS: Record<string, string> = {
-  cabs: 'page-cabs',
-  luxury: 'page-luxury-cabs',
-  van: 'page-van',
-  bus: 'page-bus',
-}
+// One admin SEO page for all of /cabs, whatever the query params (?type=luxury, ?view=all, …).
+// Fields left empty in the admin fall back to the per-type title/description below.
+const SEO_SLUG = 'page-cabs'
 
 export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
   const { type = 'cabs' } = await searchParams
   const cat = CATEGORIES[type as keyof typeof CATEGORIES] ?? CATEGORIES.cabs
-  return getSeoMetadata(SEO_SLUGS[type] ?? SEO_SLUGS.cabs, {
+  return getSeoMetadata(SEO_SLUG, {
     title: `${cat.title} — Breeter`,
     description: cat.desc,
   })
