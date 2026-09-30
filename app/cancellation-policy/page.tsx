@@ -3,7 +3,7 @@ import CancellationPolicyContent from '@/components/legal/CancellationPolicyCont
 import { getSeoMetadata } from '@/lib/seo'
 
 export async function generateMetadata(): Promise<Metadata> {
-  return getSeoMetadata('page-cancellation-policy', {
+  return getSeoMetadata('cancellation-policy', {
     title: 'Cancellation Policy — Breeter',
     description: 'Read Breeter’s cancellation and refund policy for cab bookings and holiday packages.',
   })

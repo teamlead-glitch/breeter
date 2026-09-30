@@ -4,7 +4,7 @@ import { Shield, Star, MapPin } from 'lucide-react'
 import { getSeoMetadata } from '@/lib/seo'
 
 export async function generateMetadata(): Promise<Metadata> {
-  return getSeoMetadata('page-about-us', {
+  return getSeoMetadata('about', {
     title: 'About Breeter — Outstation Cabs & Holiday Packages',
     description: 'Learn how Breeter partners with verified, background-checked local cab operators across South India to offer transparent, all-inclusive pricing.',
   })

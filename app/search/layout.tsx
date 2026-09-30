@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { getSeoMetadata } from '@/lib/seo'
 
 export async function generateMetadata(): Promise<Metadata> {
-  return getSeoMetadata('page-search', {
+  return getSeoMetadata('search', {
     title: 'Search Results — Breeter',
     description: 'Browse available cabs matching your route, dates and preferences on Breeter.',
   })

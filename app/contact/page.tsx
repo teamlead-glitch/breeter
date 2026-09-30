@@ -4,7 +4,7 @@ import { fetchSiteSettings } from '@/lib/settings'
 import ContactForm from '@/components/contact/ContactForm'
 
 export async function generateMetadata(): Promise<Metadata> {
-  return getSeoMetadata('page-contact-us', {
+  return getSeoMetadata('contact', {
     title: 'Contact Us — Breeter',
     description: "Questions about a booking or a holiday package? Send us a message and we'll get back to you within 2 hours.",
   })

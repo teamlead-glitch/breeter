@@ -10,7 +10,7 @@ type PageProps = { searchParams: Promise<{ type?: string; view?: string }> }
 
 // One admin SEO page for all of /cabs, whatever the query params (?type=luxury, ?view=all, …).
 // Fields left empty in the admin fall back to the per-type title/description below.
-const SEO_SLUG = 'page-cabs'
+const SEO_SLUG = 'cabs'
 
 export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
   const { type = 'cabs' } = await searchParams

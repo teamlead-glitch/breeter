@@ -11,7 +11,7 @@ import { getSeoMetadata } from '@/lib/seo'
 import { fetchSiteSettings } from '@/lib/settings'
 
 export async function generateMetadata(): Promise<Metadata> {
-  return getSeoMetadata('page-home', {
+  return getSeoMetadata('home', {
     title: 'Breeter — Outstation Cabs & Holiday Packages',
     description: 'Book outstation cabs, hourly rentals and curated holiday packages across South India. Transparent pricing, verified operators.',
   })
