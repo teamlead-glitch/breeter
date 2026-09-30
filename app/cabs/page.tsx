@@ -64,6 +64,13 @@ export default async function CabsPage({ searchParams }: PageProps) {
   const { type = 'cabs', view } = await searchParams
   const cat = CATEGORIES[type as keyof typeof CATEGORIES] ?? CATEGORIES.cabs
   const showSearch = view !== 'all'
+  const tabHref = (key: string) => {
+    const params = new URLSearchParams()
+    if (key !== 'cabs') params.set('type', key)
+    if (!showSearch) params.set('view', 'all')
+    const query = params.toString()
+    return query ? `/cabs?${query}` : '/cabs'
+  }
   return (
     <>
       {/* Banner */}
@@ -83,7 +90,8 @@ export default async function CabsPage({ searchParams }: PageProps) {
       <div className="bg-forest border-b border-white/10 sticky top-16 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-2 py-3 overflow-x-auto scrollbar-hide">
           {Object.entries(CATEGORIES).map(([key, val]) => (
-            <Link key={key} href={`/cabs${key === 'cabs' ? '' : `?type=${key}`}`}
+            // Keep `view=all` across tab switches so the search form stays hidden when arriving via "View all".
+            <Link key={key} href={tabHref(key)}
               className={`flex-none px-4 py-1.5 rounded-full text-sm font-semibold transition-all border ${
                 (key === 'cabs' ? !type || type === 'cabs' : type === key)
                   ? 'bg-cta text-white border-cta'
