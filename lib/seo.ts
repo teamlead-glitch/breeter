@@ -7,7 +7,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'https://breeter.phitanydev.
 export async function fetchPageSeo(slug: string): Promise<SeoDetails | null> {
   try {
     const res = await fetch(`${API_BASE}v1/pages/${slug}`, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 60 },
     })
     if (!res.ok) return null
     const json: PageApiResponse = await res.json()
